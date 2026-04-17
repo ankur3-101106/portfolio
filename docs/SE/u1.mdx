@@ -2045,8 +2045,33 @@ Feedback ensures:
 - Continuous enhancement
 
 ---
+#### 8.4.4 Where Agile Methodology Does NOT Work
 
-### Comparison of Agile Frameworks
+Agile is not suitable in all situations. It may fail or be less effective in the following cases:
+
+* **Stable Requirements**
+
+  * When requirements are clearly defined and unlikely to change.
+  * Traditional models like Waterfall are more suitable.
+
+* **Large Distributed Teams**
+
+  * Agile requires strong communication and collaboration.
+  * Difficult when teams are spread across locations.
+
+* **Poor Understanding of Agile**
+
+  * Teams without proper Agile knowledge may misuse practices.
+  * Leads to confusion and inefficiency.
+
+* **Lack of Customer Involvement**
+
+  * Agile depends heavily on continuous customer feedback.
+  * Without it, development may go in the wrong direction.
+
+---
+
+#### Comparison of Agile Frameworks
 
 | Feature | XP | Scrum | Kanban |
 | --- | --- | --- | --- |
@@ -2055,5 +2080,140 @@ Feedback ensures:
 | Roles | Flexible | Defined roles | Flexible |
 | WIP Limits | No strict rule | Sprint-based | Strict WIP limits |
 | Best For | High code quality | Team coordination | Continuous delivery |
+
+---
+
+### 8.5 Traditional Process Models
+
+In addition to Agile, several traditional models are used in software engineering.
+
+---
+
+#### 8.5.1 Waterfall Model
+
+A **linear and sequential model** where each phase must be completed before moving to the next.
+
+```mermaid
+flowchart LR
+    A[Requirements] --> B[Design]
+    B --> C[Implementation]
+    C --> D[Testing]
+    D --> E[Deployment]
+    E --> F[Maintenance]
+```
+
+**Advantages:**
+
+* Simple and easy to understand
+* Clear structure and documentation
+* Suitable for stable requirements
+
+**Disadvantages:**
+
+* Difficult to handle changes
+* No working product until late stages
+* Errors discovered late
+
+---
+
+#### 8.5.2 Incremental Model
+
+Software is developed in **small parts (increments)**, each delivering partial functionality.
+
+```mermaid
+flowchart LR
+    A[Increment 1] --> B[Increment 2]
+    B --> C[Increment 3]
+    C --> D[Final System]
+```
+
+**Advantages:**
+
+* Early delivery of working software
+* Easier testing and debugging
+* Flexible to changes
+
+**Disadvantages:**
+
+* Requires good planning
+* Overall cost may increase
+
+---
+
+#### 8.5.3 Prototype Model
+
+A **prototype (initial version)** is developed to understand user requirements.
+
+**Steps:**
+
+1. Requirements gathering
+2. Quick design
+3. Build prototype
+4. User evaluation
+5. Refine and develop final system
+
+**Advantages:**
+
+* Clarifies unclear requirements
+* Improves user involvement
+
+**Limitations:**
+
+* Prototype may be mistaken as final product
+* Poor documentation
+* Not suitable for large systems
+
+---
+
+#### 8.5.4 Spiral Model
+
+A **risk-driven model** combining iterative development with systematic risk analysis.
+
+```mermaid
+flowchart LR
+    A[Planning] --> B[Risk Analysis]
+    B --> C[Development]
+    C --> D[Evaluation]
+    D --> A
+```
+
+**Features:**
+
+* Focus on risk assessment
+* Iterative development
+* Continuous feedback
+
+**Advantages:**
+
+* Strong risk management
+* Suitable for large, complex projects
+
+**Disadvantages:**
+
+* Expensive
+* Requires expertise
+
+---
+
+#### 8.5.5 Concurrent Development Model
+
+Also known as **Concurrent Engineering**.
+
+* Multiple activities occur simultaneously
+* Each activity exists in different states
+
+**States:**
+
+* Inactive
+* Under Development
+* Under Review
+* Awaiting Changes
+* Under Revision
+* Baselined
+* Done
+
+**Key Idea:**
+
+> Different development activities progress concurrently with state transitions.
 
 ---

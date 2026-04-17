@@ -124,6 +124,42 @@ pre[class*="language-"] {
   counter-reset: line;
 }
 
-h3, h2, h4 {
+h3, h2 {
   font-family: 'CabbagetownBookStd';
+  font-weight: 100;
+}
+h2{
+  color: #c2410c;
+}
+h3{
+  color: #d65a1f;
+}
+
+h4{
+  font-family: 'Garamond';
+  font-size: 1.4em;
+  color:#ff9a64;
+}
+html[data-theme='light'] h4{
+  color:#a75021;
+}
+
+.alert--info {
+  --ifm-alert-background-color: #b54dff72;
+  
+  --ifm-alert-border-color: #91d5ff;
+  
+  border-radius: 0 18px 18px 0px;
+}
+[class*="admonition"] h2 {
+  color: #ffffff;
+}
+[class*="cardContainer"] h2 {
+  color: rgb(255, 206, 151);
+}
+[class*="cardContainer"]:hover {
+  /* add zoom effect */
+  transform: scale(1.02);
+  transition: transform 0.6s ease;
+  border-color: rgba(77, 255, 0, 0.414);
 }

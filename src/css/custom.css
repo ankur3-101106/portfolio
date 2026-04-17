@@ -123,3 +123,7 @@ pre code,
 pre[class*="language-"] {
   counter-reset: line;
 }
+
+h3, h2, h4 {
+  font-family: 'CabbagetownBookStd';
+}

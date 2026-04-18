@@ -46,6 +46,20 @@ html[data-theme='dark'] {
   --ifm-background-surface-color: #161b22;
 }
 
+@font-face {
+  font-family: 'CabbagetownBookStd';
+  src: url('/fonts/CabbagetownBookStd.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CustomGaramond';
+  src: url('/fonts/garamond.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .navbar {
   position: sticky;
   top: 0;
@@ -64,6 +78,7 @@ html[data-theme='dark'] {
   inset: 0;
   pointer-events: none;
 }
+
 .navbar::after {
   content: "";
   position: absolute;
@@ -76,6 +91,7 @@ html[data-theme='dark'] {
   background: linear-gradient(90deg, #c2400c71, #fbbf2471);
   transition: width 0.1s ease-out;
 }
+
 .navbar-sidebar {
   position: fixed !important;
   inset: 0;
@@ -124,42 +140,90 @@ pre[class*="language-"] {
   counter-reset: line;
 }
 
-h3, h2 {
+h3,
+h2 {
   font-family: 'CabbagetownBookStd';
   font-weight: 100;
 }
-h2{
+
+h2 {
   color: #c2410c;
 }
-h3{
+
+h3 {
   color: #d65a1f;
 }
 
-h4{
-  font-family: 'Garamond';
+h4 {
+  font-family: 'CustomGaramond';
   font-size: 1.4em;
-  color:#ff9a64;
+  color: #ff9a64;
 }
-html[data-theme='light'] h4{
-  color:#a75021;
+
+html[data-theme='light'] h4 {
+  color: #a75021;
 }
 
 .alert--info {
-  --ifm-alert-background-color: #b54dff72;
-  
-  --ifm-alert-border-color: #91d5ff;
-  
+  overflow: hidden;
+  --ifm-alert-border-color: #00bbff;
+  color: #00acef;
+  border-radius: 0 18px 18px 0px;
+  z-index: 1;
+  position: relative;
+}
+
+.alert--info::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* --ifm-alert-background-color: rgba(181, 77, 255, 0.447); */
+  background-image: url("colors.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  filter: blur(7px);
+  z-index: 0;
   border-radius: 0 18px 18px 0px;
 }
-[class*="admonition"] h2 {
-  color: #ffffff;
+
+.alert--info>* {
+  position: relative;
+  z-index: 1;
 }
+
+[class*="admonition"] h2 {
+  color: rgb(207, 140, 255);
+}
+
 [class*="cardContainer"] h2 {
   color: rgb(255, 206, 151);
 }
+
 [class*="cardContainer"]:hover {
   /* add zoom effect */
   transform: scale(1.02);
   transition: transform 0.6s ease;
   border-color: rgba(77, 255, 0, 0.414);
+}
+
+h1 {
+  background: linear-gradient(90deg, #6a00ff, #00aaff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-theme='dark'] h1 {
+  background: linear-gradient(90deg, #ff4dff, #00ffff);
+}
+
+html[data-theme='dark'] h1 {
+  background: linear-gradient(90deg, #ff4dff, #00ffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 10px rgba(255, 77, 255, 0.4);
 }

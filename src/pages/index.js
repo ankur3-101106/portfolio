@@ -18,14 +18,14 @@ function Hero() {
           Penetration Tester | Network Administrator | Network Security
         </p>
 
-        <div className={styles.buttons}>
+        {/* <div className={styles.buttons}>
           <a className="button button--secondary button--lg" href="#projects">
             View My Work
           </a>
           <a className="button button--outline button--lg" href="/resume.pdf">
             Download Resume
           </a>
-        </div>
+        </div> */}
       </div>
     </header>
   );
@@ -80,12 +80,29 @@ function Contact() {
   return (
     <section className="container margin-vert--lg">
       <Heading as="h2">Contact</Heading>
-      <p>
-        Email: <a href='mailto:ankurdcs101106@gmail.com'>ankurdcs101106@gmail.com</a>
-      </p>
-      <p>
-        <a href="https://github.com/ankur3-101106">GitHub</a> |{" "}
-        <a href="https://linkedin.com/in/ankur101106">LinkedIn</a>
+
+      <p class="social-icons">
+        <a href="https://instagram.com/ankur3_101106">
+          <img src="https://skillicons.dev/icons?i=instagram" />
+        </a>
+        <a href="https://x.com/ankur3_101106">
+          <img src="https://skillicons.dev/icons?i=twitter" />
+        </a>
+        <a href="mailto:ankurdcs101106@gmail.com">
+          <img src="https://skillicons.dev/icons?i=gmail" />
+        </a>
+        <a href="https://linkedin.com/in/ankur101106">
+          <img src="https://skillicons.dev/icons?i=linkedin" />
+        </a>
+        <a href="https://github.com/ankur3-101106">
+          <img src="https://skillicons.dev/icons?i=github" />
+        </a>
+        <a href="https://gitlab.com/ankur3-101106">
+          <img src="https://skillicons.dev/icons?i=gitlab" />
+        </a>
+        <a href="https://discord.com/users/ankur3_101106">
+          <img src="https://skillicons.dev/icons?i=discord" />
+        </a>
       </p>
     </section>
   );
@@ -99,7 +116,6 @@ export default function Home() {
       <Hero />
       <main>
         <About />
-        <Projects />
         <Contact />
       </main>
     </Layout>

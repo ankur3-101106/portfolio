@@ -306,7 +306,7 @@ The CPU operates in two distinct modes to ensure system security and stability:
 These calls are used to control the lifecycle of processes.
 
 * **$pid=fork()$**: Creates a child process that is identical to the parent.
-* **$pid=waitpid(pid, \\\&statloc, options)$**: Used by a parent process to wait for a child to terminate.
+* **$pid=waitpid(pid, \&statloc, options)$**: Used by a parent process to wait for a child to terminate.
 * **$s=execve(name, argv, environp)$**: Replaces a process's core image with a new program.
 * **$exit(status)$**: Terminates process execution and returns a status code.
 
@@ -321,7 +321,7 @@ These calls handle individual file operations.
 * **$n=read(fd, buffer, nbytes)$**: Reads data from a file into a buffer.
 * **$n=write(fd, buffer, nbytes)$**: Writes data from a buffer into a file.
 * **$position=lseek(fd, offset, whence)$**: Moves the file pointer to a specific location.
-* **$s=stat(name, \\\&buf)$**: Retrieves status information about a file.
+* **$s=stat(name, \&buf)$**: Retrieves status information about a file.
 
 ***
 

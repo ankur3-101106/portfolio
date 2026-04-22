@@ -1,0 +1,992 @@
+---
+sidebar_position: 6
+---
+
+# Week - 6
+:::info[TITLE]
+## Lecture 26: <br />More on RSA
+:::
+
+## Fast Modular Exponentiation (Square & Multiply)
+
+### Goal
+
+Compute:
+$$
+a^n \mod m
+$$
+
+efficiently
+
+---
+
+### Idea
+
+* Write exponent in **binary**:
+  $$
+  n = (b_k b_{k-1} ... b_0)_2
+  $$
+
+* Then:
+  $$
+  a^n = a^{b_0 2^0} \cdot a^{b_1 2^1} \cdots a^{b_k 2^k}
+  $$
+
+---
+
+### Key Observation
+
+$$
+a^{2^i} = (a^{2^{i-1}})^2
+$$
+
+✔ Compute using repeated squaring
+
+---
+
+### Complexity
+
+* Number of steps:
+  $$
+  O(\log n)
+  $$
+
+✔ Much faster than naive ( O(n) )
+
+---
+
+## Algorithm (Concept)
+
+1. Convert ( n ) to binary
+2. Initialize result = 1
+3. For each bit:
+
+   * Square current value
+   * If bit = 1 → multiply
+
+---
+
+## Side-Channel Attack (Timing Attack)
+
+### Problem
+
+* Computation time depends on:
+
+  * Bits of exponent
+
+---
+
+### Idea
+
+* Attacker measures:
+
+  * Execution time
+* Infers:
+
+  * Whether bit = 1 or 0
+
+---
+
+### Example Insight
+
+* If extra multiplication occurs → bit = 1
+* Leads to **key leakage**
+
+---
+
+## RSA Key Generation (Practical Issues)
+
+---
+
+### 1. Prime Generation
+
+Need:
+$$
+p, q \text{ large primes (e.g., 512+ bits)}
+$$
+
+---
+
+### Naive Method (Inefficient)
+
+* Check divisibility up to:
+  $$
+  \sqrt{n}
+  $$
+
+❌ Too slow for large numbers
+
+---
+
+### Sieve Method
+
+* Remove multiples:
+
+  * 2, 3, 5, ...
+
+✔ Works for small ( n )
+❌ Not practical for large primes
+
+---
+
+### Efficient Approach
+
+* Use **probabilistic tests**
+
+#### Example:
+
+* Miller-Rabin test
+
+✔ Fast
+✔ High probability of correctness
+
+---
+
+## RSA Security
+
+### Based On
+
+$$
+n = p \cdot q
+$$
+
+* Public:
+  $$
+  n
+  $$
+
+* Secret:
+  $$
+  p, q
+  $$
+
+---
+
+### Hard Problem
+
+$$
+\text{Factorization of large integers}
+$$
+
+---
+
+### Why Secure?
+
+* Given:
+  $$
+  n
+  $$
+
+❌ Hard to compute:
+$$
+p, q
+$$
+
+---
+
+## Key Insight
+
+* If attacker finds:
+  $$
+  p, q
+  $$
+
+→ Can compute:
+$$
+\phi(n)
+$$
+
+→ Then:
+$$
+d
+$$
+
+→ System breaks
+
+---
+
+## Key Takeaways
+
+* Square & multiply:
+
+  * Efficient exponentiation
+* Timing attacks:
+
+  * Real-world vulnerability
+* Prime generation:
+
+  * Uses probabilistic tests
+* RSA security:
+
+  * Depends on factorization hardness
+
+---
+
+## Final Conclusion
+
+* RSA efficiency:
+  $$
+  O(\log n)
+  $$
+
+* RSA security:
+  $$
+  \text{Hardness of factoring } n = p \cdot q
+  $$
+
+✔ Still widely used, but requires:
+
+* Large keys
+* Secure implementations
+
+:::info[TITLE]
+## Lecture 27: <br />Primality Testing
+:::
+## Goal
+
+* Check whether a number ( n ) is **prime or composite**
+
+---
+
+## Fermat Primality Test
+
+### Idea (from Fermat’s Little Theorem)
+
+If ( p ) is prime and ( \gcd(a,p)=1 ), then:
+
+$$
+a^{p-1} \equiv 1 \pmod{p}
+$$
+
+---
+
+## Algorithm
+
+1. Choose random:
+   $$
+   a < n
+   $$
+
+2. Compute:
+   $$
+   y = a^{n-1} \mod n
+   $$
+
+3. Check:
+
+* If:
+  $$
+  y \ne 1
+  $$
+  → ( n ) is **composite** ✅
+
+* If:
+  $$
+  y = 1
+  $$
+  → ( n ) is **probably prime**
+
+---
+
+## Limitation
+
+* Some composite numbers pass test
+* Called:
+
+  * **Fermat pseudoprimes**
+
+---
+
+## Miller–Rabin Primality Test
+
+### Stronger Test
+
+---
+
+## Step 1: Write
+
+$$
+n - 1 = 2^k \cdot m
+$$
+
+where:
+$$
+m \text{ is odd}
+$$
+
+---
+
+## Step 2: Choose Random Base
+
+$$
+a < n
+$$
+
+---
+
+## Step 3: Compute
+
+$$
+b_0 = a^m \mod n
+$$
+
+---
+
+## Step 4: Check Conditions
+
+* If:
+  $$
+  b_0 \equiv 1 \pmod{n}
+  $$
+  → probably prime
+
+---
+
+* Else compute:
+
+$$
+b_i = b_{i-1}^2 \mod n
+$$
+
+Check if any:
+$$
+b_i \equiv -1 \pmod{n}
+$$
+
+→ probably prime
+
+---
+
+## Final Decision
+
+* If none satisfy:
+  $$
+  \pm 1
+  $$
+
+→ ( n ) is **composite** ✅
+
+---
+
+## Key Property
+
+* If test says **composite** → always correct
+* If says **prime** → probabilistic
+
+---
+
+## Why Better than Fermat
+
+* Detects:
+
+  * Carmichael numbers
+* Much lower error probability
+
+---
+
+## Key Takeaways
+
+* Fermat test:
+
+  * Fast but weak
+* Miller-Rabin:
+
+  * Fast and reliable
+* Used in:
+
+  * RSA key generation
+
+---
+
+## Final Conclusion
+
+* Primality testing is:
+  $$
+  \text{Essential for generating large primes}
+  $$
+
+* Practical systems use:
+
+  * **Miller-Rabin test**
+
+✔ Efficient + high confidence for cryptography
+
+:::info[TITLE]
+## Lecture 28: <br />ElGamal Cryptosystem.
+:::
+
+## Overview
+
+* Public key cryptosystem based on:
+  $$
+  \text{Discrete Logarithm Problem}
+  $$
+
+
+---
+
+## Setup (Bob)
+
+### Step 1: Choose Parameters
+
+* Prime:
+  $$
+  p
+  $$
+
+* Generator:
+  $$
+  \alpha \in \mathbb{Z}_p^*
+  $$
+
+---
+
+### Step 2: Choose Secret Key
+
+$$
+a \in {1,2,...,p-2}
+$$
+
+---
+
+### Step 3: Compute Public Value
+
+$$
+\beta = \alpha^a \mod p
+$$
+
+---
+
+## Keys
+
+* Public key:
+  $$
+  (p, \alpha, \beta)
+  $$
+
+* Private key:
+  $$
+  a
+  $$
+
+---
+
+## Encryption (Alice)
+
+### Input
+
+* Message:
+  $$
+  x \in \mathbb{Z}_p^*
+  $$
+
+* Choose random:
+  $$
+  k
+  $$
+
+---
+
+### Compute Ciphertext
+
+$$
+y_1 = \alpha^k \mod p
+$$
+
+$$
+y_2 = x \cdot \beta^k \mod p
+$$
+
+---
+
+### Ciphertext
+
+$$
+(y_1, y_2)
+$$
+
+---
+
+## Decryption (Bob)
+
+### Step 1
+
+$$
+y_1^a = (\alpha^k)^a = \alpha^{ak} = \beta^k \mod p
+$$
+
+---
+
+### Step 2
+
+$$
+x = y_2 \cdot (y_1^a)^{-1} \mod p
+$$
+
+---
+
+## Why It Works
+
+$$
+y_2 = x \cdot \beta^k
+$$
+
+$$
+y_1^a = \beta^k
+$$
+
+So:
+
+$$
+x = \frac{y_2}{\beta^k} \mod p
+$$
+
+✔ Correct decryption
+
+---
+
+## Important Property
+
+* Same message → different ciphertexts
+
+✔ Because of random:
+$$
+k
+$$
+
+---
+
+## Example
+
+### Given
+
+$$
+p = 2579,; \alpha = 2,; a = 765
+$$
+
+---
+
+### Compute
+
+$$
+\beta = 2^{765} \mod 2579 = 949
+$$
+
+---
+
+### Encryption
+
+Message:
+$$
+x = 1299
+$$
+
+Choose:
+$$
+k
+$$
+
+---
+
+$$
+y_1 = 2^k \mod 2579 = 435
+$$
+
+$$
+y_2 = 1299 \cdot 949^k \mod 2579 = 2396
+$$
+
+---
+
+### Ciphertext
+
+$$
+(435, 2396)
+$$
+
+---
+
+## Decryption
+
+$$
+x = y_2 \cdot (y_1^a)^{-1} \mod p
+$$
+
+$$
+x = 1299
+$$
+
+✔ Original message recovered
+
+---
+
+## Security
+
+* Based on:
+  $$
+  \text{Discrete logarithm hardness}
+  $$
+
+---
+
+## Key Takeaways
+
+* Uses:
+
+  * Modular exponentiation
+* Randomness:
+
+  * Provides semantic security
+* Different from RSA:
+
+  * Non-deterministic
+
+---
+
+## Final Conclusion
+
+* ElGamal provides:
+
+  * Strong security
+  * Randomized encryption
+
+$$
+\text{Widely used in cryptographic protocols and digital signatures}
+$$
+
+:::info[TITLE]
+## Lecture 29: <br />Elliptic Curve over the Reals
+:::
+
+## Curve Equation
+
+$$
+y^2 = x^3 + ax + b
+$$
+
+* Condition:
+  $$
+  4a^3 + 27b^2 \ne 0
+  $$
+
+✔ Ensures no singular points 
+
+---
+
+## Point Set
+
+* Points:
+  $$
+  (x,y)
+  $$
+  satisfying equation
+
+* Plus **point at infinity**:
+  $$
+  \mathcal{O}
+  $$
+
+---
+
+## Point Addition
+
+Let:
+
+* $P = (x_1, y_1)$
+* $Q = (x_2, y_2)$
+
+---
+
+### Case 1: $P \ne Q$
+
+Slope:
+$$
+\lambda = \frac{y_2 - y_1}{x_2 - x_1}
+$$
+
+Coordinates:
+
+$$
+x_3 = \lambda^2 - x_1 - x_2
+$$
+
+$$
+y_3 = \lambda(x_1 - x_3) - y_1
+$$
+
+---
+
+### Case 2: $Q = -P$
+
+$$
+P + Q = \mathcal{O}
+$$
+
+* Where:
+  $$
+  (x, y) \rightarrow (x, -y)
+  $$
+
+---
+
+### Case 3: $P = Q$ (Point Doubling)
+
+Slope:
+$$
+\lambda = \frac{3x_1^2 + a}{2y_1}
+$$
+
+Coordinates:
+
+$$
+x_3 = \lambda^2 - 2x_1
+$$
+
+$$
+y_3 = \lambda(x_1 - x_3) - y_1
+$$
+
+---
+
+## Inverse of Point
+
+$$
+P = (x,y)
+$$
+
+$$
+-P = (x, -y)
+$$
+
+---
+
+## Identity Element
+
+$$
+\mathcal{O}
+$$
+
+* Point at infinity
+
+---
+
+## Group Properties
+
+* Closure
+
+* Associativity
+
+* Identity:
+  $$
+  P + \mathcal{O} = P
+  $$
+
+* Inverse:
+  $$
+  P + (-P) = \mathcal{O}
+  $$
+
+* Commutative:
+  $$
+  P + Q = Q + P
+  $$
+
+✔ Forms **Abelian group**
+
+---
+
+## Key Operation (Scalar Multiplication)
+
+$$
+kP = P + P + \cdots + P
+$$
+
+---
+
+## Cryptographic Idea
+
+* Given:
+  $$
+  P,; kP
+  $$
+
+❌ Hard to find:
+$$
+k
+$$
+
+✔ Elliptic Curve Discrete Log Problem
+
+---
+
+## Key Takeaways
+
+* Points on curve form group
+* Addition defined geometrically + algebraically
+* Security based on:
+  $$
+  \text{ECDLP}
+  $$
+
+---
+
+## Final Conclusion
+
+* Elliptic curves provide:
+
+$$
+\text{High security with smaller key sizes}
+$$
+
+✔ Widely used in modern cryptography (ECC)
+
+:::info[TITLE]
+## Lecture 30: <br />Elliptic curve Modulo a Prime
+:::
+
+## Over ($$\mathbb{Z}_p $$)
+
+---
+
+## Curve
+
+$$
+y^2 \equiv x^3 + ax + b \pmod{p}
+$$
+
+* Points:
+  $$
+  (x,y) \in \mathbb{Z}_p
+  $$
+
+* Plus:
+  $$
+  \mathcal{O}
+  $$
+
+---
+
+## Finding Points
+
+For each:
+$$
+x \in {0,1,2,...,p-1}
+$$
+
+Compute:
+$$
+z = x^3 + ax + b \mod p
+$$
+
+---
+
+## Check Validity
+
+* Check if $$ ( z ) $$ is quadratic residue:
+
+$$
+z^{\frac{p-1}{2}} \equiv 1 \pmod{p}
+$$
+
+✔ If true → valid point exists
+
+---
+
+## Compute ( y )
+
+If:
+$$
+p \equiv 3 \pmod{4}
+$$
+
+Then:
+
+$$
+y = z^{\frac{p+1}{4}} \mod p
+$$
+
+* Points:
+  $$
+  (x, y),; (x, -y)
+  $$
+
+---
+
+## Example
+
+Given:
+$$
+p = 11
+$$
+
+$$
+y^2 \equiv x^3 + x + 6 \pmod{11}
+$$
+
+---
+
+## Quadratic Residues mod 11
+
+$$
+{1,3,4,5,9}
+$$
+
+---
+
+## Valid Points
+
+$$
+(2,4), (2,7)
+$$
+
+$$
+(3,5), (3,6)
+$$
+
+$$
+(5,2), (5,9)
+$$
+
+$$
+(7,2), (7,9)
+$$
+
+$$
+(8,3), (8,8)
+$$
+
+$$
+(10,2), (10,9)
+$$
+
+---
+
+## Total Points
+
+$$
+12 + 1 = 13
+$$
+
+(including $$( \mathcal{O} )$$) 
+
+---
+
+## Notes
+
+* For each valid ( x ):
+
+  * Either 0 or 2 points
+* Symmetry:
+  $$
+  y \leftrightarrow -y
+  $$
+
+---
+
+## Key Idea
+
+* Points form group under addition
+* Used for:
+  $$
+  \text{Elliptic Curve Cryptography (ECC)}
+  $$

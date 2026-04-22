@@ -200,12 +200,15 @@ html[data-theme='light'] h4 {
 [class*="cardContainer"] h2 {
   color: rgb(255, 206, 151);
 }
+html[data-theme='light'] [class*="cardContainer"] h2 {
+  color: rgb(167, 90, 1);
+}
 
 [class*="cardContainer"]:hover {
   /* add zoom effect */
   transform: scale(1.02);
   transition: transform 0.6s ease;
-  border-color: rgba(77, 255, 0, 0.414);
+  border-color: rgb(140, 255, 0);
 }
 
 h1 {

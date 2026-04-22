@@ -1,0 +1,1064 @@
+---
+sidebar_position: 10
+---
+
+# Week - 10
+:::info[TITLE]
+## Lecture 46: <br />Cryptoanalysis
+:::
+
+## Cryptology
+
+* Two parts:
+
+  * Cryptography (design)
+  * Cryptanalysis (attack)
+
+---
+
+## Attack Models
+
+### 1. Ciphertext-Only Attack (COA)
+
+* Attacker knows:
+  $$
+  C
+  $$
+
+* Goal:
+
+  * Recover:
+    $$
+    P \text{ or } K
+    $$
+
+---
+
+### 2. Known-Plaintext Attack (KPA)
+
+* Attacker knows:
+  $$
+  (P,; C)
+  $$
+
+* From previous communications
+
+---
+
+### 3. Chosen-Plaintext Attack (CPA)
+
+* Attacker can choose:
+  $$
+  P_i
+  $$
+
+* Gets corresponding:
+  $$
+  C_i
+  $$
+
+* Goal:
+
+  * Break encryption
+  * Predict new plaintext
+
+---
+
+### 4. Chosen-Ciphertext Attack (CCA)
+
+* Attacker chooses:
+  $$
+  C_i
+  $$
+
+* Gets:
+  $$
+  P_i
+  $$
+
+* Strongest attack model
+
+---
+
+## Attacker Goal
+
+* Find:
+  $$
+  K
+  $$
+
+OR
+
+* Given:
+  $$
+  C^*
+  $$
+
+Find:
+$$
+P^*
+$$
+
+---
+
+## Generic Attacks
+
+### 1. Exhaustive Search (Brute Force)
+
+* Try all keys:
+  $$
+  K_1, K_2, ..., K_n
+  $$
+
+* Until correct one found
+
+---
+
+### 2. Table Lookup Attack
+
+* Precompute table:
+
+$$
+(P,; C)
+$$
+
+* Store mappings
+
+* On intercept:
+  $$
+  C \rightarrow \text{lookup } P
+  $$
+
+✔ Very fast at runtime
+
+---
+
+## One-Way Function
+
+Function:
+$$
+f: A \rightarrow B
+$$
+
+---
+
+### Properties
+
+1. Easy to compute:
+   $$
+   y = f(x)
+   $$
+
+2. Hard to invert:
+   $$
+   x = f^{-1}(y)
+   $$
+
+---
+
+## In Cryptography
+
+* Encryption:
+  $$
+  C = E_K(P)
+  $$
+
+* Hard to recover:
+  $$
+  P \text{ or } K
+  $$
+
+---
+
+## Table-Based Attack Idea
+
+* Precompute:
+  $$
+  E_K(P)
+  $$
+
+for many keys
+
+* Store results
+
+* Match with intercepted:
+  $$
+  C
+  $$
+
+---
+
+## Trade-off
+
+* Time ↓ (fast lookup)
+* Memory ↑ (large table)
+
+---
+
+## Key Insight
+
+* Strong systems must resist:
+
+  * CPA
+  * CCA
+
+✔ Security defined against strongest attacker
+
+---
+
+## Final Note
+
+* Cryptanalysis evaluates:
+
+  * Strength of system
+  * Weakness under attack models
+
+:::info[TITLE]
+## Lecture 47: <br />Time- Memory Trade- off Attack
+:::
+
+## Time–Memory Trade-Off (TMTO)
+
+---
+
+## Goal
+
+* Invert one-way function:
+  $$
+  y = f(x)
+  $$
+
+* Find:
+  $$
+  x
+  $$
+
+---
+
+## Problem
+
+* Brute force:
+
+  * Time:
+    $$
+    O(N)
+    $$
+  * Memory:
+    $$
+    O(1)
+    $$
+
+* Table lookup:
+
+  * Time:
+    $$
+    O(1)
+    $$
+  * Memory:
+    $$
+    O(N)
+    $$
+
+---
+
+## Idea
+
+* Balance:
+  $$
+  \text{Time} \leftrightarrow \text{Memory}
+  $$
+
+✔ Reduce both partially
+
+---
+
+## Hellman Method
+
+---
+
+## Precomputation Phase
+
+* Choose chains of length:
+  $$
+  t
+  $$
+
+* Start with random:
+  $$
+  x_0
+  $$
+
+* Generate chain:
+
+$$
+x_1 = f(x_0),; x_2 = f(x_1),; ...,; x_t = f(x_{t-1})
+$$
+
+---
+
+## Storage
+
+* Store only:
+  $$
+  (\text{start},; \text{end})
+  $$
+
+* Not full chain
+
+✔ Saves memory
+
+---
+
+## Table Size
+
+* Number of chains:
+  $$
+  m
+  $$
+
+* Total covered space:
+  $$
+  \approx m \cdot t
+  $$
+
+---
+
+## Online Phase (Attack)
+
+Given:
+$$
+y = f(x)
+$$
+
+---
+
+### Step 1: Check Endpoints
+
+* Compare:
+  $$
+  y \text{ with stored endpoints}
+  $$
+
+---
+
+### Step 2: If no match
+
+* Compute:
+  $$
+  f(y),; f(f(y)),; ...
+  $$
+
+* Up to:
+  $$
+  t \text{ steps}
+  $$
+
+---
+
+### Step 3: If match found
+
+* Recompute chain from start
+* Locate exact:
+  $$
+  x
+  $$
+
+---
+
+## Maximum Work
+
+$$
+\le t \text{ operations}
+$$
+
+---
+
+## Trade-off Relation
+
+Let:
+
+* (N) = key space
+
+Then:
+
+$$
+T \cdot M^2 \approx N^2
+$$
+
+---
+
+## Balanced Case
+
+$$
+T = M = N^{2/3}
+$$
+
+---
+
+## Success Probability
+
+* Depends on:
+  $$
+  \frac{m \cdot t}{N}
+  $$
+
+* More chains → higher success
+
+---
+
+## Key Insight
+
+* Do heavy work **offline**
+* Fast lookup **online**
+
+---
+
+## Limitation
+
+* Chains may merge → collisions
+* Reduces coverage
+
+---
+
+## Improvement
+
+* Use multiple tables
+* Different reduction functions
+
+---
+
+## Summary
+
+* TMTO reduces:
+
+  * Time from (O(N))
+  * Memory from (O(N))
+
+✔ Achieves practical balance for attacks
+
+:::info[TITLE]
+## Lecture 48: <br />Differential Cryptoanalysis
+:::
+
+## Differential Cryptanalysis
+
+---
+
+## Basic Idea
+
+* Study how **input difference** affects **output difference**
+
+---
+
+## Definitions
+
+* Input pair:
+  $$
+  x_1 = x,\quad x_2 = x \oplus \alpha
+  $$
+
+* Input difference:
+  $$
+  x_1 \oplus x_2 = \alpha
+  $$
+
+---
+
+* Output:
+  $$
+  y_1 = F(x_1),\quad y_2 = F(x_2)
+  $$
+
+* Output difference:
+  $$
+  y_1 \oplus y_2 = \beta
+  $$
+
+---
+
+## Differential
+
+* Pair:
+  $$
+  (\alpha,; \beta)
+  $$
+
+* If:
+  $$
+  \alpha \rightarrow \beta \text{ with high probability}
+  $$
+
+✔ Useful for attack
+
+---
+
+## Attack Strategy
+
+1. Choose many plaintext pairs:
+   $$
+   (x,; x \oplus \alpha)
+   $$
+
+2. Encrypt → get:
+   $$
+   (c_1,; c_2)
+   $$
+
+---
+
+## Last Round Attack
+
+* Guess subkey:
+  $$
+  k_r
+  $$
+
+---
+
+### For each guess
+
+* Partially decrypt:
+  $$
+  y_1 = F^{-1}(c_1,; k_r)
+  $$
+
+$$
+y_2 = F^{-1}(c_2,; k_r)
+$$
+
+---
+
+### Check condition
+
+$$
+y_1 \oplus y_2 = \beta
+$$
+
+---
+
+### Count matches
+
+* Maintain counter for each:
+  $$
+  k_r
+  $$
+
+✔ Correct key → highest count
+
+---
+
+## Key Space Example
+
+* For DES:
+
+$$
+|K| = 2^{48} \text{ (last round)}
+$$
+
+---
+
+## Finding Good Differentials
+
+* Use **S-box analysis**
+
+---
+
+## Difference Distribution Table (DDT)
+
+For each:
+$$
+\alpha
+$$
+
+* Compute all:
+  $$
+  x,; x \oplus \alpha
+  $$
+
+* Evaluate:
+  $$
+  \beta = S(x) \oplus S(x \oplus \alpha)
+  $$
+
+* Count frequency
+
+---
+
+## Goal
+
+* Find:
+  $$
+  (\alpha,\beta) \text{ with high probability}
+  $$
+
+---
+
+## Example (4-bit S-box)
+
+* Choose:
+  $$
+  \alpha = 4
+  $$
+
+* For all inputs:
+
+  * Compute output differences
+  * Build frequency table
+
+✔ Highest frequency → best differential
+
+---
+
+## Multi-Round Extension
+
+* Combine round-wise differentials
+* Multiply probabilities
+
+---
+
+## Key Insight
+
+* Exploits **non-random behavior** of cipher
+* Works well on:
+
+  * SPN
+  * Feistel structures
+
+---
+
+## Summary
+
+* Input difference → predictable output difference
+* Use statistics to recover key
+
+✔ Powerful non-generic attack on block ciphers
+
+:::info[TITLE]
+## Lecture 49: <br />More on Differential Cryptoanalysis
+:::
+
+## Differential Attack (r-round)
+
+---
+
+### Step 1: Find Differential
+
+* Find high-probability:
+  $$
+  \alpha \rightarrow \beta \text{ for } (r-1) \text{ rounds}
+  $$
+
+---
+
+### Step 2: Initialize
+
+* For all subkeys:
+  $$
+  K_r
+  $$
+
+* Set counter:
+  $$
+  \text{count}(K_r) = 0
+  $$
+
+---
+
+### Step 3: Chosen Plaintexts
+
+* Select:
+  $$
+  P_1,; P_2 \text{ such that } P_1 \oplus P_2 = \alpha
+  $$
+
+* Encrypt:
+  $$
+  C_1,; C_2
+  $$
+
+---
+
+### Step 4: Partial Decryption
+
+* For each guess:
+  $$
+  K_r
+  $$
+
+* Compute:
+  $$
+  y_1 = F^{-1}(C_1,; K_r)
+  $$
+
+$$
+y_2 = F^{-1}(C_2,; K_r)
+$$
+
+---
+
+### Step 5: Check
+
+* If:
+  $$
+  y_1 \oplus y_2 = \beta
+  $$
+
+* Then:
+  $$
+  \text{count}(K_r)++
+  $$
+
+---
+
+### Step 6: Repeat
+
+* Until one key has significantly high count
+
+✔ That is likely correct subkey
+
+---
+
+## Impossible Differential Attack
+
+* Instead of high probability:
+
+$$
+\alpha \nrightarrow \beta \quad (\text{impossible})
+$$
+
+---
+
+### Idea
+
+* If a key produces:
+  $$
+  \beta
+  $$
+
+→ Reject that key
+
+✔ Eliminate wrong keys
+
+---
+
+## Higher-Order Differential
+
+* Use multiple differences
+
+Example:
+
+* Second-order:
+  $$
+  \Delta^2 x
+  $$
+
+✔ Captures complex patterns
+
+---
+
+## Differential Composition
+
+Given:
+
+$$
+\alpha \rightarrow \beta \text{ with prob } p
+$$
+
+$$
+\beta \rightarrow \delta \text{ with prob } q
+$$
+
+---
+
+### Combined
+
+$$
+\alpha \rightarrow \delta \text{ with prob } p \cdot q
+$$
+
+---
+
+## Attack Using Composition
+
+### Step 1
+
+Choose:
+$$
+P_1,; P_2 \text{ with } P_1 \oplus P_2 = \alpha
+$$
+
+---
+
+### Step 2
+
+Get:
+$$
+C_1,; C_2
+$$
+
+Construct:
+$$
+C_3 = C_1 \oplus \delta,\quad C_4 = C_2 \oplus \delta
+$$
+
+---
+
+### Step 3
+
+Decrypt:
+$$
+P_3,; P_4
+$$
+
+---
+
+### Step 4
+
+Check:
+$$
+P_3 \oplus P_4 = \alpha
+$$
+
+---
+
+### Step 5
+
+Repeat → count valid patterns
+
+---
+
+## Key Insight
+
+* Break cipher by:
+
+  * Tracking differences
+  * Using probability bias
+
+---
+
+## Applications
+
+* Effective on:
+
+  * DES (reduced rounds)
+  * SPN ciphers
+
+---
+
+## Summary
+
+* Uses:
+  $$
+  \text{input difference} \rightarrow \text{output difference}
+  $$
+
+* Types:
+
+  * Standard differential
+  * Impossible differential
+  * Higher-order differential
+
+✔ Powerful statistical cryptanalysis technique
+
+:::info[TITLE]
+## Lecture 50: <br />Linear Cryptoanalysis
+:::
+
+
+## Attack Model
+
+* Uses:
+
+  * Known plaintext pairs:
+    $$
+    (P_i\ , C_i)
+    $$
+
+* Goal:
+  $$
+  \text{Recover key } K
+  $$
+
+---
+
+## Idea
+
+* Approximate cipher using **linear relations**
+
+---
+
+## Linear Approximation
+
+For bits:
+
+$$
+a_1 p_1 \oplus a_2 p_2 \oplus \cdots \oplus b_1 k_1 \oplus \cdots \oplus c_1 c_1 \oplus \cdots = 0
+$$
+
+* Holds with probability:
+  $$
+  p > \frac{1}{2}
+  $$
+
+---
+
+## Bias
+
+Define:
+
+$$
+\epsilon = p - \frac{1}{2}
+$$
+
+* If:
+  $$
+  \epsilon \ne 0
+  $$
+
+✔ Useful relation
+
+---
+
+## Boolean Function
+
+* Input:
+  $$
+  (s_1, s_2, ..., s_n)
+  $$
+
+* Output:
+  $$
+  {0,1}
+  $$
+
+* Linear form:
+  $$
+  \bigoplus a_i s_i
+  $$
+
+---
+
+## Combining Approximations (Piling-Up Lemma)
+
+Let biases:
+
+$$
+\epsilon_1,; \epsilon_2,; ...,; \epsilon_k
+$$
+
+---
+
+### Combined Bias
+
+$$
+\epsilon = 2^{k-1} \prod_{j=1}^{k} \epsilon_j
+$$
+
+---
+
+### Combined Probability
+
+$$
+P = \frac{1}{2} + \epsilon
+$$
+
+---
+
+## Special Case (2 variables)
+
+$$
+\epsilon_{i,j} = 2 \epsilon_i \epsilon_j
+$$
+
+---
+
+## Key Observation
+
+* If any:
+  $$
+  \epsilon_j = 0
+  $$
+
+Then:
+
+$$
+\epsilon = 0
+$$
+
+❌ No useful information
+
+---
+
+## Attack Steps
+
+### Step 1: Find Linear Approximation
+
+* For S-box / round function
+
+---
+
+### Step 2: Collect Data
+
+* Gather many:
+  $$
+  (P,; C)
+  $$
+
+---
+
+### Step 3: Evaluate Expression
+
+* Compute LHS for all pairs
+
+---
+
+### Step 4: Count Bias
+
+* Count how often:
+  $$
+  \text{expression} = 0
+  $$
+
+---
+
+### Step 5: Guess Key Bits
+
+* Try key candidates
+* Select one with highest bias
+
+✔ Likely correct key
+
+---
+
+## Application
+
+* Applied to:
+
+  * DES (Eurocrypt 1993)
+
+* Needs:
+
+  * Large number of plaintext-ciphertext pairs
+
+---
+
+## Key Insight
+
+* Cipher ≠ perfectly random
+* Linear patterns exist
+
+---
+
+## Summary
+
+* Uses:
+  $$
+  \text{linear relation between } P, C, K
+  $$
+
+* Exploits:
+  $$
+  \text{bias } (\epsilon)
+  $$
+
+✔ Powerful statistical attack on block ciphers

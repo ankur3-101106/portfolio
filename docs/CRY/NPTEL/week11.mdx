@@ -1,0 +1,1019 @@
+---
+sidebar_position: 11
+---
+
+# Week - 11
+:::info[TITLE]
+## Lecture 51: <br />Cryptoanalysis and Stream Cipher
+:::
+
+## Stream Cipher (LFSR Model)
+
+* Keystream:
+  $$
+  z_t = f(s_t)
+  $$
+
+* Encryption:
+  $$
+  c_t = p_t \oplus z_t
+  $$
+
+* Decryption:
+  $$
+  p_t = c_t \oplus z_t
+  $$
+
+---
+
+## LFSR Structure
+
+* State:
+  $$
+  s_t
+  $$
+
+* Linear recurrence:
+  $$
+  s_{t+1} = \sum a_i s_{t-i}
+  $$
+
+✔ Defined by feedback polynomial
+
+---
+
+## Problem
+
+* LFSR is **linear**
+  ❌ Easily breakable
+
+---
+
+## Solution
+
+* Add **non-linear function**:
+  $$
+  z_t = f(s_t)
+  $$
+
+✔ Improves security
+
+---
+
+## Algebraic Attack
+
+---
+
+## Idea
+
+* From:
+  $$
+  z_t = c_t \oplus p_t
+  $$
+
+* If plaintext known:
+  $$
+  z_t \text{ known}
+  $$
+
+---
+
+* Also:
+  $$
+  z_t = f(s_t)
+  $$
+
+---
+
+## Build Equations
+
+* For multiple time steps:
+  $$
+  f(s_t) = z_t
+  $$
+
+✔ System of equations
+
+---
+
+## Goal
+
+* Solve for:
+  $$
+  s_t \Rightarrow \text{recover key}
+  $$
+
+---
+
+## Problem
+
+* Equations are **non-linear**
+
+---
+
+## Linearization
+
+* Replace products:
+
+$$
+x_i x_j = y_{ij}
+$$
+
+---
+
+### Example
+
+$$
+x_1 x_2 \rightarrow y_{12}
+$$
+
+$$
+x_1 x_3 \rightarrow y_{13}
+$$
+
+---
+
+## Result
+
+* Convert system into:
+  $$
+  \text{linear equations in } y_{ij}
+  $$
+
+✔ Easier to solve
+
+---
+
+## Re-linearization
+
+* Use identities like:
+
+$$
+x_1 x_2 x_3 x_4
+$$
+
+* Rewrite as combinations:
+
+$$
+(x_1 x_2)(x_3 x_4)
+$$
+
+* Substitute:
+  $$
+  y_{12},; y_{34}
+  $$
+
+---
+
+## Key Insight
+
+* Non-linear → transformed into linear system
+* Solve using linear algebra
+
+---
+
+## Limitation
+
+* Number of variables increases rapidly
+* Needs enough equations
+
+---
+
+## Final Summary
+
+* LFSR → linear → weak
+* Add non-linearity → stronger
+* Algebraic attack:
+
+  * Build equations
+  * Linearize
+  * Solve system
+
+✔ Recovers internal state / key
+
+:::info[TITLE]
+## Lecture 52: <br />Modern Stream Ciphers
+:::
+
+## Modern Stream Cipher Structure
+
+---
+
+## Basic Working
+
+* Keystream:
+  $$
+  z_t
+  $$
+
+* Encryption:
+  $$
+  c_t = p_t \oplus z_t
+  $$
+
+---
+
+## Initialization
+
+* Key + IV → initial state:
+  $$
+  s_0
+  $$
+
+* Run cipher for some rounds (warm-up)
+
+✔ Removes initial bias
+
+---
+
+## LFSR + Non-linearity
+
+* Linear part:
+  $$
+  \text{LFSR}
+  $$
+
+* Non-linear part:
+  $$
+  \text{NLFSR / Boolean functions}
+  $$
+
+✔ Combined for security
+
+---
+
+## General Model
+
+* State:
+  $$
+  s_t
+  $$
+
+* Output:
+  $$
+  z_t = h(s_t)
+  $$
+
+* Update:
+  $$
+  s_{t+1} = g(s_t)
+  $$
+
+---
+
+## Key Idea
+
+* LFSR → fast but linear
+* Add:
+
+  * Non-linear function (g)
+  * Non-linear output (h)
+
+✔ Prevents algebraic attacks
+
+---
+
+## Example Structure (Typical)
+
+* LFSR generates bits
+* NLFSR mixes bits
+* Output function combines both
+
+---
+
+## SNOW-like Design
+
+* Uses:
+
+  * LFSR (linear state update)
+  * FSM (non-linear mixing)
+
+* Operates in:
+  $$
+  GF(2^8)
+  $$
+
+* Uses polynomial-based arithmetic
+
+---
+
+## Grain Cipher (Example)
+
+---
+
+### Components
+
+* LFSR (linear)
+* NLFSR (non-linear)
+
+---
+
+### Output
+
+$$
+z_t = h(x_1, x_2, ..., x_n)
+$$
+
+---
+
+### Initialization
+
+* Run:
+  $$
+  256 \text{ cycles}
+  $$
+
+✔ Before generating keystream
+
+---
+
+## Functions
+
+* Feedback:
+  $$
+  g(\cdot)
+  $$
+
+* Output:
+  $$
+  h(\cdot)
+  $$
+
+✔ Both include non-linearity
+
+---
+
+## Important Concepts
+
+### 1. Internal State
+
+$$
+s_t
+$$
+
+* Determines entire keystream
+
+---
+
+### 2. Key Recovery Target
+
+* Attacker tries to find:
+  $$
+  s_0 \text{ or key}
+  $$
+
+---
+
+### 3. Security
+
+* Depends on:
+
+  * Non-linearity
+  * State size
+  * Initialization
+
+---
+
+## Attacks
+
+* Algebraic attacks
+* Correlation attacks
+* Known keystream attacks
+
+---
+
+## Weakness
+
+* Poor design → recover:
+  $$
+  s_t
+  $$
+
+→ Full keystream known
+
+---
+
+## Example Cipher
+
+* Helix (stream cipher design)
+
+---
+
+## Summary
+
+* Modern stream ciphers:
+
+  * LFSR + NLFSR
+  * Non-linear output
+  * Initialization phase
+
+✔ Designed to resist linear & algebraic attacks
+
+:::info[TITLE]
+## Lecture 53: <br />Shamir secret sharing 
+:::
+
+## Secret Sharing (Threshold Scheme)
+
+---
+
+## Goal
+
+* Split secret:
+  $$
+  S
+  $$
+
+* Into shares so that:
+
+  * Any:
+    $$
+    t \text{ users}
+    $$
+    → can recover
+
+  * Less than (t)
+    → cannot learn anything
+
+---
+
+## Polynomial Construction
+
+* Choose random polynomial:
+  $$
+  f(x) = S + a_1 x + a_2 x^2 + \cdots + a_{t-1} x^{t-1}
+  $$
+
+* Degree:
+  $$
+  t-1
+  $$
+
+---
+
+## Share Distribution
+
+* For each user (i):
+
+$$
+\text{Share}_i = (i,; f(i))
+$$
+
+---
+
+## Reconstruction (Lagrange Interpolation)
+
+* Using any (t) shares:
+
+$$
+S = f(0)
+$$
+
+---
+
+### Formula
+
+$$
+f(0) = \sum_{i=1}^{t} y_i \cdot \lambda_i
+$$
+
+where
+
+$$
+\lambda_i = \prod_{j \ne i} \frac{x_j}{x_j - x_i}
+$$
+
+---
+
+## Key Property
+
+* Polynomial of degree (t-1)
+  → uniquely determined by (t) points
+
+✔ Security guarantee
+
+---
+
+## Security Insight
+
+* With fewer than (t) shares:
+
+$$
+\text{Infinite possible polynomials}
+$$
+
+❌ Secret cannot be guessed
+
+---
+
+## Visual Intuition
+
+* 1 share → many curves possible
+* (t) shares → single curve
+
+✔ Secret fixed
+
+---
+
+## Application: Group Key Recovery
+
+* Secret key:
+  $$
+  K = f(0)
+  $$
+
+* Each user has:
+  $$
+  f(i)
+  $$
+
+* Any (t) users:
+
+  * Combine shares
+  * Recover:
+    $$
+    K
+    $$
+
+---
+
+## Broadcast Scenario
+
+* Authority (GM) generates:
+  $$
+  f(x)
+  $$
+
+* Sends shares to users
+
+* Broadcasts helper function:
+  $$
+  h(x) = f(x) + r(x)
+  $$
+
+---
+
+## User Computation
+
+* Each user knows:
+  $$
+  f(i)
+  $$
+
+* Using broadcast:
+  $$
+  h(i)
+  $$
+
+* Can compute:
+  $$
+  r(i)
+  $$
+
+---
+
+## Key Insight
+
+* Only authorized group (≥ t users):
+
+  * Can reconstruct secret
+
+---
+
+## Advantages
+
+* Fault tolerance
+* No single point of failure
+* Secure distributed key management
+
+---
+
+## Summary
+
+* Secret → polynomial
+* Shares → points on curve
+* Reconstruction → interpolation
+
+✔ Foundation of secure group cryptography
+
+:::info[TITLE]
+## Lecture 54: <br />Identity based Encryption (IBE)
+:::
+
+## Identity-Based Encryption (IBE)
+
+---
+
+## Idea
+
+* Public key = **user identity**
+  $$
+  ID \in {0,1}^*
+  $$
+
+✔ No certificates needed
+
+---
+
+## Setup
+
+* Choose groups:
+  $$
+  G,; G_T
+  $$
+
+* Generator:
+  $$
+  g \in G
+  $$
+
+* Master secret:
+  $$
+  \alpha
+  $$
+
+* Public key:
+  $$
+  g^\alpha
+  $$
+
+---
+
+## Hash Functions
+
+* Map identity:
+  $$
+  H_1(ID) \in G
+  $$
+
+* Key derivation:
+  $$
+  H_2: G_T \rightarrow {0,1}^\ell
+  $$
+
+---
+
+## Bilinear Pairing
+
+$$
+e: G \times G \rightarrow G_T
+$$
+
+---
+
+### Properties
+
+1. Bilinearity:
+   $$
+   e(u^a,; v^b) = e(u,v)^{ab}
+   $$
+
+2. Non-degenerate:
+   $$
+   e(g,g) \ne 1
+   $$
+
+3. Efficient
+
+---
+
+## Private Key Generation
+
+* For user with identity (ID):
+
+$$
+d_{ID} = H_1(ID)^\alpha
+$$
+
+---
+
+## Encryption
+
+* Message:
+  $$
+  m
+  $$
+
+* Choose random:
+  $$
+  r
+  $$
+
+---
+
+### Compute
+
+$$
+U = g^r
+$$
+
+$$
+V = m \oplus H_2\big(e(H_1(ID),; g^\alpha)^r\big)
+$$
+
+---
+
+## Ciphertext
+
+$$
+C = (U,; V)
+$$
+
+---
+
+## Decryption
+
+* Using private key:
+  $$
+  d_{ID}
+  $$
+
+---
+
+### Compute
+
+$$
+e(d_{ID},; U) = e(H_1(ID)^\alpha,; g^r)
+$$
+
+$$
+= e(H_1(ID),; g)^{\alpha r}
+$$
+
+---
+
+### Recover Message
+
+$$
+m = V \oplus H_2\big(e(d_{ID},; U)\big)
+$$
+
+---
+
+## Correctness
+
+* Encryption uses:
+  $$
+  e(H_1(ID),; g^\alpha)^r
+  $$
+
+* Decryption computes same:
+  $$
+  e(H_1(ID),; g)^{\alpha r}
+  $$
+
+✔ Values match
+
+---
+
+## Key Insight
+
+* Identity → public key
+* Trusted authority generates private keys
+
+---
+
+## Advantages
+
+* No certificates
+* Simple key management
+
+---
+
+## Limitation
+
+* Key escrow problem:
+
+  * Authority knows all private keys
+
+---
+
+## Summary
+
+* Uses:
+
+  * Pairing (e)
+  * Hash to group
+  * XOR masking
+
+✔ Foundation: Boneh–Franklin IBE scheme
+
+:::info[TITLE]
+## Lecture 55: <br />Attribute based Encryption (ABE)
+:::
+
+## Attribute-Based Encryption (ABE)
+
+---
+
+## Idea
+
+* Instead of identity → use **attributes**
+
+$$
+\text{Attributes} = {\text{MSc},; \text{Math},; \text{Student},; ...}
+$$
+
+✔ Access based on properties, not identity
+
+---
+
+## Motivation
+
+* Traditional (IBE):
+
+  * One-to-one communication
+
+* ABE:
+
+  * One-to-many communication
+
+✔ Encrypt once → many authorized users can decrypt
+
+---
+
+## Access Policy
+
+* Ciphertext defined by policy:
+
+$$
+\text{Policy } = (\text{MSc} \land \text{Math})
+$$
+
+* Only users with matching attributes can decrypt
+
+---
+
+## Types of ABE
+
+### 1. Key-Policy ABE (KP-ABE)
+
+* Ciphertext → attributes
+* Key → policy
+
+---
+
+### 2. Ciphertext-Policy ABE (CP-ABE)
+
+* Ciphertext → policy
+* Key → attributes
+
+✔ More practical
+
+---
+
+## Setup
+
+* Groups:
+  $$
+  G,; G_T
+  $$
+
+* Generator:
+  $$
+  g
+  $$
+
+* Pairing:
+  $$
+  e: G \times G \rightarrow G_T
+  $$
+
+---
+
+## Encryption
+
+* Message:
+  $$
+  m
+  $$
+
+* Random:
+  $$
+  r
+  $$
+
+---
+
+### Compute
+
+$$
+C_1 = g^r
+$$
+
+$$
+C_2 = m \oplus H_2\big(e(H_1(\text{attributes}),; g^\alpha)^r\big)
+$$
+
+---
+
+## Ciphertext
+
+$$
+C = (C_1,; C_2,; \text{policy})
+$$
+
+---
+
+## Key Generation
+
+* For user with attributes:
+  $$
+  \text{Attr}_u
+  $$
+
+* Generate secret key components
+
+---
+
+## Decryption
+
+* If attributes satisfy policy:
+
+---
+
+### Compute pairing
+
+$$
+e(d,; C_1)
+$$
+
+---
+
+### Recover
+
+$$
+m = C_2 \oplus H_2(\text{pairing result})
+$$
+
+---
+
+## Key Insight
+
+* Uses bilinear property:
+
+$$
+e(g^a,; g^b) = e(g,g)^{ab}
+$$
+
+✔ Enables policy-based access
+
+---
+
+## Example
+
+* Policy:
+
+  * “MSc Math Students”
+
+* Users:
+
+  * MSc Math → ✔ decrypt
+  * BSc Math → ❌ cannot
+  * MSc Physics → ❌ cannot
+
+---
+
+## Applications
+
+* Secure file sharing
+* Cloud access control
+* Broadcast encryption
+
+---
+
+## Broadcast Scenario
+
+* Encrypt once
+* Only authorized subset:
+  $$
+  S
+  $$
+  can decrypt
+
+---
+
+## Advantages
+
+* Fine-grained access control
+* No need for multiple encryptions
+
+---
+
+## Limitation
+
+* Complex key management
+* Computation overhead
+
+---
+
+## Summary
+
+* Identity → replaced by attributes
+* Policy-based encryption
+* Built using:
+
+  * Pairings
+  * Hash functions
+
+✔ Powerful for real-world access control systems

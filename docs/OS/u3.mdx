@@ -1356,8 +1356,8 @@ Execution Model:
 
 ```mermaid
 flowchart TD
-    A[Set flag[i] = true] --> B[Set turn = j]
-    B --> C{flag[j] == true AND turn == j?}
+    A["Set flag[i] = true"] --> B[Set turn = j]
+    B --> C{"flag[j] == true AND turn == j?"}
     C -->|Yes| C
     C -->|No| D[Enter Critical Section]
 ```

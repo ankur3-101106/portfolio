@@ -2050,7 +2050,7 @@ mongodb://localhost:27017
 
 #### 4.6.1 Create Operations
 
-#### 4.6.1.1 insertOne()
+##### 4.6.1.1 insertOne()
 
 ```jsx
 db.students.insertOne({name: "Ankur", age: 20})
@@ -2059,7 +2059,7 @@ db.students.insertOne({name: "Ankur", age: 20})
 Inserts one document.
 
 
-#### 4.6.1.2 insertMany()
+###### 4.6.1.2 insertMany()
 
 ```jsx
 db.students.insertMany([
@@ -2071,7 +2071,7 @@ db.students.insertMany([
 Inserts multiple documents.
 
 
-#### 4.6.1.3 createCollection()
+##### 4.6.1.3 createCollection()
 
 ```jsx
 db.createCollection("teachers")
@@ -2082,7 +2082,7 @@ Creates new collection.
 
 #### 4.6.2 Read Operations
 
-#### 4.6.2.1 find()
+##### 4.6.2.1 find()
 
 ```jsx
 db.students.find()
@@ -2091,7 +2091,7 @@ db.students.find()
 Returns all matching documents.
 
 
-#### 4.6.2.2 findOne()
+##### 4.6.2.2 findOne()
 
 ```jsx
 db.students.findOne({name: "Ankur"})
@@ -2114,7 +2114,7 @@ db.students.updateOne(
 Updates single document.
 
 
-#### 4.6.3.2 updateMany()
+##### 4.6.3.2 updateMany()
 
 ```jsx
 db.students.updateMany(
@@ -2140,7 +2140,7 @@ Replaces entire document.
 
 #### 4.6.4 Delete Operations
 
-#### 4.6.4.1 deleteOne()
+##### 4.6.4.1 deleteOne()
 
 ```jsx
 db.students.deleteOne({name: "Ankur"})
@@ -2149,7 +2149,7 @@ db.students.deleteOne({name: "Ankur"})
 Deletes one document.
 
 
-#### 4.6.4.2 deleteMany()
+##### 4.6.4.2 deleteMany()
 
 ```jsx
 db.students.deleteMany({age: {$lt: 18}})

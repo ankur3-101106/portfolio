@@ -2551,28 +2551,200 @@ flowchart TD
 
 #### 11.1.1 Robust Applications
 
+Error handling is essential for building **robust and reliable applications**.
+
+* Prevents application crashes
+* Ensures smooth execution even when errors occur
+* Handles unexpected situations gracefully
+
+Without error handling:
+
+* App may crash
+* User experience becomes poor
+* Debugging becomes difficult
+
 #### 11.1.2 User-Friendly Errors
+
+Instead of showing raw errors, Flask allows displaying **user-friendly messages**.
+
+Example:
+
+* Instead of:
+
+```text id="raw_error"
+Internal Server Error
+```
+
+* Show:
+
+```text id="friendly_error"
+Something went wrong. Please try again later.
+```
+
+👉 Improves usability and professionalism
 
 ### 11.2 HTTP Error Handling
 
-#### 11.2.1 404 Error Handling
+Flask provides built-in mechanisms to handle HTTP errors.
 
-#### 11.2.2 500 Error Handling
+### 11.2.1 404 Error Handling
 
-#### 11.2.3 @app.errorhandler()
+Occurs when:
+
+* User requests a page that does not exist
+
+Example:
+
+```python showLineNumbers id="error_404"
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.errorhandler(404)
+def not_found(error):
+    return "Page Not Found", 404
+```
+
+👉 Triggered when invalid URL is accessed
+
+
+### 11.2.2 500 Error Handling
+
+Occurs when:
+
+* Internal server error happens (bug, exception)
+
+Example:
+
+```python showLineNumbers id="error_500"
+@app.errorhandler(500)
+def server_error(error):
+    return "Internal Server Error", 500
+```
+
+👉 Helps handle unexpected failures
+
+
+### 11.2.3 @app.errorhandler()
+
+Used to define custom error handlers.
+
+Syntax:
+
+```python showLineNumbers id="errorhandler_syntax"
+@app.errorhandler(error_code)
+def handler(error):
+    return response
+```
+
+* `error_code` → 404, 500, etc.
+* Function handles the error
+
+
+### 🧠 Error Handling Flow
+
+```mermaid id="error_flow"
+flowchart TD
+    A[User Request] --> B[Flask App]
+    B --> C{Error Occurs?}
+    C -->|Yes| D[Error Handler]
+    D --> E[Custom Response]
+    C -->|No| F[Normal Response]
+```
 
 ### 11.3 Custom Exceptions
 
-#### 11.3.1 try-except Usage
+### 11.3.1 try-except Usage
 
-#### 11.3.2 Application-specific Errors
+Python `try-except` is used to handle runtime errors.
+
+```python showLineNumbers id="try_except"
+@app.route('/divide')
+def divide():
+    try:
+        result = 10 / 0
+        return str(result)
+    except Exception as e:
+        return "Error occurred"
+```
+
+* `try` → risky code
+* `except` → handles error
+
+
+### 11.3.2 Application-specific Errors
+
+Custom logic can handle specific cases:
+
+```python showLineNumbers id="custom_exception"
+@app.route('/user/<name>')
+def user(name):
+    if name == "":
+        return "Invalid user"
+    return f"Hello {name}"
+```
+
+👉 Helps define application-specific rules
+
 
 ### 11.4 Logging
 
-#### 11.4.1 Logging Exceptions
+### 11.4.1 Logging Exceptions
 
-#### 11.4.2 Debugging Support 
+Logging is used to **record errors for debugging**.
 
+```python showLineNumbers id="logging_example"
+import logging
+
+logging.basicConfig(level=logging.ERROR)
+
+@app.route('/error')
+def error():
+    try:
+        1 / 0
+    except Exception as e:
+        logging.error(str(e))
+        return "Error logged"
+```
+
+* Stores error details
+* Useful for developers
+
+
+### 11.4.2 Debugging Support
+
+Flask supports debugging through:
+
+* Debug mode (`debug=True`)
+* Error logs
+* Stack traces
+
+Benefits:
+
+* Faster issue detection
+* Easier troubleshooting
+
+### 🧠 Logging Flow
+
+```mermaid id="logging_flow"
+flowchart TD
+    A[Error Occurs] --> B[Catch Exception]
+    B --> C[Log Error]
+    C --> D[Store Log]
+    D --> E[Developer Debugs]
+```
+
+
+### 🎯 Key Points (Exam Focus)
+
+* Error handling ensures **robust applications**
+* Provides **user-friendly error messages**
+* 404 → page not found
+* 500 → server error
+* `@app.errorhandler()` handles HTTP errors
+* `try-except` handles runtime errors
+* Logging records errors for debugging
+* Debug mode helps identify issues quickly
 
 
 ## 12. Flash Messages
@@ -2581,31 +2753,188 @@ flowchart TD
 
 #### 12.1.1 Definition
 
+**Flash messages** are a way to send **temporary messages** from the server to the user.
+
+* Stored in the session temporarily
+* Displayed on the next request
+* Automatically removed after being shown
+
+👉 Used to provide feedback after actions
+
+
 #### 12.1.2 Temporary Notifications
+
+Flash messages are commonly used for:
+
+* Login success
+* Form submission confirmation
+* Error alerts
+* Warning messages
+
+Example:
+
+```text id="flash_example"
+"Login Successful"
+"Invalid Password"
+```
 
 ### 12.2 Message Types
 
+Flash messages can represent different categories of feedback.
+
 #### 12.2.1 Success
+
+* Indicates successful operation
+
+Example:
+
+```text id="success_msg"
+"Account created successfully"
+```
 
 #### 12.2.2 Error
 
-#### 12.2.3 Warning 
+* Indicates failure or problem
+
+Example:
+
+```text id="error_msg"
+"Invalid username or password"
+```
+
+#### 12.2.3 Warning
+
+* Indicates caution or important notice
+
+Example:
+
+```text id="warning_msg"
+"Password is weak"
+```
 
 ### 12.3 Functions
 
 #### 12.3.1 flash()
 
+Used to create a flash message.
+
+Syntax:
+
+```python showLineNumbers id="flash_func"
+flash(message)
+```
+
+Example:
+
+```python showLineNumbers id="flash_example_code"
+from flask import flash
+
+@app.route('/login', methods=['POST'])
+def login():
+    flash("Login Successful")
+    return "Done"
+```
+
 #### 12.3.2 get_flashed_messages()
+
+Used to retrieve and display flash messages.
+
+Syntax:
+
+```python showLineNumbers id="get_flash"
+get_flashed_messages()
+```
+
+### 🧠 Flash Message Flow
+
+```mermaid id="flash_flow"
+flowchart TD
+    A[User Action] --> B[flash()]
+    B --> C[Stored in Session]
+    C --> D[get_flashed_messages()]
+    D --> E[Displayed in Template]
+```
 
 ### 12.4 Implementation Steps
 
 #### 12.4.1 Setting SECRET_KEY
 
+Flask requires a **SECRET_KEY** to use sessions (and flash messages).
+
+```python showLineNumbers id="secret_key_flash"
+app.config['SECRET_KEY'] = 'your_secret_key'
+```
+
+👉 Required for:
+
+* Session storage
+* Security
+
 #### 12.4.2 Creating Messages
+
+Use `flash()` inside a route:
+
+```python showLineNumbers id="create_flash"
+from flask import Flask, flash
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret'
+
+@app.route('/submit')
+def submit():
+    flash("Form submitted successfully")
+    return "Submitted"
+```
 
 #### 12.4.3 Displaying in Templates
 
+Flash messages are displayed using Jinja2:
 
+```html id="display_flash"
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+```
+
+👉 This block:
+
+* Retrieves messages
+* Loops through them
+* Displays each message
+
+### 🧠 Complete Example
+
+```python showLineNumbers id="flash_full_app"
+from flask import Flask, flash, render_template
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret'
+
+@app.route('/')
+def home():
+    flash("Welcome to the site!")
+    return render_template('index.html')
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+
+
+### 🎯 Key Points (Exam Focus)
+
+* Flash messages = temporary notifications
+* Stored in session
+* `flash()` → create message
+* `get_flashed_messages()` → retrieve messages
+* Requires `SECRET_KEY`
+* Used for success, error, warning messages
+* Displayed in templates using Jinja2
 
 ## 13. Working with Emails (Flask-Mail)
 
@@ -2613,39 +2942,215 @@ flowchart TD
 
 #### 13.1.1 Purpose
 
+Flask-Mail is an extension used to **send emails from a Flask application**.
+
+* Enables email functionality inside web apps
+* Integrates with SMTP (Simple Mail Transfer Protocol) servers
+* Useful for user communication and notifications
+
+👉 It allows Flask apps to interact with email servers like:
+
+* Gmail SMTP
+* Outlook SMTP
+* Custom mail servers
+
+
 #### 13.1.2 Use Cases (Verification, Reset)
+
+Common use cases:
+
+* Account verification emails
+* Password reset emails
+* Notifications (alerts, updates)
+* Contact form messages
+
+Example:
+
+```text id="mail_usecases"
+"Verify your email address"
+"Reset your password"
+"New login detected"
+```
 
 ### 13.2 Installation
 
 #### 13.2.1 pip install Flask-Mail
 
+Install Flask-Mail using pip:
+
+```python showLineNumbers id="install_flask_mail"
+pip install Flask-Mail
+```
+
+* Adds Flask-Mail extension to your project
+* Required before using email features
+
 ### 13.3 Configuration
+
+Flask-Mail requires configuration of mail server settings.
 
 #### 13.3.1 MAIL_SERVER
 
+Defines the email server.
+
+Example:
+
+```python showLineNumbers id="mail_server"
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+```
+
 #### 13.3.2 MAIL_PORT
+
+Defines the port used for SMTP connection.
+
+```python showLineNumbers id="mail_port"
+app.config['MAIL_PORT'] = 587
+```
+
+* 587 → TLS
+* 465 → SSL
 
 #### 13.3.3 MAIL_USE_TLS
 
+Enables TLS (Transport Layer Security).
+
+```python showLineNumbers id="mail_tls"
+app.config['MAIL_USE_TLS'] = True
+```
+
+* Encrypts communication
+* Recommended for security
+
 #### 13.3.4 MAIL_USERNAME
 
+Email account username.
+
+```python showLineNumbers id="mail_username"
+app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
+```
+
 #### 13.3.5 MAIL_PASSWORD
+
+Email account password or app password.
+
+```python showLineNumbers id="mail_password"
+app.config['MAIL_PASSWORD'] = 'your_password'
+```
+
+👉 For Gmail, use **App Password**, not your real password
+
+### 🧠 Mail Configuration Flow
+
+```mermaid id="mail_config_flow"
+flowchart TD
+    A[Flask App] --> B[Mail Config]
+    B --> C[SMTP Server]
+    C --> D[Email Sent]
+```
 
 ### 13.4 Sending Emails
 
 #### 13.4.1 Mail Instance
 
+Create a Mail object to handle email operations.
+
+```python showLineNumbers id="mail_instance"
+from flask_mail import Mail
+
+mail = Mail(app)
+```
+
 #### 13.4.2 Message Object
+
+The `Message` object defines the email content.
+
+```python showLineNumbers id="message_object"
+from flask_mail import Message
+```
 
 ##### 13.4.2.1 sender
 
+Defines the sender email address.
+
 ##### 13.4.2.2 recipients
+
+List of recipient email addresses.
 
 ##### 13.4.2.3 body
 
-#### 13.4.3 send() Method 
+Content of the email.
 
+Example:
 
+```python showLineNumbers id="message_example"
+msg = Message(
+    subject="Hello",
+    sender="your_email@gmail.com",
+    recipients=["user@example.com"]
+)
+msg.body = "This is a test email"
+```
+
+#### 13.4.3 send() Method
+
+Used to send the email.
+
+```python showLineNumbers id="send_mail"
+mail.send(msg)
+```
+
+👉 Sends the email through configured SMTP server
+
+### 🧠 Complete Example
+
+```python showLineNumbers id="full_mail_example"
+from flask import Flask
+from flask_mail import Mail, Message
+
+app = Flask(__name__)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
+app.config['MAIL_PASSWORD'] = 'your_password'
+
+mail = Mail(app)
+
+@app.route('/send')
+def send_email():
+    msg = Message(
+        subject="Test Email",
+        sender=app.config['MAIL_USERNAME'],
+        recipients=["receiver@example.com"]
+    )
+    msg.body = "Hello from Flask-Mail"
+    mail.send(msg)
+    return "Email Sent"
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+
+### 🎯 Key Points (Exam Focus)
+
+* Flask-Mail used to send emails from Flask apps
+* Requires SMTP configuration
+* Important config:
+
+  * MAIL_SERVER
+  * MAIL_PORT
+  * MAIL_USE_TLS
+  * MAIL_USERNAME
+  * MAIL_PASSWORD
+* `Mail(app)` → creates mail instance
+* `Message()` → defines email
+* `mail.send()` → sends email
+* Used for:
+
+  * Verification
+  * Password reset
+  * Notifications
 
 ## 14. Authentication and Authorization (Flask-Login)
 
@@ -2653,33 +3158,276 @@ flowchart TD
 
 #### 14.1.1 Authentication
 
+**Authentication** is the process of verifying the **identity of a user**.
+
+* Confirms *who the user is*
+* Usually done using:
+
+  * Username & password
+  * Email & password
+
+Example:
+
+```text id="auth_example"
+User enters username and password → system verifies credentials
+```
+
+If valid:
+
+* User is logged in
+  If invalid:
+* Access is denied
+
+
 #### 14.1.2 Authorization
+
+**Authorization** determines **what a user is allowed to do** after authentication.
+
+* Controls access to resources
+* Based on roles or permissions
+
+Example:
+
+```text id="authz_example"
+Admin → can delete users  
+User → can only view profile
+```
+
+👉 Key difference:
+
+| Concept        | Meaning          |
+| -------------- | ---------------- |
+| Authentication | Who are you?     |
+| Authorization  | What can you do? |
+
 
 ### 14.2 Flask-Login Features
 
+Flask-Login is an extension used to manage **user sessions and authentication**.
+
+
 #### 14.2.1 User Session Management
+
+* Keeps track of logged-in users
+* Stores session data securely
+* Maintains login state across requests
+
+Example:
+
+* User logs in → session created
+* User stays logged in until logout
+
 
 #### 14.2.2 User Loader
 
-#### 14.2.3 login_required Decorator 
+Flask-Login requires a **user loader function**.
+
+* Loads user from database using user ID
+* Required for session management
+
+Example:
+
+```python showLineNumbers id="user_loader"
+from flask_login import LoginManager
+
+login_manager = LoginManager()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+```
+
+👉 Used internally to:
+
+* Reload user from session
+
+
+#### 14.2.3 login_required Decorator
+
+Used to **protect routes** from unauthorized access.
+
+```python showLineNumbers id="login_required"
+from flask_login import login_required
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return "Protected Page"
+```
+
+* Only logged-in users can access
+* Others are redirected to login page
+
 
 ### 14.3 Behavior
 
 #### 14.3.1 Redirect Unauthorized Users to Login Page
 
+If a user tries to access a protected route:
+
+* Flask-Login automatically:
+
+  * Redirects to login page
+
+Configuration:
+
+```python showLineNumbers id="login_view"
+login_manager.login_view = 'login'
+```
+
+👉 Ensures:
+
+* Secure access control
+* Better user experience
+
+
+### 🧠 Authentication Flow
+
+```mermaid id="auth_flow"
+flowchart TD
+    A[User Access Protected Page] --> B{Logged In?}
+    B -->|No| C[Redirect to Login]
+    B -->|Yes| D[Access Granted]
+```
+
+
 ### 14.4 Implementation Steps
 
 #### 14.4.1 Setup Flask App
 
+Install Flask-Login:
+
+```python showLineNumbers id="install_login"
+pip install flask-login
+```
+
+Import required modules:
+
+```python showLineNumbers id="import_login"
+from flask import Flask
+from flask_login import LoginManager
+```
+
+
 #### 14.4.2 Initialize LoginManager
+
+```python showLineNumbers id="init_login_manager"
+app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+login_manager.login_view = 'login'
+```
+
 
 #### 14.4.3 Create User Model
 
+User model must implement required methods:
+
+```python showLineNumbers id="user_model"
+from flask_login import UserMixin
+
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+    @staticmethod
+    def get(user_id):
+        return User(user_id)
+```
+
+👉 `UserMixin` provides:
+
+* is_authenticated
+* is_active
+* is_anonymous
+* get_id()
+
+
 #### 14.4.4 Define Routes (login, logout, protected)
+
+**Login Route:**
+
+```python showLineNumbers id="login_route"
+from flask import request
+from flask_login import login_user
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = User(request.form['username'])
+        login_user(user)
+        return "Logged In"
+    return "Login Page"
+```
+
+
+**Logout Route:**
+
+```python showLineNumbers id="logout_route"
+from flask_login import logout_user
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return "Logged Out"
+```
+
+
+**Protected Route:**
+
+```python showLineNumbers id="protected_route"
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return "Welcome to Dashboard"
+```
+
 
 #### 14.4.5 Templates (login.html, home.html)
 
+**login.html:**
 
+```html id="login_template"
+<form method="POST">
+    <input name="username" placeholder="Enter username">
+    <input type="submit">
+</form>
+```
+
+
+**home.html / dashboard view:**
+
+```html id="home_template"
+<h1>Welcome User</h1>
+<a href="/logout">Logout</a>
+```
+
+
+### 🧠 Full Authentication Flow
+
+```mermaid id="full_auth_flow"
+flowchart TD
+    A[User Visits Login] --> B[Enter Credentials]
+    B --> C[Validate User]
+    C --> D[Create Session]
+    D --> E[Access Protected Route]
+    E --> F[Logout]
+    F --> G[Session Cleared]
+```
+
+
+### 🎯 Key Points (Exam Focus)
+
+* Authentication → verify identity
+* Authorization → control access
+* Flask-Login manages user sessions
+* `login_required` protects routes
+* `user_loader` loads user from session
+* Unauthorized users → redirected to login
+* `login_user()` → logs in user
+* `logout_user()` → logs out user
+* `UserMixin` provides built-in user methods
 
 ## 15. Deployment of Flask Application
 
@@ -2687,51 +3435,313 @@ flowchart TD
 
 #### 15.1.1 Need for Deployment
 
+**Deployment** is the process of making a Flask application available to users over the internet.
+
+* Converts a local app → publicly accessible service
+* Required for real-world usage
+* Allows users to access app via domain/IP
+
+Without deployment:
+
+* App runs only on local machine
+* Not accessible to others
+
+
 #### 15.1.2 Production vs Development Server
+
+| Feature     | Development Server | Production Server  |
+| ----------- | ------------------ | ------------------ |
+| Purpose     | Testing            | Real-world usage   |
+| Performance | Low                | High               |
+| Security    | Weak               | Strong             |
+| Example     | `app.run()`        | Gunicorn, Waitress |
+
+👉 Important:
+
+* Flask’s built-in server (`app.run()`) is **NOT suitable for production**
+
 
 ### 15.2 WSGI Servers
 
-#### 15.2.1 Gunicorn (Linux)
+WSGI (Web Server Gateway Interface) connects:
 
-##### 15.2.1.1 Installation
+* Web server ↔ Python application
 
-##### 15.2.1.2 Command Usage
+Used for running Flask apps in production.
 
-##### 15.2.1.3 -w (Workers)
 
-##### 15.2.1.4 -b (Bind Address)
+### 15.2.1 Gunicorn (Linux)
 
-#### 15.2.2 Waitress (Windows)
+#### 15.2.1.1 Installation
+
+```python showLineNumbers id="install_gunicorn"
+pip install gunicorn
+```
+
+
+#### 15.2.1.2 Command Usage
+
+```python showLineNumbers id="gunicorn_command"
+gunicorn -w 4 -b 0.0.0.0:8000 app:app
+```
+
+* `app:app` → file name : Flask app instance
+
+
+#### 15.2.1.3 -w (Workers)
+
+* Number of worker processes
+
+Example:
+
+```text id="workers_example"
+-w 4 → 4 worker processes
+```
+
+👉 More workers = better concurrency
+
+
+#### 15.2.1.4 -b (Bind Address)
+
+* Defines IP and port
+
+Example:
+
+```text id="bind_example"
+0.0.0.0:8000
+```
+
+* `0.0.0.0` → accessible from any IP
+* `8000` → port number
+
+
+### 15.2.2 Waitress (Windows)
+
+Used for Windows systems as an alternative to Gunicorn.
+
+Installation:
+
+```python showLineNumbers id="install_waitress"
+pip install waitress
+```
+
+Run app:
+
+```python showLineNumbers id="waitress_run"
+from waitress import serve
+serve(app, host='0.0.0.0', port=8000)
+```
+
+
+### 🧠 WSGI Flow
+
+```mermaid id="wsgi_flow"
+flowchart TD
+    A[Client Request] --> B[Web Server]
+    B --> C[WSGI Server]
+    C --> D[Flask App]
+    D --> E[Response]
+```
+
 
 ### 15.3 Reverse Proxy
 
-#### 15.3.1 Purpose (Forward Requests to Flask App) 
+#### 15.3.1 Purpose (Forward Requests to Flask App)
+
+A **reverse proxy** sits in front of the Flask app and:
+
+* Receives client requests
+* Forwards them to Flask server
+* Returns response to client
+
+Benefits:
+
+* Improved performance
+* Security (hides backend)
+* Load balancing
+
 
 #### 15.3.2 Nginx Configuration
 
+Nginx is commonly used as a reverse proxy.
+
+Basic steps:
+
+1. Install Nginx
+2. Configure server block
+3. Forward requests to Flask app
+
+Example config:
+
+```text id="nginx_config"
+server {
+    listen 80;
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
+```
+
+
 #### 15.3.3 Apache Configuration
+
+Apache can also act as a reverse proxy.
+
+* Uses modules like:
+
+  * mod_proxy
+  * mod_wsgi
+
+Example concept:
+
+```text id="apache_config"
+ProxyPass / http://127.0.0.1:8000/
+```
+
+
+### 🧠 Reverse Proxy Flow
+
+```mermaid id="proxy_flow"
+flowchart TD
+    A[Client] --> B[Nginx/Apache]
+    B --> C[WSGI Server]
+    C --> D[Flask App]
+    D --> B
+    B --> A
+```
+
 
 ### 15.4 Deployment Platforms
 
-#### 15.4.1 Heroku
+### 15.4.1 Heroku
 
-##### 15.4.1.1 Install CLI
+#### 15.4.1.1 Install CLI
 
-##### 15.4.1.2 Create Profile
+Install Heroku CLI:
 
-##### 15.4.1.3 Deployment Commands
+```text id="heroku_cli"
+Download from heroku.com
+```
 
-#### 15.4.2 AWS Elastic Beanstalk
 
-#### 15.4.3 Docker Deployment 
+#### 15.4.1.2 Create Profile
+
+```python showLineNumbers id="heroku_login"
+heroku login
+```
+
+
+#### 15.4.1.3 Deployment Commands
+
+```python showLineNumbers id="heroku_deploy"
+git init
+heroku create
+git add .
+git commit -m "Initial commit"
+git push heroku master
+```
+
+👉 Deploys Flask app to cloud
+
+
+### 15.4.2 AWS Elastic Beanstalk
+
+* Cloud platform by AWS
+* Provides pre-configured Python environment
+* Automatically handles:
+
+  * Scaling
+  * Load balancing
+
+
+### 15.4.3 Docker Deployment
+
+Docker allows containerizing the Flask app.
+
+Example Dockerfile:
+
+```dockerfile id="dockerfile_example"
+FROM python:3.10
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+```
+
+👉 Benefits:
+
+* Consistent environment
+* Easy deployment across systems
+
+
+### 🧠 Deployment Flow
+
+```mermaid id="deployment_flow"
+flowchart TD
+    A[Flask App] --> B[WSGI Server]
+    B --> C[Reverse Proxy]
+    C --> D[Internet Users]
+```
+
 
 ### 15.5 Serving Static Files
 
 #### 15.5.1 Static Files in Production
 
+In production:
+
+* Static files are usually served by:
+
+  * Nginx
+  * Apache
+
+👉 Faster than Flask handling them
+
+
 #### 15.5.2 static Folder Usage
 
+* Static files stored in `static/` folder
+* Includes:
 
+  * CSS
+  * JS
+  * Images
+
+Example:
+
+```text id="static_prod"
+static/css/style.css
+static/js/script.js
+```
+
+👉 Proper configuration ensures:
+
+* Faster loading
+* Better performance
+
+
+### 🎯 Key Points (Exam Focus)
+
+* Deployment = making app accessible online
+* `app.run()` not for production
+* Use WSGI servers:
+
+  * Gunicorn (Linux)
+  * Waitress (Windows)
+* Gunicorn flags:
+
+  * `-w` → workers
+  * `-b` → bind address
+* Reverse proxy:
+
+  * Nginx / Apache
+  * Forwards requests to Flask
+* Deployment platforms:
+
+  * Heroku
+  * AWS
+  * Docker
+* Static files served efficiently in production
 
 ## 16. Summary Concepts (From PDF Table)
 
@@ -2739,26 +3749,179 @@ flowchart TD
 
 #### 16.1.1 Using @app.errorhandler
 
+Flask provides `@app.errorhandler()` to handle specific HTTP errors gracefully.
+
+* Used for errors like:
+
+  * 404 (Not Found)
+  * 500 (Internal Server Error)
+
+Example:
+
+```python showLineNumbers id="summary_errorhandler"
+@app.errorhandler(404)
+def not_found(error):
+    return "Page Not Found", 404
+```
+
+Key idea:
+
+* Prevents crash
+* Returns controlled response to user
+
+
 #### 16.1.2 try-except for Application Errors
+
+Used to handle runtime errors inside application logic.
+
+```python showLineNumbers id="summary_try_except"
+@app.route('/divide')
+def divide():
+    try:
+        result = 10 / 0
+        return str(result)
+    except Exception:
+        return "Error occurred"
+```
+
+Key idea:
+
+* Handles unexpected errors
+* Improves application stability
+
 
 ### 16.2 Flash Messages
 
 #### 16.2.1 Temporary Notifications
 
+Flash messages are **temporary messages stored in session**.
+
+* Displayed once and removed automatically
+* Used for user feedback
+
+Example:
+
+```python showLineNumbers id="summary_flash"
+from flask import flash
+
+flash("Login Successful")
+```
+
+
 #### 16.2.2 Success/Error Display
+
+Flash messages are commonly used for:
+
+* Success:
+
+```text id="flash_success"
+"Account created successfully"
+```
+
+* Error:
+
+```text id="flash_error"
+"Invalid credentials"
+```
+
+Displayed in templates:
+
+```html id="summary_flash_template"
+{% for message in get_flashed_messages() %}
+    <p>{{ message }}</p>
+{% endfor %}
+```
+
 
 ### 16.3 Sending Emails
 
 #### 16.3.1 Flask-Mail Configuration
 
+Flask-Mail requires SMTP configuration:
+
+```python showLineNumbers id="summary_mail_config"
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
+app.config['MAIL_PASSWORD'] = 'your_password'
+```
+
+Key idea:
+
+* Connects Flask app to mail server
+
+
 #### 16.3.2 Use Cases (Activation, Reset)
+
+Emails are used for:
+
+* Account activation
+* Password reset
+* Notifications
+
+Example:
+
+```text id="mail_usecases_summary"
+"Click here to verify your account"
+"Reset your password using this link"
+```
+
 
 ### 16.4 Deployment
 
 #### 16.4.1 WSGI Servers
 
+Used to run Flask apps in production.
+
+Examples:
+
+* Gunicorn (Linux)
+* Waitress (Windows)
+
+Key idea:
+
+* Handles requests efficiently
+* Replaces Flask development server
+
+
 #### 16.4.2 Reverse Proxy
 
-#### 16.4.3 Cloud Platforms 
+Acts as an intermediary between client and Flask app.
+
+* Tools:
+
+  * Nginx
+  * Apache
+
+Function:
+
+* Forwards requests to Flask server
+* Improves performance and security
 
 
+#### 16.4.3 Cloud Platforms
+
+Flask apps can be deployed on cloud services:
+
+* Heroku
+* AWS Elastic Beanstalk
+* Docker-based deployments
+
+Key idea:
+
+* Makes app accessible globally
+* Handles scaling and infrastructure
+
+
+### 🎯 Key Points (Exam Focus)
+
+* `@app.errorhandler()` handles HTTP errors
+* `try-except` handles runtime errors
+* Flash messages = temporary notifications
+* Flask-Mail used for sending emails
+* Deployment uses:
+
+  * WSGI servers
+  * Reverse proxy
+  * Cloud platforms

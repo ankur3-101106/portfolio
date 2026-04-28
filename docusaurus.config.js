@@ -133,7 +133,7 @@ const config = {
           position: 'left',
           label: 'Notes',
         },
-        { to: '/blog', label: 'Blog', position: 'left' },
+        // { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/ankur3-101106',
           label: 'GitHub',

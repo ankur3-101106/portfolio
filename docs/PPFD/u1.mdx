@@ -123,12 +123,12 @@ sidebar_position: 1
 
 #### Python Program Examples (Grouped)
 
-```python
+```python showLineNumbers
 ## Example 1: Basic Python Program
 print("Hello, Python")
 ```
 
-```python
+```python showLineNumbers
 ## Example 2: Demonstrating readability
 a = 10
 b = 20
@@ -136,14 +136,14 @@ sum = a + b
 print("Sum:", sum)
 ```
 
-```python
+```python showLineNumbers
 ## Example 3: Dynamic typing demonstration
 x = 10
 x = "Python"
 print(x)
 ```
 
-```python
+```python showLineNumbers
 ## Example 4: Platform-independent script
 import sys
 print("Running on:", sys.platform)
@@ -170,7 +170,7 @@ print("Running on:", sys.platform)
 - Fewer syntax-related bugs
 - Easier debugging and maintenance
 
-```python
+```python showLineNumbers
 ## Readable and clean syntax example
 for i in range(3):
     print("Python is easy to read")
@@ -194,7 +194,7 @@ for i in range(3):
 
 - Interpreter performs type checking during execution.
 
-```python
+```python showLineNumbers
 ## Dynamic typing demonstration
 x = 10
 x = 3.14
@@ -219,7 +219,7 @@ print(x)
 - Improved safety
 - Reduced development complexity
 
-```python
+```python showLineNumbers
 ## No manual memory handling required
 a = 100
 b = 200
@@ -236,7 +236,7 @@ print(a + b)
 - Bytecode improves execution speed compared to direct interpretation.
 - Bytecode is platform-independent.
 
-```python
+```python showLineNumbers
 ## Checking bytecode generation
 import os
 print("__pycache__" in os.listdir())
@@ -264,7 +264,7 @@ flowchart TD
 - Defines Python’s behavior and standards.
 - Other implementations exist but follow CPython semantics.
 
-```python
+```python showLineNumbers
 ## Checking Python implementation
 import platform
 print(platform.python_implementation())
@@ -288,7 +288,7 @@ print(platform.python_implementation())
 - Handles circular references that reference counting cannot resolve.
 - Periodically scans object graphs.
 
-```python
+```python showLineNumbers
 ## Inspecting garbage collection status
 import gc
 print(gc.isenabled())
@@ -310,7 +310,7 @@ print(gc.isenabled())
     - Abstraction
 - Enables modular, reusable, and scalable programs.
 
-```python
+```python showLineNumbers
 ## Everything is an object
 x = 10
 print(type(x))
@@ -330,7 +330,7 @@ print(x.__class__)
 - Linux
 - macOS
 
-```python
+```python showLineNumbers
 ## Platform detection
 import sys
 print(sys.platform)
@@ -349,7 +349,7 @@ print(sys.platform)
     - Data serialization
 - Reduces dependency on external libraries.
 
-```python
+```python showLineNumbers
 ## Using standard library modules
 import datetime
 print(datetime.datetime.now())
@@ -369,7 +369,7 @@ print(datetime.datetime.now())
 - Security through community review
 - Large ecosystem of tools and libraries
 
-```python
+```python showLineNumbers
 ## Checking Python license
 import sys
 print(sys.license)
@@ -402,7 +402,7 @@ print(sys.license)
 - Content management systems
 - Backend services for mobile apps
 
-```python
+```python showLineNumbers
 ## Minimal web application using Flask
 from flask import Flask
 
@@ -432,7 +432,7 @@ if __name__ == "__main__":
 - Platform-independent GUI logic
 - Suitable for small to medium desktop tools
 
-```python
+```python showLineNumbers
 ## Simple GUI example using Tkinter
 import tkinter as tk
 
@@ -462,7 +462,7 @@ root.mainloop()
 - Easy debugging
 - Ideal for scripting
 
-```python
+```python showLineNumbers
 ## Console-based application
 name = input("Enter your name: ")
 print("Welcome,", name)
@@ -482,7 +482,7 @@ print("Welcome,", name)
     - Create developer tools
 - Acts as a “glue language” to integrate components written in other languages.
 
-```python
+```python showLineNumbers
 ## Modular software structure example
 def add(a, b):
     return a + b
@@ -505,7 +505,7 @@ print(subtract(10, 5))
 - High-level abstractions hide complex numerical computations.
 - Efficient due to integration with low-level optimized libraries.
 
-```python
+```python showLineNumbers
 ## Numerical computation example
 import math
 
@@ -526,7 +526,7 @@ print("Area of circle:", area)
 - Reduces manual effort and human error.
 - Easily integrates with databases and spreadsheets.
 
-```python
+```python showLineNumbers
 ## Simple business logic example
 sales = [12000, 15000, 11000]
 total_sales = sum(sales)
@@ -546,7 +546,7 @@ print("Total Sales:", total_sales)
     - Frame extraction
     - Signal processing
 
-```python
+```python showLineNumbers
 ## Basic audio file handling example
 import wave
 
@@ -565,7 +565,7 @@ audio.close()
     - Custom CAD tools
 - Python scripts control geometry creation and manipulation.
 
-```python
+```python showLineNumbers
 ## Conceptual example: parametric value
 length = 10
 width = 5
@@ -587,7 +587,7 @@ print("CAD Object Area:", area)
     - Secure authentication
 - Python’s readability helps maintain large codebases.
 
-```python
+```python showLineNumbers
 ## Enterprise-style configuration handling
 config = {
     "host": "localhost",
@@ -609,7 +609,7 @@ print("Server running on port:", config["port"])
 - Python handles images as numerical matrices.
 - Enables automation of visual tasks.
 
-```python
+```python showLineNumbers
 ## Image processing example
 from PIL import Image
 
@@ -637,7 +637,7 @@ print(img.mode)
 - Reassignment changes the reference, not the object itself (for immutable types).
 - Variables have no fixed type; the object does.
 
-```python
+```python showLineNumbers
 x = 10
 y = x
 print(x, y)
@@ -658,7 +658,7 @@ print(x, y)
 - Immutable objects → new memory created on modification
 - Mutable objects → same memory modified
 
-```python
+```python showLineNumbers
 a = 100
 b = a
 print(id(a), id(b))
@@ -696,7 +696,7 @@ flowchart LR
 - Global
 - Built-in
 
-```python
+```python showLineNumbers
 x = 5
 print(type(x))
 
@@ -717,7 +717,7 @@ print(type(x))
 - Python is dynamically typed but **strongly typed**
 - Implicit type coercion is not allowed.
 
-```python
+```python showLineNumbers
 x = 10
 print(type(x))
 
@@ -725,7 +725,7 @@ x = 10.5
 print(type(x))
 ```
 
-```python
+```python showLineNumbers
 ## Strong typing example (will raise error)
 print("5" + 5)
 ```
@@ -735,7 +735,7 @@ print("5" + 5)
 - `type()`
 - `isinstance()`
 
-```python
+```python showLineNumbers
 x = 10
 print(isinstance(x, int))
 ```
@@ -769,14 +769,14 @@ print(isinstance(x, int))
 - `class`
 - `student name`
 
-```python
+```python showLineNumbers
 ## Valid variables
 total_marks = 90
 _count = 10
 name1 = "Ankur"
 ```
 
-```python
+```python showLineNumbers
 ## Invalid variable examples (will raise errors)
 ## 1value = 10
 ## total-marks = 90
@@ -800,7 +800,7 @@ name1 = "Ankur"
 - Mutable:
     - `list`, `dict`, `set`
 
-```python
+```python showLineNumbers
 ## Immutable behavior
 x = 10
 print(id(x))
@@ -808,7 +808,7 @@ x += 1
 print(id(x))
 ```
 
-```python
+```python showLineNumbers
 ## Mutable behavior
 lst = [1, 2, 3]
 print(id(lst))
@@ -821,7 +821,7 @@ print(id(lst))
 
 - `del` removes the reference, not necessarily the object.
 
-```python
+```python showLineNumbers
 x = 100
 del x
 ```
@@ -831,14 +831,14 @@ del x
 
 - Accidentally overwriting built-ins:
 
-```python
+```python showLineNumbers
 ## Bad practice
 list = [1, 2, 3]
 ```
 
 - Confusing assignment with copying:
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = a
 b.append(3)
@@ -875,7 +875,7 @@ print(a)
 - **Case-sensitive**
 - Must **not be a Python keyword**
 
-```python
+```python showLineNumbers
 valid_name = 10
 _valid_name = 20
 validName123 = 30
@@ -889,7 +889,7 @@ validName123 = 30
 - Examples of keywords:
     - `if`, `else`, `while`, `for`, `class`, `def`, `return`, `True`, `None`
 
-```python
+```python showLineNumbers
 ## Invalid: keyword usage
 ## class = 10
 ## if = 5
@@ -897,7 +897,7 @@ validName123 = 30
 
 To view all keywords:
 
-```python
+```python showLineNumbers
 import keyword
 print(keyword.kwlist)
 ```
@@ -907,7 +907,7 @@ print(keyword.kwlist)
 
 - Python treats identifiers with different casing as **distinct**.
 
-```python
+```python showLineNumbers
 value = 10
 Value = 20
 print(value, Value)
@@ -920,7 +920,7 @@ print(value, Value)
 - Technically valid but **strongly discouraged** in professional codebases.
 - Reduces readability and portability.
 
-```python
+```python showLineNumbers
 π = 3.14
 print(π)
 ```
@@ -933,7 +933,7 @@ print(π)
 - `__var` → name mangling in classes
 - `__var__` → reserved for Python internals (dunder methods)
 
-```python
+```python showLineNumbers
 _var = "internal"
 class Test:
     def __init__(self):
@@ -948,7 +948,7 @@ class Test:
 - Follow all syntax rules
 - Meaningful and readable
 
-```python
+```python showLineNumbers
 count = 0
 student_name = "Ankur"
 totalMarks = 95
@@ -962,7 +962,7 @@ _temp_value = 3.5
 
 - Used for variables and functions
 
-```python
+```python showLineNumbers
 student_score = 90
 calculate_average()
 ```
@@ -971,7 +971,7 @@ calculate_average()
 
 - Used for class names
 
-```python
+```python showLineNumbers
 class StudentRecord:
     pass
 ```
@@ -980,7 +980,7 @@ class StudentRecord:
 
 - Allowed but **not standard in Python**
 
-```python
+```python showLineNumbers
 studentScore = 85
 ```
 
@@ -989,7 +989,7 @@ studentScore = 85
 
 - Identifier names should express **intent**, not implementation.
 
-```python
+```python showLineNumbers
 ## Good
 total_price = 500
 
@@ -1003,7 +1003,7 @@ tp = 500
 - Short for small scope
 - Longer for clarity in larger scope
 
-```python
+```python showLineNumbers
 i = 0                 ## acceptable in loops
 number_of_students = 60
 ```
@@ -1013,7 +1013,7 @@ number_of_students = 60
 
 #### Common Invalid Patterns
 
-```python
+```python showLineNumbers
 ## Starts with digit
 ## 1value = 10
 
@@ -1033,12 +1033,12 @@ number_of_students = 60
 - Python allows this syntactically, but it is **dangerous**.
 - Overwrites built-in functionality.
 
-```python
+```python showLineNumbers
 list = [1, 2, 3]
 ## list() is now inaccessible
 ```
 
-```python
+```python showLineNumbers
 sum = 10
 ## sum() built-in function lost
 ```
@@ -1048,7 +1048,7 @@ sum = 10
 
 - Same identifier used in different scopes may cause confusion.
 
-```python
+```python showLineNumbers
 x = 10
 
 def func():
@@ -1070,7 +1070,7 @@ print(x)
     - Function definition
     - Import statements
 
-```python
+```python showLineNumbers
 a = 10
 ```
 
@@ -1084,7 +1084,7 @@ Python resolves identifiers in the following order:
 3. Global
 4. Built-in
 
-```python
+```python showLineNumbers
 x = 5
 
 def outer():
@@ -1153,7 +1153,7 @@ flowchart TD
 > In Python, *assignment creates a binding between a name and an object*.
 > 
 
-```python
+```python showLineNumbers
 x = 10
 ```
 
@@ -1167,7 +1167,7 @@ x = 10
 - Variables can be declared at **any point during program execution**.
 - No forward declaration required.
 
-```python
+```python showLineNumbers
 print(a)        ## Error: a not defined
 a = 5
 print(a)
@@ -1178,13 +1178,13 @@ print(a)
 
 - Python allows **multiple variables to be declared in one line**.
 
-```python
+```python showLineNumbers
 a = b = c = 10
 ```
 
 - All variables reference the **same object** in memory.
 
-```python
+```python showLineNumbers
 print(id(a), id(b), id(c))
 ```
 
@@ -1193,13 +1193,13 @@ print(id(a), id(b), id(c))
 
 - Assign different values to different variables in a single statement.
 
-```python
+```python showLineNumbers
 x, y, z = 1, 2, 3
 ```
 
 - Internally uses tuple packing and unpacking.
 
-```python
+```python showLineNumbers
 x, y = y, x   ## Value swapping without temp variable
 ```
 
@@ -1209,7 +1209,7 @@ x, y = y, x   ## Value swapping without temp variable
 - Python does **not have block-level scope**.
 - Variables declared inside loops or conditionals exist in the enclosing scope.
 
-```python
+```python showLineNumbers
 if True:
     temp = 100
 
@@ -1222,7 +1222,7 @@ print(temp)
 - Variables declared inside a function are **local by default**.
 - Use `global` keyword to modify global variable inside a function.
 
-```python
+```python showLineNumbers
 x = 10
 
 def modify():
@@ -1239,7 +1239,7 @@ print(x)
 - Variables can be declared by taking input at runtime.
 - Input is always read as a string unless explicitly converted.
 
-```python
+```python showLineNumbers
 age = int(input("Enter age: "))
 ```
 
@@ -1249,7 +1249,7 @@ age = int(input("Enter age: "))
 - `del` removes the name binding.
 - Object is destroyed only when reference count becomes zero.
 
-```python
+```python showLineNumbers
 x = 50
 del x
 ```
@@ -1264,21 +1264,21 @@ del x
 
 #### Simple Assignment
 
-```python
+```python showLineNumbers
 x = 5
 ```
 
 
 #### Chained Assignment
 
-```python
+```python showLineNumbers
 a = b = c = 100
 ```
 
 
 #### Parallel Assignment
 
-```python
+```python showLineNumbers
 x, y = 10, 20
 ```
 
@@ -1298,7 +1298,7 @@ x, y = 10, 20
 | `%=` | Modulus and assign |
 | `**=` | Power and assign |
 
-```python
+```python showLineNumbers
 x = 10
 x += 5
 x *= 2
@@ -1310,7 +1310,7 @@ x *= 2
 - Assignment creates a **new reference**.
 - Mutable objects can lead to unintended side effects.
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = a
 b.append(3)
@@ -1320,7 +1320,7 @@ print(a)
 
 #### Copying Objects Correctly
 
-```python
+```python showLineNumbers
 ## Shallow copy
 a = [1, 2]
 b = a.copy()
@@ -1336,13 +1336,13 @@ c = copy.deepcopy(a)
 - Immutable → new object created
 - Mutable → object modified in-place
 
-```python
+```python showLineNumbers
 ## Immutable
 x = 10
 x += 1
 ```
 
-```python
+```python showLineNumbers
 ## Mutable
 lst = [1, 2]
 lst += [3]
@@ -1354,7 +1354,7 @@ lst += [3]
 - Assign and evaluate in one expression.
 - Introduced in Python 3.8.
 
-```python
+```python showLineNumbers
 if (n := len([1, 2, 3])) > 2:
     print(n)
 ```
@@ -1376,7 +1376,7 @@ flowchart LR
 - Accidental shared references
 - Shadowing global variables
 
-```python
+```python showLineNumbers
 ## Logical error
 if x = 5:   ## invalid
     pass
@@ -1420,7 +1420,7 @@ Python supports **integer arithmetic, floating-point arithmetic, and arbitrary-p
 - `/` **always returns float**
 - `//` returns the **floor** of the result (towards negative infinity)
 
-```python
+```python showLineNumbers
 print(7 / 2)     ## 3.5
 print(7 // 2)    ## 3
 print(-7 // 2)   ## -4  (not -3!)
@@ -1436,7 +1436,7 @@ Python ensures:
 (a // b) * b + (a % b) == a
 ```
 
-```python
+```python showLineNumbers
 print(7 % 2)     ## 1
 print(-7 % 2)    ## 1
 print(7 % -2)    ## -1
@@ -1447,7 +1447,7 @@ print(7 % -2)    ## -1
 
 - `*` is **right-associative**.
 
-```python
+```python showLineNumbers
 print(2 ** 3 ** 2)   ## 512 → 2 ** (3 ** 2)
 ```
 
@@ -1456,7 +1456,7 @@ print(2 ** 3 ** 2)   ## 512 → 2 ** (3 ** 2)
 
 - Python integers are **unbounded** (limited by memory).
 
-```python
+```python showLineNumbers
 x = 10 ** 100
 print(x)
 ```
@@ -1482,14 +1482,14 @@ Comparison operators return **Boolean values (`True` or `False`)**.
 
 Python allows **mathematical-style chaining**.
 
-```python
+```python showLineNumbers
 x = 5
 print(1 < x < 10)     ## True
 ```
 
 Equivalent to:
 
-```python
+```python showLineNumbers
 print(1 < x and x < 10)
 ```
 
@@ -1498,7 +1498,7 @@ print(1 < x and x < 10)
 
 - Compared character-by-character using **Unicode values**.
 
-```python
+```python showLineNumbers
 print("apple" < "banana")   ## True
 print("Z" < "a")            ## True
 ```
@@ -1508,7 +1508,7 @@ print("Z" < "a")            ## True
 
 - Some comparisons are invalid in Python 3.
 
-```python
+```python showLineNumbers
 ## print(5 < "5")   ## TypeError
 ```
 
@@ -1534,7 +1534,7 @@ Assignment operators **bind names to objects**.
 
 #### Assignment vs Mutation (Mind-bender #5)
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = a
 b += [3]
@@ -1543,7 +1543,7 @@ print(a)   ## [1, 2, 3]
 
 vs
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = a
 b = b + [3]
@@ -1558,7 +1558,7 @@ print(a)   ## [1, 2]
 
 Assigns and evaluates in one expression.
 
-```python
+```python showLineNumbers
 if (n := len("Python")) > 3:
     print(n)
 ```
@@ -1581,7 +1581,7 @@ Logical operators work on **Boolean logic**, but return **operands**, not always
 
 - Python stops evaluation as soon as result is known.
 
-```python
+```python showLineNumbers
 x = 0
 y = 10
 print(x and y)   ## 0
@@ -1601,14 +1601,14 @@ Falsy values:
 
 Everything else → Truthy.
 
-```python
+```python showLineNumbers
 print([] or "fallback")   ## fallback
 ```
 
 
 #### Logical Operators Return Objects (Important!)
 
-```python
+```python showLineNumbers
 print("A" and "B")   ## B
 print("" or "B")     ## B
 ```
@@ -1632,7 +1632,7 @@ Operate on **binary representations** of integers.
 
 #### Binary-Level Thinking
 
-```python
+```python showLineNumbers
 a = 5    ## 0101
 b = 3    ## 0011
 print(a & b)   ## 1
@@ -1642,7 +1642,7 @@ print(a | b)   ## 7
 
 #### Bitwise NOT (Mind-bender #7)
 
-```python
+```python showLineNumbers
 print(~5)   ## -6
 ```
 
@@ -1655,7 +1655,7 @@ Because:
 
 #### Bit Shifting
 
-```python
+```python showLineNumbers
 print(5 << 1)   ## 10
 print(5 >> 1)   ## 2
 ```
@@ -1683,7 +1683,7 @@ Used to test **existence of elements in sequences**.
 - Lists/Tuples → linear search
 - Sets/Dictionaries → hash-based lookup (O(1))
 
-```python
+```python showLineNumbers
 print(3 in [1, 2, 3])        ## True
 print("a" in "cat")         ## True
 print("x" in {"x": 1})      ## True (checks keys)
@@ -1704,7 +1704,7 @@ Used to check **object identity**, not equality.
 
 #### `is` vs `==` (Mind-bender #8)
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = [1, 2]
 print(a == b)   ## True
@@ -1716,7 +1716,7 @@ print(a is b)   ## False
 
 Python caches small integers `[-5, 256]`.
 
-```python
+```python showLineNumbers
 a = 100
 b = 100
 print(a is b)   ## True
@@ -1729,7 +1729,7 @@ print(x is y)   ## False
 
 #### `None` Comparison (Best Practice)
 
-```python
+```python showLineNumbers
 x = None
 print(x is None)   ## Correct
 ```
@@ -1747,7 +1747,7 @@ Order (high → low):
 6. `and`
 7. `or`
 
-```python
+```python showLineNumbers
 print(not False and True)   ## True
 ```
 
@@ -1776,7 +1776,7 @@ flowchart TD
     - Can be rebound to different objects
 - Variables exist within **namespaces** (scope).
 
-```python
+```python showLineNumbers
 x = 10
 x = "Python"
 ```
@@ -1784,7 +1784,7 @@ x = "Python"
 - Assignment binds a name to an object.
 - Multiple variables can reference the same object.
 
-```python
+```python showLineNumbers
 a = b = 5
 ```
 
@@ -1806,7 +1806,7 @@ a = b = 5
     - Boolean
     - Special
 
-```python
+```python showLineNumbers
 x = 10
 print(type(x))
 ```
@@ -1819,7 +1819,7 @@ print(type(x))
 - Represents integers of **arbitrary precision**.
 - No overflow limit (bounded by memory).
 
-```python
+```python showLineNumbers
 a = 12345678901234567890
 ```
 
@@ -1828,7 +1828,7 @@ a = 12345678901234567890
 - Represents floating-point numbers.
 - Uses **IEEE 754 double precision**.
 
-```python
+```python showLineNumbers
 pi = 3.14159
 ```
 
@@ -1836,7 +1836,7 @@ pi = 3.14159
 
 - Represents complex numbers: `a + bj`.
 
-```python
+```python showLineNumbers
 z = 2 + 3j
 print(z.real, z.imag)
 ```
@@ -1862,7 +1862,7 @@ print(z.real, z.imag)
 - Indexed from `0`.
 - Supports slicing.
 
-```python
+```python showLineNumbers
 s = "HELLO"
 print(s[0])
 print(s[1:4])
@@ -1870,7 +1870,7 @@ print(s[1:4])
 
 - Strings are immutable.
 
-```python
+```python showLineNumbers
 ## s[0] = 'h'  ## Error
 ```
 
@@ -1879,7 +1879,7 @@ print(s[1:4])
     - (repetition)
     - `in` (membership)
 
-```python
+```python showLineNumbers
 print("Py" in "Python")
 ```
 
@@ -1889,19 +1889,19 @@ print("Py" in "Python")
 - Mutable sequence.
 - Can store mixed data types.
 
-```python
+```python showLineNumbers
 lst = [1, "Python", 3.5]
 ```
 
 - Supports dynamic resizing.
 
-```python
+```python showLineNumbers
 lst.append(10)
 ```
 
 - Lists are mutable → in-place modification.
 
-```python
+```python showLineNumbers
 lst[0] = 100
 ```
 
@@ -1912,13 +1912,13 @@ lst[0] = 100
 - Faster and safer than lists.
 - Used for fixed data.
 
-```python
+```python showLineNumbers
 t = (1, 2, 3)
 ```
 
 - Supports indexing and slicing.
 
-```python
+```python showLineNumbers
 print(t[1])
 ```
 
@@ -1931,7 +1931,7 @@ print(t[1])
 - Memory-efficient.
 - Commonly used in loops.
 
-```python
+```python showLineNumbers
 r = range(1, 5)
 print(list(r))
 ```
@@ -1949,19 +1949,19 @@ print(list(r))
 - Values can be any type.
 - Ordered (Python 3.7+).
 
-```python
+```python showLineNumbers
 student = {"name": "Ankur", "age": 20}
 ```
 
 - Access via keys.
 
-```python
+```python showLineNumbers
 print(student["name"])
 ```
 
 - Mutable and dynamic.
 
-```python
+```python showLineNumbers
 student["age"] = 21
 ```
 
@@ -1974,7 +1974,7 @@ student["age"] = 21
 - Mutable.
 - No indexing.
 
-```python
+```python showLineNumbers
 s = {1, 2, 3, 3}
 print(s)
 ```
@@ -1984,7 +1984,7 @@ print(s)
     - Intersection
     - Difference
 
-```python
+```python showLineNumbers
 a = {1, 2, 3}
 b = {3, 4}
 print(a & b)
@@ -1997,7 +1997,7 @@ print(a & b)
 - Hashable.
 - Can be used as dictionary keys or set elements.
 
-```python
+```python showLineNumbers
 fs = frozenset([1, 2, 3])
 ```
 
@@ -2009,14 +2009,14 @@ fs = frozenset([1, 2, 3])
     - `True`
     - `False`
 
-```python
+```python showLineNumbers
 x = True
 y = False
 ```
 
 - Used in conditions and control flow.
 
-```python
+```python showLineNumbers
 print(10 > 5)
 ```
 
@@ -2030,13 +2030,13 @@ print(10 > 5)
 - Represents absence of value.
 - Used as default return value for functions.
 
-```python
+```python showLineNumbers
 x = None
 ```
 
 - Comparison should be done using `is`.
 
-```python
+```python showLineNumbers
 print(x is None)
 ```
 
@@ -2047,7 +2047,7 @@ print(x is None)
 - Cannot be used as identifiers.
 - Fixed and finite set.
 
-```python
+```python showLineNumbers
 import keyword
 print(keyword.kwlist)
 ```
@@ -2069,7 +2069,7 @@ Examples:
 
 - Begin with `#`.
 
-```python
+```python showLineNumbers
 ## This is a single-line comment
 x = 10
 ```
@@ -2080,13 +2080,13 @@ x = 10
 - Python does not have true multi-line comments.
 - Achieved using multiple `#` or docstrings.
 
-```python
+```python showLineNumbers
 ## Line 1
 ## Line 2
 ## Line 3
 ```
 
-```python
+```python showLineNumbers
 """
 This is often used as
 a multi-line comment
@@ -2105,7 +2105,7 @@ but technically a docstring
 
 - Executes block when condition is True.
 
-```python
+```python showLineNumbers
 x = 10
 if x > 5:
     print("Greater than 5")
@@ -2116,7 +2116,7 @@ if x > 5:
 
 - Executes one block if condition is True, another if False.
 
-```python
+```python showLineNumbers
 x = 3
 if x % 2 == 0:
     print("Even")
@@ -2129,7 +2129,7 @@ else:
 
 - If statement inside another if.
 
-```python
+```python showLineNumbers
 x = 10
 if x > 0:
     if x % 2 == 0:
@@ -2154,13 +2154,13 @@ flowchart TD
     - 4 spaces per level
 - Inconsistent indentation causes errors.
 
-```python
+```python showLineNumbers
 if True:
     print("Correct")
     print("Still inside block")
 ```
 
-```python
+```python showLineNumbers
 ## IndentationError example
 ## if True:
 ## print("Error")
@@ -2210,7 +2210,7 @@ flowchart TD
 
 #### Syntax
 
-```python
+```python showLineNumbers
 while condition:
     statements
 ```
@@ -2218,7 +2218,7 @@ while condition:
 
 #### Basic While Loop
 
-```python
+```python showLineNumbers
 i = 1
 while i <= 5:
     print(i)
@@ -2230,7 +2230,7 @@ while i <= 5:
 
 - Occurs when condition never becomes False.
 
-```python
+```python showLineNumbers
 ## while True:
 ##     print("Infinite Loop")
 ```
@@ -2240,7 +2240,7 @@ while i <= 5:
 
 - Any non-zero, non-empty object evaluates to True.
 
-```python
+```python showLineNumbers
 x = [1, 2]
 while x:
     print(x.pop())
@@ -2251,7 +2251,7 @@ while x:
 
 - `else` executes **only if loop terminates normally**.
 
-```python
+```python showLineNumbers
 i = 1
 while i <= 3:
     print(i)
@@ -2269,7 +2269,7 @@ else:
 
 #### Syntax
 
-```python
+```python showLineNumbers
 for variable in iterable:
     statements
 ```
@@ -2277,7 +2277,7 @@ for variable in iterable:
 
 #### For Loop Over Sequence
 
-```python
+```python showLineNumbers
 for ch in "Python":
     print(ch)
 ```
@@ -2291,7 +2291,7 @@ Internally:
 - `next()` is repeatedly called
 - `StopIteration` ends loop
 
-```python
+```python showLineNumbers
 it = iter([1, 2, 3])
 print(next(it))
 print(next(it))
@@ -2301,7 +2301,7 @@ print(next(it))
 
 #### For Loop with Dictionary
 
-```python
+```python showLineNumbers
 data = {"a": 1, "b": 2}
 
 for key in data:
@@ -2314,7 +2314,7 @@ for key in data:
 - `else` executes **only if loop finishes without break**.
 - Often misunderstood.
 
-```python
+```python showLineNumbers
 for i in range(5):
     if i == 10:
         break
@@ -2326,7 +2326,7 @@ else:
 
 - Searching
 
-```python
+```python showLineNumbers
 nums = [2, 4, 6]
 for n in nums:
     if n % 2 != 0:
@@ -2341,7 +2341,7 @@ else:
 - Loop inside another loop.
 - Inner loop completes fully for each outer iteration.
 
-```python
+```python showLineNumbers
 for i in range(3):
     for j in range(2):
         print(i, j)
@@ -2378,7 +2378,7 @@ Used to **alter normal loop execution**.
 - Immediately terminates loop.
 - Control moves to statement after loop.
 
-```python
+```python showLineNumbers
 for i in range(10):
     if i == 5:
         break
@@ -2390,7 +2390,7 @@ for i in range(10):
 
 - Break exits **only the innermost loop**.
 
-```python
+```python showLineNumbers
 for i in range(3):
     for j in range(3):
         if j == 1:
@@ -2404,7 +2404,7 @@ for i in range(3):
 - Skips current iteration.
 - Control returns to loop condition.
 
-```python
+```python showLineNumbers
 for i in range(5):
     if i == 2:
         continue
@@ -2423,7 +2423,7 @@ for i in range(5):
 - Placeholder statement.
 - Used where syntax requires a statement but logic is pending.
 
-```python
+```python showLineNumbers
 for i in range(3):
     pass
 ```
@@ -2436,14 +2436,14 @@ for i in range(3):
 
 #### Syntax
 
-```python
+```python showLineNumbers
 range(start, stop, step)
 ```
 
 
 #### Range Behavior
 
-```python
+```python showLineNumbers
 print(list(range(5)))
 print(list(range(1, 10, 2)))
 ```
@@ -2451,14 +2451,14 @@ print(list(range(1, 10, 2)))
 
 #### Range with Negative Step (Mind-bender #5)
 
-```python
+```python showLineNumbers
 print(list(range(10, 0, -2)))
 ```
 
 
 #### Range Object Is Not a List
 
-```python
+```python showLineNumbers
 r = range(5)
 print(type(r))
 ```
@@ -2468,14 +2468,14 @@ print(type(r))
 
 - Uses arithmetic, not iteration.
 
-```python
+```python showLineNumbers
 print(3 in range(1000000))
 ```
 
 
 #### Loop + Range Pattern
 
-```python
+```python showLineNumbers
 for i in range(len("Python")):
     print(i)
 ```
@@ -2483,7 +2483,7 @@ for i in range(len("Python")):
 
 #### Better Pythonic Loop
 
-```python
+```python showLineNumbers
 for index, value in enumerate("Python"):
     print(index, value)
 ```
@@ -2495,7 +2495,7 @@ for index, value in enumerate("Python"):
 
 - Loop variable remains available after loop.
 
-```python
+```python showLineNumbers
 for i in range(3):
     pass
 print(i)
@@ -2504,7 +2504,7 @@ print(i)
 
 #### Modifying Iterable While Looping (Dangerous)
 
-```python
+```python showLineNumbers
 lst = [1, 2, 3]
 for x in lst:
     lst.remove(x)
@@ -2566,7 +2566,7 @@ flowchart TD
 - Iterable
 - Supports indexing and slicing
 
-```python
+```python showLineNumbers
 s = "Python"
 print(type(s))
 ```
@@ -2577,7 +2577,7 @@ print(type(s))
 - Strings **cannot be modified in-place**.
 - Any “modification” creates a **new string object**.
 
-```python
+```python showLineNumbers
 s = "Python"
 print(id(s))
 s = s + "3"
@@ -2591,13 +2591,13 @@ Strings can be created using:
 
 #### Single Quotes
 
-```python
+```python showLineNumbers
 s1 = 'Hello'
 ```
 
 #### Double Quotes
 
-```python
+```python showLineNumbers
 s2 = "Hello"
 ```
 
@@ -2607,7 +2607,7 @@ s2 = "Hello"
     - Multi-line strings
     - Docstrings
 
-```python
+```python showLineNumbers
 s3 = """This is
 a multi-line
 string"""
@@ -2624,7 +2624,7 @@ string"""
 | `\'` | Single quote |
 | `\"` | Double quote |
 
-```python
+```python showLineNumbers
 print("Hello\nWorld")
 ```
 
@@ -2634,7 +2634,7 @@ print("Hello\nWorld")
 - Ignore escape sequences.
 - Commonly used for file paths and regex.
 
-```python
+```python showLineNumbers
 path = r"C:\new\test"
 print(path)
 ```
@@ -2645,7 +2645,7 @@ print(path)
 - Indexing starts at `0`.
 - Negative indexing starts at `1`.
 
-```python
+```python showLineNumbers
 s = "PYTHON"
 print(s[0])
 print(s[-1])
@@ -2656,14 +2656,14 @@ print(s[-1])
 
 - Accessing out-of-range index raises error.
 
-```python
+```python showLineNumbers
 ## print(s[10])  ## IndexError
 ```
 
 
 #### String as Iterable
 
-```python
+```python showLineNumbers
 for ch in "ABC":
     print(ch)
 ```
@@ -2681,7 +2681,7 @@ string[start : stop : step]
 - `stop` → exclusive
 - `step` → jump size
 
-```python
+```python showLineNumbers
 s = "PYTHON"
 print(s[1:4])      ## YTH
 print(s[:3])       ## PYT
@@ -2691,21 +2691,21 @@ print(s[::2])      ## PTO
 
 #### Reverse String (Mind-bender #3)
 
-```python
+```python showLineNumbers
 print(s[::-1])
 ```
 
 
 #### Negative Step Slicing
 
-```python
+```python showLineNumbers
 print(s[5:1:-1])
 ```
 
 
 #### Slicing Never Raises IndexError
 
-```python
+```python showLineNumbers
 print(s[0:100])
 ```
 
@@ -2714,21 +2714,21 @@ print(s[0:100])
 
 #### Concatenation `+`
 
-```python
+```python showLineNumbers
 print("Py" + "thon")
 ```
 
 
 #### Repetition
 
-```python
+```python showLineNumbers
 print("Hi" * 3)
 ```
 
 
 #### Membership `in`, `not in`
 
-```python
+```python showLineNumbers
 print("Py" in "Python")
 ```
 
@@ -2737,7 +2737,7 @@ print("Py" in "Python")
 
 - Lexicographical comparison using **Unicode values**.
 
-```python
+```python showLineNumbers
 print("apple" < "banana")
 print("Z" < "a")
 ```
@@ -2745,7 +2745,7 @@ print("Z" < "a")
 
 #### `%` String Formatting (Old-style)
 
-```python
+```python showLineNumbers
 name = "Ankur"
 print("Hello %s" % name)
 ```
@@ -2756,7 +2756,7 @@ print("Hello %s" % name)
 
 #### Case Conversion
 
-```python
+```python showLineNumbers
 s = "python"
 print(s.upper())
 print(s.lower())
@@ -2767,7 +2767,7 @@ print(s.title())
 
 #### Searching and Counting
 
-```python
+```python showLineNumbers
 s = "banana"
 print(s.count("a"))
 print(s.find("na"))
@@ -2782,7 +2782,7 @@ print(s.index("na"))
 
 #### Checking String Properties
 
-```python
+```python showLineNumbers
 print("abc".isalpha())
 print("123".isdigit())
 print("abc123".isalnum())
@@ -2794,7 +2794,7 @@ print("var1".isidentifier())
 
 #### Splitting and Joining
 
-```python
+```python showLineNumbers
 s = "a,b,c"
 parts = s.split(",")
 print(parts)
@@ -2806,7 +2806,7 @@ print(joined)
 
 #### Trimming Whitespace
 
-```python
+```python showLineNumbers
 s = "  python  "
 print(s.strip())
 print(s.lstrip())
@@ -2816,7 +2816,7 @@ print(s.rstrip())
 
 #### Replace
 
-```python
+```python showLineNumbers
 s = "I like Java"
 print(s.replace("Java", "Python"))
 ```
@@ -2829,7 +2829,7 @@ print(s.replace("Java", "Python"))
 - Returns **Unicode code point** of a character.
 - ASCII is a **subset of Unicode** (0–127).
 
-```python
+```python showLineNumbers
 print(ord('A'))    ## 65
 print(ord('a'))    ## 97
 print(ord('0'))    ## 48
@@ -2840,7 +2840,7 @@ print(ord('0'))    ## 48
 
 - Converts Unicode code point to character.
 
-```python
+```python showLineNumbers
 print(chr(65))
 print(chr(97))
 ```
@@ -2851,7 +2851,7 @@ print(chr(97))
 - ASCII: 7-bit (0–127)
 - Unicode: Supports **all world languages, emojis, symbols**
 
-```python
+```python showLineNumbers
 print(ord('₹'))
 print(ord('😊'))
 ```
@@ -2859,7 +2859,7 @@ print(ord('😊'))
 
 #### Character Arithmetic
 
-```python
+```python showLineNumbers
 print(chr(ord('a') + 1))   ## b
 ```
 
@@ -2870,7 +2870,7 @@ print(chr(ord('a') + 1))   ## b
 
 - Python may reuse immutable string objects for optimization.
 
-```python
+```python showLineNumbers
 a = "python"
 b = "python"
 print(a is b)
@@ -2879,7 +2879,7 @@ print(a is b)
 
 #### `is` vs `==` with Strings
 
-```python
+```python showLineNumbers
 a = "hello"
 b = "".join(["he", "llo"])
 
@@ -2893,7 +2893,7 @@ print(a is b)   ## False
 - Strings are Unicode.
 - Bytes are raw binary data.
 
-```python
+```python showLineNumbers
 s = "Python"
 b = s.encode("utf-8")
 print(b)
@@ -2905,7 +2905,7 @@ print(decoded)
 
 #### Length of String
 
-```python
+```python showLineNumbers
 print(len("Python"))
 ```
 
@@ -2949,7 +2949,7 @@ flowchart LR
 - Lists are implemented as **dynamic arrays** internally.
 - Defined using square brackets `[]`.
 
-```python
+```python showLineNumbers
 lst = [1, "Python", 3.14, True]
 ```
 
@@ -2968,7 +2968,7 @@ lst = [1, "Python", 3.14, True]
 - Lists can be modified **in-place**.
 - Same memory location is reused.
 
-```python
+```python showLineNumbers
 lst = [1, 2, 3]
 print(id(lst))
 lst.append(4)
@@ -2986,7 +2986,7 @@ print(id(lst))
 
 - Assignment copies the **reference**, not the list.
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = a
 b.append(3)
@@ -2996,7 +2996,7 @@ print(a)
 
 #### Heterogeneous Storage
 
-```python
+```python showLineNumbers
 lst = [10, "A", 3.5, [1, 2]]
 ```
 
@@ -3006,7 +3006,7 @@ lst = [10, "A", 3.5, [1, 2]]
 - Index starts from `0`.
 - Negative indexing starts from `1`.
 
-```python
+```python showLineNumbers
 lst = [10, 20, 30, 40]
 print(lst[0])
 print(lst[-1])
@@ -3015,14 +3015,14 @@ print(lst[-1])
 
 #### IndexError
 
-```python
+```python showLineNumbers
 ## print(lst[10])   ## IndexError
 ```
 
 
 #### Nested Indexing
 
-```python
+```python showLineNumbers
 lst = [1, [2, 3], 4]
 print(lst[1][0])
 ```
@@ -3036,7 +3036,7 @@ print(lst[1][0])
 list[start : stop : step]
 ```
 
-```python
+```python showLineNumbers
 lst = [0, 1, 2, 3, 4, 5]
 print(lst[1:4])
 print(lst[::2])
@@ -3045,14 +3045,14 @@ print(lst[::2])
 
 #### Reverse List (Mind-bender #2)
 
-```python
+```python showLineNumbers
 print(lst[::-1])
 ```
 
 
 #### Slicing Creates New List
 
-```python
+```python showLineNumbers
 a = [1, 2, 3]
 b = a[:]
 print(a is b)
@@ -3061,7 +3061,7 @@ print(a is b)
 
 #### Slice Assignment (Powerful & Dangerous)
 
-```python
+```python showLineNumbers
 lst = [1, 2, 3]
 lst[1:2] = [10, 20]
 print(lst)
@@ -3073,14 +3073,14 @@ print(lst)
 
 #### 11.5.1 Repetition
 
-```python
+```python showLineNumbers
 lst = [1, 2]
 print(lst * 3)
 ```
 
 **Mind-bender #3 (Shallow Copy Trap)**
 
-```python
+```python showLineNumbers
 lst = [[0]] * 3
 lst[0][0] = 1
 print(lst)
@@ -3089,13 +3089,13 @@ print(lst)
 
 #### 11.5.2 Concatenation `+`
 
-```python
+```python showLineNumbers
 a = [1, 2]
 b = [3, 4]
 print(a + b)
 ```
 
-```python
+```python showLineNumbers
 ## Creates new list
 print(a is (a + b))
 ```
@@ -3103,7 +3103,7 @@ print(a is (a + b))
 
 #### 11.5.3 Length
 
-```python
+```python showLineNumbers
 lst = [1, 2, 3]
 print(len(lst))
 ```
@@ -3111,12 +3111,12 @@ print(len(lst))
 
 #### 11.5.4 Iteration
 
-```python
+```python showLineNumbers
 for item in lst:
     print(item)
 ```
 
-```python
+```python showLineNumbers
 for i, v in enumerate(lst):
     print(i, v)
 ```
@@ -3124,7 +3124,7 @@ for i, v in enumerate(lst):
 
 #### 11.5.5 Membership
 
-```python
+```python showLineNumbers
 print(2 in lst)
 print(5 not in lst)
 ```
@@ -3138,28 +3138,28 @@ print(5 not in lst)
 
 #### append()
 
-```python
+```python showLineNumbers
 lst.append(5)
 ```
 
 
 #### extend()
 
-```python
+```python showLineNumbers
 lst.extend([6, 7])
 ```
 
 
 #### insert()
 
-```python
+```python showLineNumbers
 lst.insert(1, 100)
 ```
 
 
 #### Adding via Slice Assignment
 
-```python
+```python showLineNumbers
 lst[1:1] = [9, 9]
 ```
 
@@ -3168,35 +3168,35 @@ lst[1:1] = [9, 9]
 
 #### remove()
 
-```python
+```python showLineNumbers
 lst.remove(9)
 ```
 
 
 #### pop()
 
-```python
+```python showLineNumbers
 x = lst.pop()
 ```
 
 
 #### del
 
-```python
+```python showLineNumbers
 del lst[0]
 ```
 
 
 #### clear()
 
-```python
+```python showLineNumbers
 lst.clear()
 ```
 
 
 #### Removing While Iterating (Mind-bender #4)
 
-```python
+```python showLineNumbers
 lst = [1, 2, 3, 4]
 for x in lst:
     if x % 2 == 0:
@@ -3207,27 +3207,27 @@ print(lst)
 
 #### Safe Removal Pattern
 
-```python
+```python showLineNumbers
 lst = [x for x in lst if x % 2 != 0]
 ```
 
 
 ### 11.8 List Built-in Functions
 
-```python
+```python showLineNumbers
 lst = [3, 1, 4, 2]
 ```
 
 #### len()
 
-```python
+```python showLineNumbers
 print(len(lst))
 ```
 
 
 #### max(), min()
 
-```python
+```python showLineNumbers
 print(max(lst))
 print(min(lst))
 ```
@@ -3235,21 +3235,21 @@ print(min(lst))
 
 #### sum()
 
-```python
+```python showLineNumbers
 print(sum(lst))
 ```
 
 
 #### sorted()
 
-```python
+```python showLineNumbers
 print(sorted(lst))
 ```
 
 
 #### any(), all()
 
-```python
+```python showLineNumbers
 print(any(lst))
 print(all(lst))
 ```
@@ -3264,42 +3264,42 @@ print(all(lst))
 
 #### Syntax
 
-```python
+```python showLineNumbers
 [expression for item in iterable if condition]
 ```
 
 
 #### Basic Example
 
-```python
+```python showLineNumbers
 squares = [x**2 for x in range(5)]
 ```
 
 
 #### Conditional Comprehension
 
-```python
+```python showLineNumbers
 evens = [x for x in range(10) if x % 2 == 0]
 ```
 
 
 #### Nested Comprehension
 
-```python
+```python showLineNumbers
 pairs = [(i, j) for i in range(2) for j in range(3)]
 ```
 
 
 #### Conditional Expression Inside
 
-```python
+```python showLineNumbers
 labels = ["Even" if x % 2 == 0 else "Odd" for x in range(5)]
 ```
 
 
 #### List Comprehension vs Loop (Performance)
 
-```python
+```python showLineNumbers
 ## Faster
 [x*x for x in range(1000000)]
 ```
@@ -3310,7 +3310,7 @@ labels = ["Even" if x % 2 == 0 else "Odd" for x in range(5)]
 
 #### Shallow vs Deep Copy
 
-```python
+```python showLineNumbers
 import copy
 a = [[1, 2], [3, 4]]
 b = copy.copy(a)
@@ -3320,7 +3320,7 @@ c = copy.deepcopy(a)
 
 #### List as Stack
 
-```python
+```python showLineNumbers
 stack = []
 stack.append(1)
 stack.append(2)
@@ -3330,7 +3330,7 @@ stack.pop()
 
 #### List as Queue (Inefficient)
 
-```python
+```python showLineNumbers
 queue = []
 queue.append(1)
 queue.pop(0)
@@ -3390,7 +3390,7 @@ flowchart LR
 - Defined using **parentheses `()`** or by **comma separation**.
 - Like lists, tuples store **references to objects**, not the objects themselves.
 
-```python
+```python showLineNumbers
 t = (1, 2, 3)
 print(type(t))
 ```
@@ -3410,7 +3410,7 @@ print(type(t))
 - Tuple elements **cannot be reassigned**.
 - Any “modification” requires creating a **new tuple**.
 
-```python
+```python showLineNumbers
 t = (1, 2, 3)
 ## t[0] = 10   ## TypeError
 ```
@@ -3421,7 +3421,7 @@ t = (1, 2, 3)
 - Tuple structure is immutable,
 - But **mutable objects inside a tuple can be modified**.
 
-```python
+```python showLineNumbers
 t = (1, [2, 3])
 t[1].append(4)
 print(t)
@@ -3445,7 +3445,7 @@ print(t)
     - Dictionary keys
     - Set elements
 
-```python
+```python showLineNumbers
 d = {(1, 2): "value"}
 ```
 
@@ -3454,21 +3454,21 @@ d = {(1, 2): "value"}
 
 #### Using Parentheses
 
-```python
+```python showLineNumbers
 t = (1, 2, 3)
 ```
 
 
 #### Without Parentheses (Tuple Packing)
 
-```python
+```python showLineNumbers
 t = 1, 2, 3
 ```
 
 
 #### Single-Element Tuple (Very Common Trap)
 
-```python
+```python showLineNumbers
 t1 = (5)      ## int
 t2 = (5,)     ## tuple
 ```
@@ -3476,14 +3476,14 @@ t2 = (5,)     ## tuple
 
 #### Empty Tuple
 
-```python
+```python showLineNumbers
 t = ()
 ```
 
 
 #### Tuple from Iterable
 
-```python
+```python showLineNumbers
 t = tuple([1, 2, 3])
 ```
 
@@ -3492,7 +3492,7 @@ t = tuple([1, 2, 3])
 
 - Indexing starts from `0`.
 
-```python
+```python showLineNumbers
 t = ("Python", "Tuple", "Immutable")
 print(t[0])
 ```
@@ -3500,7 +3500,7 @@ print(t[0])
 
 #### Nested Tuple Access
 
-```python
+```python showLineNumbers
 t = (1, (2, 3), 4)
 print(t[1][0])
 ```
@@ -3508,7 +3508,7 @@ print(t[1][0])
 
 #### IndexError
 
-```python
+```python showLineNumbers
 ## print(t[10])   ## IndexError
 ```
 
@@ -3517,7 +3517,7 @@ print(t[1][0])
 
 - Access elements from the end using negative indices.
 
-```python
+```python showLineNumbers
 t = (10, 20, 30, 40)
 print(t[-1])
 print(t[-2])
@@ -3532,7 +3532,7 @@ print(t[-2])
 tuple[start : stop : step]
 ```
 
-```python
+```python showLineNumbers
 t = (0, 1, 2, 3, 4, 5)
 print(t[1:4])
 print(t[::2])
@@ -3541,14 +3541,14 @@ print(t[::2])
 
 #### Reverse Tuple (Mind-bender #3)
 
-```python
+```python showLineNumbers
 print(t[::-1])
 ```
 
 
 #### Slicing Always Creates a New Tuple
 
-```python
+```python showLineNumbers
 a = (1, 2, 3)
 b = a[:]
 print(a is b)   ## False
@@ -3560,7 +3560,7 @@ print(a is b)   ## False
 - Individual elements **cannot be deleted**.
 - Entire tuple can be deleted using `del`.
 
-```python
+```python showLineNumbers
 t = (1, 2, 3)
 del t
 ```
@@ -3570,7 +3570,7 @@ del t
 
 - Repetition using .
 
-```python
+```python showLineNumbers
 t = (1, 2)
 print(t * 3)
 ```
@@ -3578,7 +3578,7 @@ print(t * 3)
 
 #### Repetition with Mutable Elements (Mind-bender #4)
 
-```python
+```python showLineNumbers
 t = ([0],) * 3
 t[0].append(1)
 print(t)
@@ -3597,7 +3597,7 @@ Tuples have **very few methods** due to immutability.
 
 - Returns number of occurrences of a value.
 
-```python
+```python showLineNumbers
 t = (1, 2, 2, 3, 2)
 print(t.count(2))
 ```
@@ -3608,12 +3608,12 @@ print(t.count(2))
 - Returns index of first occurrence.
 - Raises error if not found.
 
-```python
+```python showLineNumbers
 t = ("a", "b", "c")
 print(t.index("b"))
 ```
 
-```python
+```python showLineNumbers
 ## t.index("x")   ## ValueError
 ```
 
@@ -3627,7 +3627,7 @@ print(t.index("b"))
 - Can be dictionary keys
 - Ideal for function returns
 
-```python
+```python showLineNumbers
 def get_point():
     return (10, 20)
 ```
@@ -3637,7 +3637,7 @@ def get_point():
 
 #### Basic Unpacking
 
-```python
+```python showLineNumbers
 t = (1, 2, 3)
 a, b, c = t
 ```
@@ -3645,14 +3645,14 @@ a, b, c = t
 
 #### Swapping Variables (No Temp Variable)
 
-```python
+```python showLineNumbers
 a, b = b, a
 ```
 
 
 #### Extended Unpacking (Mind-bender #5)
 
-```python
+```python showLineNumbers
 a, *b, c = (1, 2, 3, 4, 5)
 print(a, b, c)
 ```
@@ -3664,7 +3664,7 @@ print(a, b, c)
 
 - Syntax like `(x for x in range(5))` creates a **generator**, not a tuple.
 
-```python
+```python showLineNumbers
 g = (x*x for x in range(5))
 print(type(g))
 ```
@@ -3672,7 +3672,7 @@ print(type(g))
 
 #### Correct Way to Build Tuple from Comprehension
 
-```python
+```python showLineNumbers
 t = tuple(x*x for x in range(5))
 ```
 
@@ -3692,7 +3692,7 @@ t = tuple(x*x for x in range(5))
 
 #### Tuple as Dictionary Key (Deep Insight)
 
-```python
+```python showLineNumbers
 locations = {
     (0, 0): "Origin",
     (1, 2): "Point A"
@@ -3705,7 +3705,7 @@ locations = {
 - Small tuples **may** be reused internally.
 - Do **not** rely on `is` for tuples.
 
-```python
+```python showLineNumbers
 a = (1, 2)
 b = (1, 2)
 print(a == b)
@@ -3717,7 +3717,7 @@ print(a is b)
 
 - Combines tuple immutability with named fields.
 
-```python
+```python showLineNumbers
 from collections import namedtuple
 
 Point = namedtuple("Point", ["x", "y"])
@@ -3776,7 +3776,7 @@ flowchart LR
     - Allowed: `int`, `float`, `str`, `tuple` (if immutable inside)
     - Not allowed: `list`, `dict`, `set`
 
-```python
+```python showLineNumbers
 s = {1, 2, 3, 3}
 print(s)   ## duplicates removed
 ```
@@ -3801,21 +3801,21 @@ print(s)   ## duplicates removed
 
 #### Using Curly Braces
 
-```python
+```python showLineNumbers
 s = {1, 2, 3}
 ```
 
 
 #### Using set() Constructor
 
-```python
+```python showLineNumbers
 s = set([1, 2, 3])
 ```
 
 
 #### Empty Set (Common Trap)
 
-```python
+```python showLineNumbers
 s = {}        ## dict, NOT set
 s = set()     ## correct empty set
 ```
@@ -3823,7 +3823,7 @@ s = set()     ## correct empty set
 
 #### Set from String
 
-```python
+```python showLineNumbers
 s = set("banana")
 print(s)
 ```
@@ -3834,7 +3834,7 @@ print(s)
 
 #### Set from Tuple
 
-```python
+```python showLineNumbers
 s = set((1, 2, 3))
 ```
 
@@ -3845,7 +3845,7 @@ s = set((1, 2, 3))
 
 - Adds a **single element**.
 
-```python
+```python showLineNumbers
 s = {1, 2}
 s.add(3)
 ```
@@ -3855,18 +3855,18 @@ s.add(3)
 
 - Adds **multiple elements** from an iterable.
 
-```python
+```python showLineNumbers
 s.update([4, 5])
 ```
 
-```python
+```python showLineNumbers
 s.update("ab")
 ```
 
 
 #### Adding Mutable Objects (Not Allowed)
 
-```python
+```python showLineNumbers
 ## s.add([1, 2])   ## TypeError
 ```
 
@@ -3877,7 +3877,7 @@ s.update("ab")
     - `__hash__()`
     - `__eq__()`
 
-```python
+```python showLineNumbers
 print(hash("python"))
 ```
 
@@ -3889,7 +3889,7 @@ print(hash("python"))
 - Removes specified element.
 - Raises `KeyError` if element not found.
 
-```python
+```python showLineNumbers
 s = {1, 2, 3}
 s.remove(2)
 ```
@@ -3900,7 +3900,7 @@ s.remove(2)
 - Removes element if present.
 - **No error** if element not found.
 
-```python
+```python showLineNumbers
 s.discard(5)
 ```
 
@@ -3909,7 +3909,7 @@ s.discard(5)
 
 - Removes and returns **an arbitrary element**.
 
-```python
+```python showLineNumbers
 x = s.pop()
 ```
 
@@ -3921,7 +3921,7 @@ x = s.pop()
 
 - Removes all elements.
 
-```python
+```python showLineNumbers
 s.clear()
 ```
 
@@ -3934,7 +3934,7 @@ s.clear()
 | Element absent | KeyError | No error |
 | Safe for unknown data | ❌ | ✅ |
 
-```python
+```python showLineNumbers
 s = {1, 2, 3}
 
 ## s.remove(5)   ## KeyError
@@ -3946,7 +3946,7 @@ s.discard(5)    ## Safe
 
 #### Union
 
-```python
+```python showLineNumbers
 a = {1, 2, 3}
 b = {3, 4}
 print(a | b)
@@ -3955,28 +3955,28 @@ print(a | b)
 
 #### Intersection
 
-```python
+```python showLineNumbers
 print(a & b)
 ```
 
 
 #### Difference
 
-```python
+```python showLineNumbers
 print(a - b)
 ```
 
 
 #### Symmetric Difference
 
-```python
+```python showLineNumbers
 print(a ^ b)
 ```
 
 
 #### Subset / Superset
 
-```python
+```python showLineNumbers
 print({1, 2} <= a)
 print(a >= {1})
 ```
@@ -3984,7 +3984,7 @@ print(a >= {1})
 
 ### Membership Testing (Major Performance Advantage)
 
-```python
+```python showLineNumbers
 print(3 in {1, 2, 3})
 ```
 
@@ -3998,28 +3998,28 @@ print(3 in {1, 2, 3})
 
 #### Syntax
 
-```python
+```python showLineNumbers
 {expression for item in iterable if condition}
 ```
 
 
 #### Basic Example
 
-```python
+```python showLineNumbers
 squares = {x*x for x in range(5)}
 ```
 
 
 #### Conditional Set Comprehension
 
-```python
+```python showLineNumbers
 evens = {x for x in range(10) if x % 2 == 0}
 ```
 
 
 #### Deduplication Trick
 
-```python
+```python showLineNumbers
 unique_words = {word.lower() for word in ["Python", "python", "PYTHON"]}
 ```
 
@@ -4029,7 +4029,7 @@ unique_words = {word.lower() for word in ["Python", "python", "PYTHON"]}
 
 #### Unordered Nature (Mind-bender #2)
 
-```python
+```python showLineNumbers
 s = {10, 20, 30}
 print(s)
 ```
@@ -4040,7 +4040,7 @@ print(s)
 
 #### Mutating Set During Iteration (Dangerous)
 
-```python
+```python showLineNumbers
 s = {1, 2, 3}
 ## for x in s:
 ##     s.remove(x)   ## RuntimeError
@@ -4049,7 +4049,7 @@ s = {1, 2, 3}
 
 #### Safe Pattern
 
-```python
+```python showLineNumbers
 for x in s.copy():
     s.remove(x)
 ```
@@ -4081,21 +4081,21 @@ flowchart LR
     - Dictionary keys
     - Elements of another set
 
-```python
+```python showLineNumbers
 fs = frozenset([1, 2, 3])
 ```
 
 
 #### Immutability (Mind-bender #3)
 
-```python
+```python showLineNumbers
 ## fs.add(4)   ## AttributeError
 ```
 
 
 #### Frozenset in Dictionary
 
-```python
+```python showLineNumbers
 d = {frozenset({1, 2}): "value"}
 ```
 
@@ -4104,7 +4104,7 @@ d = {frozenset({1, 2}): "value"}
 
 - Supports all **non-mutating set operations**.
 
-```python
+```python showLineNumbers
 a = frozenset([1, 2])
 b = frozenset([2, 3])
 print(a & b)
@@ -4152,7 +4152,7 @@ print(a & b)
 - **Keys must be unique and hashable**; values can be any object.
 - From **Python 3.7+**, dictionaries preserve **insertion order** (this is guaranteed, not accidental).
 
-```python
+```python showLineNumbers
 d = {"a": 1, "b": 2}
 ```
 
@@ -4165,7 +4165,7 @@ Lookup by key is fast because Python hashes the key and jumps directly to the va
 
 #### Using Curly Braces
 
-```python
+```python showLineNumbers
 student = {"name": "Ankur", "age": 20}
 ```
 
@@ -4174,7 +4174,7 @@ This is the most common and readable way to create dictionaries.
 
 #### Using `dict()` Constructor
 
-```python
+```python showLineNumbers
 student = dict(name="Ankur", age=20)
 ```
 
@@ -4183,7 +4183,7 @@ Here, keys must be valid identifiers. This style is often used for configuration
 
 #### From List of Tuples
 
-```python
+```python showLineNumbers
 pairs = [("a", 1), ("b", 2)]
 d = dict(pairs)
 ```
@@ -4195,7 +4195,7 @@ Useful when data already exists in paired form.
 
 #### Using `zip()`
 
-```python
+```python showLineNumbers
 keys = ["a", "b"]
 values = [1, 2]
 d = dict(zip(keys, values))
@@ -4206,7 +4206,7 @@ d = dict(zip(keys, values))
 
 #### Dictionary Comprehension
 
-```python
+```python showLineNumbers
 squares = {x: x*x for x in range(5)}
 ```
 
@@ -4217,7 +4217,7 @@ Dictionary comprehensions are faster and clearer than building dictionaries usin
 
 #### Empty Dictionary
 
-```python
+```python showLineNumbers
 d = {}
 ```
 
@@ -4228,7 +4228,7 @@ This creates an empty dictionary ready to accept key–value pairs.
 
 #### Using Square Brackets
 
-```python
+```python showLineNumbers
 d = {"x": 10, "y": 20}
 print(d["x"])
 ```
@@ -4240,7 +4240,7 @@ If the key does not exist, Python raises a **KeyError**.
 
 #### Using `get()` (Safe Access)
 
-```python
+```python showLineNumbers
 print(d.get("z"))
 print(d.get("z", 0))
 ```
@@ -4252,7 +4252,7 @@ This is preferred when keys may or may not exist.
 
 #### Iterating Through Dictionary
 
-```python
+```python showLineNumbers
 for key in d:
     print(key, d[key])
 ```
@@ -4264,7 +4264,7 @@ Iterating over a dictionary yields **keys by default**, not values.
 
 #### Adding a New Key
 
-```python
+```python showLineNumbers
 d["z"] = 30
 ```
 
@@ -4273,7 +4273,7 @@ If the key does not exist, Python inserts a new key–value pair.
 
 #### Updating an Existing Key
 
-```python
+```python showLineNumbers
 d["x"] = 100
 ```
 
@@ -4282,7 +4282,7 @@ If the key already exists, its value is overwritten.
 
 #### Using `update()`
 
-```python
+```python showLineNumbers
 d.update({"x": 5, "y": 15})
 ```
 
@@ -4291,7 +4291,7 @@ d.update({"x": 5, "y": 15})
 
 #### Incrementing Safely (Mind-bender)
 
-```python
+```python showLineNumbers
 d["count"] = d.get("count", 0) + 1
 ```
 
@@ -4302,7 +4302,7 @@ This pattern avoids `KeyError` and is common in frequency-count problems.
 
 #### Using `del`
 
-```python
+```python showLineNumbers
 del d["x"]
 ```
 
@@ -4313,7 +4313,7 @@ Raises `KeyError` if the key does not exist.
 
 #### Using `pop()`
 
-```python
+```python showLineNumbers
 value = d.pop("y")
 ```
 
@@ -4322,7 +4322,7 @@ value = d.pop("y")
 
 #### Using `popitem()`
 
-```python
+```python showLineNumbers
 k, v = d.popitem()
 ```
 
@@ -4333,7 +4333,7 @@ Often used in stack-like dictionary behavior.
 
 #### Using `clear()`
 
-```python
+```python showLineNumbers
 d.clear()
 ```
 
@@ -4348,13 +4348,13 @@ Removes all entries but keeps the dictionary object alive.
 - Must be **immutable**
 - Must be **unique**
 
-```python
+```python showLineNumbers
 d = {(1, 2): "valid"}
 ```
 
 Tuples are allowed as keys because they are immutable.
 
-```python
+```python showLineNumbers
 ## d = {[1, 2]: "invalid"}  ## TypeError
 ```
 
@@ -4363,7 +4363,7 @@ Lists are mutable, so Python rejects them as keys.
 
 #### Hash Collision Insight
 
-```python
+```python showLineNumbers
 d = {True: "yes", 1: "no"}
 print(d)
 ```
@@ -4375,7 +4375,7 @@ print(d)
 
 #### 14.7.1 `len()`
 
-```python
+```python showLineNumbers
 print(len(d))
 ```
 
@@ -4384,7 +4384,7 @@ Returns the number of key–value pairs, not memory size.
 
 #### 14.7.2 `any()`
 
-```python
+```python showLineNumbers
 d = {"a": 0, "b": 1}
 print(any(d.values()))
 ```
@@ -4394,7 +4394,7 @@ Returns `True` if **at least one value is truthy**.
 
 #### 14.7.3 `all()`
 
-```python
+```python showLineNumbers
 print(all(d.values()))
 ```
 
@@ -4403,14 +4403,14 @@ Returns `True` only if **all values are truthy**.
 
 #### 14.7.4 `sorted()`
 
-```python
+```python showLineNumbers
 d = {"b": 2, "a": 1}
 print(sorted(d))
 ```
 
 Sorts dictionary **keys**, not values.
 
-```python
+```python showLineNumbers
 print(sorted(d.items()))
 ```
 
@@ -4422,7 +4422,7 @@ Sorts key–value pairs as tuples.
 
 #### 14.8.1 `clear()`
 
-```python
+```python showLineNumbers
 d.clear()
 ```
 
@@ -4431,13 +4431,13 @@ Empties the dictionary without deleting it.
 
 #### 14.8.2 `copy()`
 
-```python
+```python showLineNumbers
 d2 = d.copy()
 ```
 
 Creates a **shallow copy**—nested objects are still shared.
 
-```python
+```python showLineNumbers
 d = {"a": [1, 2]}
 d2 = d.copy()
 d2["a"].append(3)
@@ -4449,7 +4449,7 @@ This shows why shallow copies can cause unexpected side effects.
 
 #### 14.8.3 `pop()`
 
-```python
+```python showLineNumbers
 d.pop("a")
 ```
 
@@ -4458,7 +4458,7 @@ Removes a specific key and returns its value.
 
 #### 14.8.4 `popitem()`
 
-```python
+```python showLineNumbers
 key, value = d.popitem()
 ```
 
@@ -4467,13 +4467,13 @@ Removes the most recently inserted item.
 
 #### 14.8.5 `keys()`
 
-```python
+```python showLineNumbers
 keys = d.keys()
 ```
 
 Returns a **dynamic view**, not a list.
 
-```python
+```python showLineNumbers
 d["new"] = 100
 print(keys)
 ```
@@ -4483,7 +4483,7 @@ The view updates automatically.
 
 #### 14.8.6 `items()`
 
-```python
+```python showLineNumbers
 for k, v in d.items():
     print(k, v)
 ```
@@ -4493,7 +4493,7 @@ Best way to iterate over keys and values together.
 
 #### 14.8.7 `get()`
 
-```python
+```python showLineNumbers showLineNumbers
 print(d.get("missing", "default"))
 ```
 
@@ -4502,7 +4502,7 @@ Safely retrieves values without raising errors.
 
 #### 14.8.8 `update()`
 
-```python
+```python showLineNumbers
 d.update({"x": 1, "y": 2})
 ```
 
@@ -4511,7 +4511,7 @@ Efficient way to merge or modify dictionaries.
 
 #### 14.8.9 `values()`
 
-```python
+```python showLineNumbers
 vals = d.values()
 ```
 
@@ -4522,7 +4522,7 @@ Returns a dynamic view of values, useful with `any()` and `all()`.
 
 #### Dictionary Views Are Live
 
-```python
+```python showLineNumbers
 d = {"a": 1}
 v = d.values()
 d["b"] = 2
@@ -4556,5 +4556,3 @@ flowchart LR
 - `get()` prevents runtime errors
 - Shallow copies share nested objects
 - Dictionary views are dynamic and powerful
-
----

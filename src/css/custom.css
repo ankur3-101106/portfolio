@@ -175,7 +175,7 @@ code{
   border: #00000023 1px solid;
 }
 html[data-theme='dark'] code{
-  border: #ffffff23 1px solid;
+  border: rgba(255, 255, 255, 0.137) 1px solid;
   background: rgba(37, 37, 37, 0.849);
   color: rgb(255, 106, 106);
 }

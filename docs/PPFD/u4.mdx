@@ -1108,7 +1108,7 @@ Output:
 
 ```mermaid id="url_building_flow"
 flowchart LR
-    A[Function Name] --> B[url_for()]
+    A[Function Name] --> B["url_for()"]
     B --> C[Route Mapping]
     C --> D[Generated URL]
 ```
@@ -1916,9 +1916,9 @@ Template:
 
 ```mermaid id="template_flow"
 flowchart TD
-    A[Flask Route] --> B[render_template()]
+    A[Flask Route] --> B["render_template()"]
     B --> C[Load HTML Template]
-    C --> D[Insert Data (Jinja2)]
+    C --> D["Insert Data (Jinja2)"]
     D --> E[Final HTML]
     E --> F[Browser Display]
 ```
@@ -2119,7 +2119,7 @@ JavaScript Loaded
 
 ```mermaid id="static_flow"
 flowchart TD
-    A[HTML Template] --> B[url_for('static')]
+    A[HTML Template] --> B["url_for('static', filename=...)"]
     B --> C[Static File Path]
     C --> D[Flask Server]
     D --> E[Browser Loads File]
@@ -2171,11 +2171,11 @@ if __name__ == "__main__":
 
 ```mermaid id="combined_static_template"
 flowchart TD
-    A[Flask Route] --> B[render_template()]
-    B --> C[HTML Template]
-    C --> D[url_for('static')]
-    D --> E[Static Files]
-    E --> F[Browser Render]
+    A[Flask Route] --> B["render_template()"]
+    B --> C["HTML Template"]
+    C --> D["url_for('static', filename=...)"]
+    D --> E["Static Files"]
+    E --> F["Browser Render"]
 ```
 
 

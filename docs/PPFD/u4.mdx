@@ -2393,7 +2393,7 @@ First, create a database.
 
 Example:
 
-* SQLite → automatically created file
+* SQLite -> automatically created file (eg. `database.db`)
 * MySQL/PostgreSQL → created using SQL tools
 
 
@@ -2849,9 +2849,9 @@ get_flashed_messages()
 
 ```mermaid id="flash_flow"
 flowchart TD
-    A[User Action] --> B[flash()]
+    A[User Action] --> B["flash()"]
     B --> C[Stored in Session]
-    C --> D[get_flashed_messages()]
+    C --> D["get_flashed_messages()"]
     D --> E[Displayed in Template]
 ```
 

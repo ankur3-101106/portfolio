@@ -1762,7 +1762,7 @@ Must be added at top of template:
 
 ```mermaid id="static_flow_django"
 flowchart TD
-    A[Template] --> B[{% static %}]
+    A[Template] --> B["{% static %}"]
     B --> C[Static File]
     C --> D[Browser Render]
 ```
@@ -2010,8 +2010,8 @@ Typical setup includes:
 
 ```mermaid id="django_deploy_flow"
 flowchart TD
-    A[User Request] --> B[Web Server (Nginx)]
-    B --> C[WSGI Server (Gunicorn)]
+    A[User Request] --> B["Web Server (Nginx)"]
+    B --> C["WSGI Server (Gunicorn)"]
     C --> D[Django App]
     D --> E[Database]
 ```

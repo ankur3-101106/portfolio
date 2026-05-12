@@ -1,0 +1,908 @@
+---
+sidebar_position: 9
+---
+
+# Week - 9
+:::info[TITLE]
+## Lecture 41: <br />Universal Hashing
+:::
+
+## Universal Hashing (Idea)
+
+* Avoid worst-case inputs by **randomly choosing hash function at runtime** 
+
+---
+
+## Definition
+
+A family of hash functions ( $$\mathcal{H}$$ ) is **universal** if:
+
+$$
+\Pr_{h \in \mathcal{H} }[h(x) = h(y)] \le \frac{1}{m}, \quad x \ne y
+$$
+
+---
+
+## Why Useful
+
+* Prevents adversarial inputs
+* Guarantees **low expected collisions**
+* Works even if input is malicious
+
+---
+
+## Collision Indicator
+
+Define:
+
+$$
+C_{xy} =
+\begin{cases}
+1 & h(x) = h(y) \\
+0 & \text{otherwise}\\
+\end{cases}
+$$
+
+---
+
+## Expectation
+
+$$
+E[C_{xy}] = \Pr[h(x)=h(y)] = \frac{1}{m}
+$$
+
+---
+
+## Expected Collisions for Key ($x$)
+
+Let set size = ($n$)
+
+$$
+E[\text{collisions with } x] = \frac{n-1}{m} \approx \alpha
+$$
+
+(where  $\alpha = \frac{n}{m}$ )
+
+---
+
+## Key Result
+
+$$
+E[\text{collisions}] \le \alpha
+$$
+
+✔ Small load factor → fewer collisions
+
+---
+
+## Construction of Universal Family
+
+Example form:
+
+$$
+h_a(k) = \left( \sum_{i=1}^{r} a_i k_i \right) \mod m
+$$
+
+* Parameters:
+
+  * $$(a_i)$$ chosen randomly
+  * Each $$(a_i \in { 0,1,\dots,m-1 } )$$
+
+---
+
+## Size of Family
+
+If there are (r) parameters:
+
+$$
+|\mathcal{H}| = m^r
+$$
+
+---
+
+## Bad Hash Functions
+
+* Cause:
+  $$
+  h(x) = h(y)
+  $$
+
+* Count of such “bad” functions:
+
+$$
+\le m^{r-1}
+$$
+
+---
+
+## Probability of Bad Choice
+
+$$
+\frac{m^{r-1}}{m^r} = \frac{1}{m}
+$$
+
+✔ Matches universal condition
+
+---
+
+## Two-Level (Perfect Hashing)
+
+### Idea
+
+* First level:
+
+  * Distribute keys into buckets
+
+* Second level:
+
+  * Build separate hash table for each bucket
+
+---
+
+## Property
+
+For bucket with $n_i$ keys:
+
+$$
+\text{Expected collisions} \propto n_i^2
+$$
+
+---
+
+## Guarantee
+
+* Total space:
+  $$
+  O(n)
+  $$
+
+* Expected collisions:
+  $$
+  < \frac{1}{2}
+  $$
+
+✔ Can achieve **perfect hashing (no collisions)**
+
+---
+
+## Key Insight
+
+* Randomization removes worst-case
+* Universal hashing → expected $O(1)$ operations
+* Perfect hashing → collision-free lookup
+
+:::info[TITLE]
+## Lecture 42: <br />Cryptographic Hash Function
+:::
+
+## Hash Function (Cryptographic Requirements)
+
+* Maps arbitrary input → fixed size output
+
+$$
+h: {0,1}^* \rightarrow {0,1}^n
+$$
+
+---
+
+## Required Properties
+
+### 1. Arbitrary Input Size
+
+* Accept any length message
+
+---
+
+### 2. Fixed Output Size
+
+* Output length is constant
+
+---
+
+### 3. Pre-image Resistance (One-way)
+
+Given:
+$$
+h(x)
+$$
+
+Hard to find:
+$$
+x
+$$
+
+---
+
+### 4. Second Pre-image Resistance
+
+Given:
+$$
+x
+$$
+
+Hard to find:
+$$
+x' \ne x \text{ such that } h(x') = h(x)
+$$
+
+---
+
+### 5. Collision Resistance
+
+Hard to find:
+$$
+x \ne y \text{ such that } h(x) = h(y)
+$$
+
+---
+
+## Use in Authentication
+
+### Basic Method
+
+* Alice sends:
+  $$
+  (M,; h(M))
+  $$
+
+* Bob:
+
+  * Computes:
+    $$
+    h(M)
+    $$
+  * Compares
+
+❌ No security (attacker can modify both)
+
+---
+
+## With Secret Key (MAC)
+
+* Shared key:
+  $$
+  K
+  $$
+
+* Alice sends:
+  $$
+  (M,; h(K || M))
+  $$
+
+* Bob verifies:
+  $$
+  h(K || M)
+  $$
+
+✔ Provides authentication
+
+---
+
+## With Encryption
+
+* Alice sends:
+  $$
+  M || E_K(h(M))
+  $$
+
+* Bob:
+
+  * Decrypts:
+    $$
+    h(M)
+    $$
+  * Verifies
+
+✔ Authentication + confidentiality
+
+---
+
+## With Digital Signature
+
+* Alice signs:
+  $$
+  S = E_{d_A}(h(M))
+  $$
+
+* Sends:
+  $$
+  (M,; S)
+  $$
+
+* Bob verifies:
+  $$
+  h(M) = D_{e_A}(S)
+  $$
+
+✔ Strong authentication + non-repudiation
+
+---
+
+## Hash Construction (Iterative)
+
+* Message split into blocks:
+  $$
+  M_1, M_2, ..., M_t
+  $$
+
+* Initial value:
+  $$
+  H_0 = IV
+  $$
+
+* Process:
+
+$$
+H_i = f(H_{i-1}, M_i)
+$$
+
+* Final hash:
+  $$
+  H_t
+  $$
+
+---
+
+## Key Insight
+
+* Hash ensures integrity
+* MAC → adds authentication
+* Signature → adds identity proof
+
+---
+
+## Final Note
+
+* Secure hash must satisfy:
+
+  * One-way
+  * Collision resistant
+  * Efficient
+
+✔ Used in all modern cryptographic systems
+
+:::info[TITLE]
+## Lecture 43: <br />Secure Hash Algorithm (SHA)
+:::
+
+## Secure Hash Algorithms
+
+---
+
+## SHA Family
+
+* Developed by **NIST** (1993)
+* SHA-1 later replaced older versions
+
+---
+
+## Variants
+
+* SHA-1 → 160-bit
+* SHA-256 → 256-bit
+* SHA-384 → 384-bit
+* SHA-512 → 512-bit
+
+---
+
+## Message Preprocessing (SHA-1)
+
+### Step 1: Padding
+
+* Append:
+  $$
+  1 \text{ followed by } 0\text{s}
+  $$
+
+* So that length ≡ 448 mod 512
+
+---
+
+### Step 2: Append Length
+
+* Add original length (64-bit)
+
+---
+
+### Step 3: Blocks
+
+* Divide message into:
+  $$
+  512\text{-bit blocks}
+  $$
+
+---
+
+## Initialization
+
+* Initial hash values (IV):
+  $$
+  H_0, H_1, H_2, H_3, H_4
+  $$
+
+---
+
+## Processing (Per Block)
+
+* 80 rounds
+
+* Uses:
+
+  * Logical functions
+  * Constants
+  * Message schedule
+
+---
+
+## Compression
+
+For each block:
+
+$$
+CV_{i+1} = \text{Compress}(CV_i, M_i)
+$$
+
+---
+
+## Final Hash
+
+$$
+\text{Digest} = CV_L
+$$
+
+---
+
+## Birthday Attack
+
+* Based on probability of collisions
+
+---
+
+## Probability Idea
+
+* Want:
+  $$
+  P(\text{collision}) > 0.5
+  $$
+
+---
+
+## Approximation
+
+$$
+P \approx 1 - e^{-\frac{k^2}{2n}}
+$$
+
+---
+
+## Solve for k
+
+$$
+\frac{k^2}{2n} \approx \ln 2
+$$
+
+$$
+k \approx \sqrt{2n \ln 2} \approx \sqrt{n}
+$$
+
+---
+
+## Example (Birthday Problem)
+
+* Total days:
+  $$
+  n = 365
+  $$
+
+* Required people:
+  $$
+  k \approx 23
+  $$
+
+✔ >50% chance of same birthday
+
+---
+
+## Implication in Hashing
+
+* For n-bit hash:
+
+$$
+\text{Collision effort} \approx 2^{n/2}
+$$
+
+---
+
+## Example
+
+* SHA-1 (160-bit):
+
+$$
+2^{80} \text{ operations for collision}
+$$
+
+---
+
+## Key Insight
+
+* Collisions easier than brute force
+* Due to:
+  $$
+  \text{Birthday paradox}
+  $$
+
+---
+
+## Final Notes
+
+* SHA-1 → broken (collision attacks exist)
+* Use:
+
+  * SHA-256 or higher
+
+✔ Stronger security against collisions
+
+:::info[TITLE]
+## Lecture 44: <br />Digital Signature Standard (DSS)
+:::
+
+## Parameters
+
+* Primes:
+  $$
+  p,; q \quad (q \mid p-1)
+  $$
+
+* Generator:
+  $$
+  g = h^{\frac{p-1}{q}} \mod p
+  $$
+
+---
+
+## Key Generation
+
+* Private key:
+  $$
+  x \in {1,2,...,q-1}
+  $$
+
+* Public key:
+  $$
+  y = g^x \mod p
+  $$
+
+---
+
+## Signing
+
+* Hash message:
+  $$
+  H = h(M)
+  $$
+
+* Choose random:
+  $$
+  k \in {1,2,...,q-1}
+  $$
+
+---
+
+### Compute
+
+$$
+r = (g^k \mod p) \mod q
+$$
+
+$$
+s = k^{-1}(H + xr) \mod q
+$$
+
+---
+
+## Signature
+
+$$
+(r, s)
+$$
+
+---
+
+## Verification
+
+* Check:
+  $$
+  0 < r,s < q
+  $$
+
+---
+
+### Compute
+
+$$
+w = s^{-1} \mod q
+$$
+
+$$
+u_1 = Hw \mod q
+$$
+
+$$
+u_2 = rw \mod q
+$$
+
+---
+
+### Compute
+
+$$
+v = ((g^{u_1} \cdot y^{u_2}) \mod p) \mod q
+$$
+
+---
+
+## Validity
+
+$$
+v = r \Rightarrow \text{valid}
+$$
+
+---
+
+## Correctness
+
+$$
+s = k^{-1}(H + xr)
+$$
+
+$$
+\Rightarrow k = (H + xr)s^{-1}
+$$
+
+Substitute in:
+
+$$
+g^k = g^{H s^{-1}} \cdot g^{x r s^{-1}}
+$$
+
+$$
+= g^{u_1} \cdot y^{u_2}
+$$
+
+---
+
+## Key Points
+
+* Uses hash:
+  $$
+  h(M)
+  $$
+
+* Random:
+  $$
+  k \text{ must be secret and unique}
+  $$
+
+* Security based on:
+  $$
+  \text{Discrete Log Problem}
+  $$
+
+---
+
+## Important Notes
+
+* Reusing (k) → private key leak
+* Requires secure random generation
+
+---
+
+## Final Insight
+
+* Signature = pair:
+  $$
+  (r,s)
+  $$
+
+* Verification uses:
+
+  * Public key
+  * Hash
+  * Modular arithmetic
+
+✔ Standardized digital signature scheme
+
+:::info[TITLE]
+## Lecture 45: <br />More on Key Exchange Protocol
+:::
+
+## 3-Party Key Exchange (Basic Idea)
+
+* Parties: Alice, Bob, Charlie
+
+* Public:
+  $$
+  g,; p
+  $$
+
+* Secrets:
+  $$
+  a,; b,; c
+  $$
+
+---
+
+## Exchange
+
+* Alice sends:
+  $$
+  g^a
+  $$
+
+* Bob sends:
+  $$
+  g^b
+  $$
+
+* Charlie sends:
+  $$
+  g^c
+  $$
+
+---
+
+## Goal
+
+* Shared key:
+  $$
+  K = g^{abc} \mod p
+  $$
+
+---
+
+## Problem
+
+* With normal exponentiation:
+
+  * Requires multiple rounds
+  * Not efficient
+
+---
+
+## Bilinear Pairing Setup
+
+* Groups:
+  $$
+  G_1 \text{ (additive)}, \quad G_2 \text{ (multiplicative)}
+  $$
+
+* Pairing:
+  $$
+  e: G_1 \times G_1 \rightarrow G_2
+  $$
+
+---
+
+## Properties
+
+### 1. Bilinearity
+
+$$
+e(aP, bP) = e(P,P)^{ab}
+$$
+
+---
+
+### 2. Non-degeneracy
+
+$$
+e(P,P) \ne 1
+$$
+
+---
+
+### 3. Computability
+
+* Efficient to compute
+
+---
+
+## Public Setup
+
+* Generator:
+  $$
+  P \in G_1
+  $$
+
+* Public:
+  $$
+  P,; G_1,; G_2,; e
+  $$
+
+---
+
+## Private Keys
+
+$$
+a,; b,; c
+$$
+
+---
+
+## Exchange (1 Round)
+
+* Alice sends:
+  $$
+  aP
+  $$
+
+* Bob sends:
+  $$
+  bP
+  $$
+
+* Charlie sends:
+  $$
+  cP
+  $$
+
+---
+
+## Key Computation
+
+### Alice
+
+$$
+K = e(bP, cP)^a = e(P,P)^{abc}
+$$
+
+---
+
+### Bob
+
+$$
+K = e(aP, cP)^b = e(P,P)^{abc}
+$$
+
+---
+
+### Charlie
+
+$$
+K = e(aP, bP)^c = e(P,P)^{abc}
+$$
+
+---
+
+## Shared Key
+
+$$
+K = e(P,P)^{abc}
+$$
+
+✔ Same for all three
+
+---
+
+## Key Insight
+
+* Pairing enables:
+  $$
+  \text{multiplication of exponents across parties}
+  $$
+
+* Achieves:
+
+  * 3-party key agreement
+  * Single round communication
+
+---
+
+## Notes
+
+* Used in:
+
+  * Identity-based cryptography
+  * Advanced protocols
+
+* Still active research area

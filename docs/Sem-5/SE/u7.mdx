@@ -1,0 +1,927 @@
+---
+sidebar_position: 2
+---
+
+# Unit - 7
+
+:::info[TITLE]
+## CASE Tools & Advance Practices of System Dependability & Security
+:::
+
+## 1. Computer Aided Software Engineering (CASE) Tools
+
+CASE Tools are software applications used to **automate, manage, and support different phases of the Software Development Life Cycle (SDLC)**.
+
+---
+
+### 1.1 Definition
+
+* CASE Tools are tools that assist in:
+
+  * Software development
+  * Design
+  * Testing
+  * Maintenance
+
+👉 They help in **improving efficiency and quality of software development** 
+
+---
+
+### 1.2 Purpose
+
+* Improve software quality
+* Increase development speed (productivity)
+* Reduce development cost
+* Ensure consistency across project
+* Automate repetitive tasks
+
+---
+
+### 1.3 Components of CASE Tools
+
+---
+
+#### 1.3.1 Central Repository (Data Dictionary)
+
+* A **central database** storing:
+
+  * Project data
+  * Diagrams
+  * Reports
+  * Documentation
+
+**Purpose:**
+
+* Maintain consistency
+* Enable data sharing
+
+---
+
+#### 1.3.2 Upper CASE Tools (Front-end)
+
+* Used in **early phases of SDLC**
+
+**Includes:**
+
+* Planning
+* Requirement analysis
+* System design
+
+---
+
+#### 1.3.3 Lower CASE Tools (Back-end)
+
+* Used in **later phases of SDLC**
+
+**Includes:**
+
+* Coding
+* Testing
+* Maintenance
+
+---
+
+#### 1.3.4 Integrated CASE (I-CASE)
+
+* Combines:
+
+  * Upper CASE tools
+  * Lower CASE tools
+
+**Purpose:**
+
+* Support entire SDLC in one environment
+
+---
+
+### 1.4 Types of CASE Tools
+
+---
+
+#### 1.4.1 Diagramming Tools
+
+* Used to create:
+
+  * Flowcharts
+  * Data Flow Diagrams (DFD)
+  * ER Diagrams
+
+---
+
+#### 1.4.2 UML Modeling Tools
+
+* Used for **object-oriented design**
+
+**Example:**
+
+* Class diagrams
+* Sequence diagrams
+
+---
+
+#### 1.4.3 Code Generators
+
+* Automatically generate **source code from design models**
+
+---
+
+#### 1.4.4 Testing Tools
+
+* Used to **automate testing**
+
+**Examples:**
+
+* Unit testing tools
+* Web testing tools
+
+---
+
+#### 1.4.5 Documentation Tools
+
+* Generate:
+
+  * Technical documents
+  * User manuals
+
+---
+
+#### 1.4.6 Version Control / Configuration Management Tools
+
+* Track changes in code
+
+**Functions:**
+
+* Version tracking
+* Collaboration
+* Backup and recovery
+
+---
+
+## 2. SCRUM Developments
+
+Scrum is an **Agile framework** used to develop, deliver, and maintain software through **iterative and incremental progress**.
+
+---
+
+### 2.1 Definition of Scrum
+
+* Scrum is a framework that:
+
+  * Uses **short development cycles (Sprints)**
+  * Focuses on collaboration and adaptability
+
+* Sprint duration:
+
+  * Usually **2–4 weeks** 
+
+---
+
+### 2.2 Scrum Framework Overview
+
+* Work is divided into **small increments**
+* Each Sprint delivers a **working product increment**
+
+**Key Features:**
+
+* Iterative development
+* Continuous feedback
+* Flexibility to changing requirements
+
+---
+
+### 2.3 Key Components of Scrum
+
+---
+
+#### 2.3.1 Roles
+
+---
+
+##### 2.3.1.1 Product Owner
+
+* Responsible for:
+
+  * Defining requirements
+  * Managing product backlog
+  * Setting priorities
+
+---
+
+##### 2.3.1.2 Scrum Master
+
+* Acts as:
+
+  * Facilitator
+  * Process guide
+
+**Responsibilities:**
+
+* Remove obstacles
+* Ensure Scrum practices are followed
+
+---
+
+##### 2.3.1.3 Development Team
+
+* Cross-functional team responsible for:
+
+  * Designing
+  * Coding
+  * Testing
+
+**Characteristics:**
+
+* Self-organizing
+* Collaborative
+
+---
+
+#### 2.3.2 Artifacts
+
+---
+
+##### 2.3.2.1 Product Backlog
+
+* A **prioritized list of all requirements**
+
+---
+
+##### 2.3.2.2 Sprint Backlog
+
+* Subset of product backlog selected for a **specific sprint**
+
+---
+
+##### 2.3.2.3 Increment
+
+* The **working product output** at the end of a sprint
+
+---
+
+#### 2.3.3 Events (Ceremonies)
+
+---
+
+##### 2.3.3.1 Sprint Planning
+
+* Decide:
+
+  * What to build
+  * How to build
+
+---
+
+##### 2.3.3.2 Daily Scrum
+
+* Short daily meeting (**~15 minutes**)
+
+**Purpose:**
+
+* Track progress
+* Identify issues
+
+---
+
+##### 2.3.3.3 Sprint Review
+
+* Demonstration of:
+
+  * Completed work to stakeholders
+
+---
+
+##### 2.3.3.4 Sprint Retrospective
+
+* Team reflects on:
+
+  * What went well
+  * What can be improved
+
+---
+
+
+## 3. Dependable System
+
+A Dependable System is one that users can **trust to operate correctly, safely, and securely** under defined conditions.
+
+---
+
+### 3.1 Definition of Dependability
+
+* Dependability refers to the **trustworthiness of a computer system**
+
+* It ensures that:
+
+  * Services are delivered **correctly**
+  * System behaves **predictably**
+
+👉 Includes multiple attributes like reliability, safety, and security 
+
+---
+
+### 3.2 Attributes of Dependability
+
+Dependability is defined through key attributes:
+
+---
+
+#### 3.2.1 Availability
+
+* System is **ready for use when required**
+
+**Meaning:**
+
+* Minimal downtime
+* Continuous service
+
+---
+
+#### 3.2.2 Reliability
+
+* System performs **correctly without failure over time**
+
+**Meaning:**
+
+* Consistent and error-free operation
+
+---
+
+#### 3.2.3 Safety
+
+* System does **not cause harm or damage** even in case of failure
+
+**Focus:**
+
+* Prevent accidents
+* Protect users and environment
+
+---
+
+#### 3.2.4 Security
+
+* Protection against:
+
+  * Unauthorized access
+  * Data breaches
+  * Attacks
+
+**Goal:**
+
+* Ensure confidentiality, integrity, and availability of data
+
+---
+
+
+## 4. Advanced Practices for Dependability
+
+These practices are used to **increase system reliability, availability, and robustness**.
+
+---
+
+### 4.1 Redundancy
+
+* Using **multiple components** to perform the same task
+
+**Purpose:**
+
+* Avoid single point of failure
+
+**Example:**
+
+* Backup servers, duplicate hardware
+
+---
+
+### 4.2 Process-Oriented Approaches
+
+* Use of **structured development processes**
+
+**Includes:**
+
+* Formal methods
+* Rigorous testing
+* Continuous integration (CI)
+
+**Goal:**
+
+* Improve quality through disciplined processes
+
+---
+
+### 4.3 Fault Tolerance
+
+* System continues to operate **even if some components fail**
+
+**Techniques:**
+
+* Recovery blocks
+* N-version programming
+
+**Goal:**
+
+* Maintain system functionality during failures
+
+---
+
+### 4.4 Defensive Programming
+
+* Writing code that **anticipates possible errors**
+
+**Practices:**
+
+* Input validation
+* Exception handling
+* Error checking
+
+**Goal:**
+
+* Prevent failures and handle unexpected situations safely
+
+---
+
+### 4.5 Re-engineering
+
+* Improving existing (legacy) systems
+
+**Purpose:**
+
+* Enhance dependability without changing core functionality
+
+**Includes:**
+
+* Code restructuring
+* System modernization
+
+---
+
+
+## 5. Reliability Engineering
+
+Reliability Engineering is a discipline focused on ensuring that **systems perform their intended function without failure over a specified time**.
+
+---
+
+### 5.1 Definition
+
+* Reliability Engineering deals with:
+
+  * **Predicting, analyzing, and improving system reliability**
+
+* Focus:
+
+  * Failure prevention
+  * Risk reduction
+  * Performance consistency 
+
+---
+
+### 5.2 Core Pillars
+
+---
+
+#### 5.2.1 Reliability
+
+* Probability that a system operates **without failure** for a given time
+
+---
+
+#### 5.2.2 Availability
+
+* Probability that a system is **operational when required**
+
+---
+
+#### 5.2.3 Maintainability
+
+* Ease with which a system can be:
+
+  * Repaired
+  * Restored after failure
+
+---
+
+### 5.3 Techniques
+
+---
+
+#### 5.3.1 Failure Modes and Effects Analysis (FMEA)
+
+* Identifies:
+
+  * Possible failure modes
+  * Their causes and effects
+
+**Goal:**
+
+* Prevent failures before they occur
+
+---
+
+#### 5.3.2 Fault Tree Analysis
+
+* Uses a **tree structure** to analyze causes of system failure
+
+**Goal:**
+
+* Identify root causes systematically
+
+---
+
+#### 5.3.3 Root Cause Analysis (RCA)
+
+* Determines the **actual cause of a failure**
+
+**Goal:**
+
+* Prevent recurrence of problems
+
+---
+
+#### 5.3.4 Reliability Modeling
+
+* Uses mathematical/statistical models to:
+
+  * Predict system reliability
+  * Analyze failure behavior
+
+---
+
+#### 5.3.5 Accelerated Life Testing (ALT)
+
+* Tests system under **extreme conditions**
+
+**Purpose:**
+
+* Predict long-term reliability in shorter time
+
+---
+
+### 5.4 Objectives
+
+* Increase system reliability
+* Improve safety
+* Reduce maintenance cost
+* Extend product life
+* Enhance customer satisfaction
+
+---
+
+### 5.5 Applications
+
+* Manufacturing systems
+* Aerospace and defense
+* Nuclear systems
+* Software systems (e.g., Site Reliability Engineering - SRE)
+
+---
+
+
+## 6. Safety Engineering
+
+Safety Engineering focuses on **preventing accidents, injuries, and system failures** by identifying hazards and designing systems to operate safely.
+
+---
+
+### 6.1 Definition
+
+* Safety Engineering is the discipline of:
+
+  * **Identifying risks and hazards**
+  * Designing systems to **minimize or eliminate harm**
+
+👉 Ensures systems operate within **safe limits** 
+
+---
+
+### 6.2 Key Aspects
+
+---
+
+#### 6.2.1 Prevention Through Design
+
+* Design systems to **eliminate hazards at the source**
+
+**Examples:**
+
+* Safer equipment design
+* Built-in safety mechanisms
+
+---
+
+#### 6.2.2 Risk Management
+
+* Identify and evaluate potential risks
+
+**Includes:**
+
+* Hazard analysis
+* Risk assessment
+
+---
+
+#### 6.2.3 Compliance and Regulation
+
+* Ensure adherence to:
+
+  * Safety standards
+  * Legal regulations
+
+---
+
+#### 6.2.4 Audit and Inspection
+
+* Regular checking of:
+
+  * Systems
+  * Equipment
+  * Safety procedures
+
+**Goal:**
+
+* Ensure continuous safety compliance
+
+---
+
+#### 6.2.5 Root Cause Analysis
+
+* Analyze incidents to find **actual causes**
+
+**Goal:**
+
+* Prevent future occurrences
+
+---
+
+### 6.3 Core Components
+
+---
+
+#### 6.3.1 System Safety Engineering
+
+* Ensures complex systems operate safely even if **failures occur**
+
+---
+
+#### 6.3.2 Process Safety Management
+
+* Focuses on preventing:
+
+  * Hazardous material release
+  * Dangerous process failures
+
+---
+
+#### 6.3.3 Human Factors Engineering
+
+* Considers **human behavior and limitations**
+
+**Goal:**
+
+* Reduce human errors
+* Improve system usability and safety
+
+---
+
+
+## 7. Security Engineering
+
+Security Engineering focuses on designing and maintaining systems that are **protected against unauthorized access, attacks, and misuse**.
+
+---
+
+### 7.1 Definition
+
+* Security Engineering is an interdisciplinary field that:
+
+  * Designs **secure systems**
+  * Prevents **malicious activities**
+  * Protects data and resources
+
+👉 It emphasizes **proactive security measures** 
+
+---
+
+### 7.2 Key Aspects
+
+---
+
+#### 7.2.1 Proactive Security
+
+* Focus on **preventing attacks before they occur**
+
+**Includes:**
+
+* Vulnerability assessment
+* Penetration testing
+* Risk analysis
+
+---
+
+#### 7.2.2 Risk Identification and Mitigation
+
+* Identify potential threats and vulnerabilities
+
+**Goal:**
+
+* Reduce risks through:
+
+  * Security controls
+  * Policies
+  * Safeguards
+
+---
+
+### 7.3 Core Functions
+
+---
+
+#### 7.3.1 Secure System Design
+
+* Design systems with built-in security
+
+**Includes:**
+
+* Secure architecture
+* Threat modeling
+
+---
+
+#### 7.3.2 Encryption and Cryptography
+
+* Protect data using:
+
+  * Encryption algorithms
+  * Cryptographic techniques
+
+---
+
+#### 7.3.3 Access Control Management
+
+* Control who can:
+
+  * Access system
+  * Modify data
+
+**Methods:**
+
+* Authentication
+* Authorization
+
+---
+
+#### 7.3.4 Security Monitoring Tools
+
+* Monitor systems for:
+
+  * Threats
+  * Intrusions
+
+**Examples:**
+
+* Firewalls
+* SIEM systems
+
+---
+
+### 7.4 Key Principles
+
+---
+
+#### 7.4.1 Defense in Depth
+
+* Use **multiple layers of security**
+
+**Goal:**
+
+* If one layer fails, others still protect system
+
+---
+
+#### 7.4.2 Least Privilege
+
+* Give users **minimum required access**
+
+**Goal:**
+
+* Reduce damage from misuse or attacks
+
+---
+
+### 7.5 Required Skill Set
+
+* Programming (e.g., Python, C++)
+* Networking knowledge
+* Cryptography fundamentals
+* Operating system security
+
+---
+
+### 7.6 Interdisciplinary Nature
+
+* Combines knowledge from:
+
+  * Computer science
+  * Psychology
+  * Sociology
+  * Economics
+
+**Goal:**
+
+* Build secure and dependable systems in real-world environments
+
+---
+
+## 8. Resilience Engineering
+
+Resilience Engineering focuses on building systems that can **handle disruptions, adapt to changes, and recover quickly from failures**.
+
+---
+
+### 8.1 Definition
+
+* Resilience Engineering is the discipline of designing systems that can:
+
+  * **Anticipate failures**
+  * **Absorb disturbances**
+  * **Adapt to changing conditions**
+  * **Recover from disruptions** 
+
+---
+
+### 8.2 Key Aspects
+
+---
+
+#### 8.2.1 Proactive Management
+
+* Focus on identifying potential problems **before they occur**
+
+**Approach:**
+
+* Risk prediction
+* Preventive strategies
+
+---
+
+#### 8.2.2 Complex Adaptive Systems
+
+* Systems are treated as **interconnected and dynamic**
+
+**Idea:**
+
+* Failures are inevitable in complex systems
+* Systems must be able to **adapt**
+
+---
+
+#### 8.2.3 Safety-II Approach
+
+* Focuses on ensuring systems **work correctly under varying conditions**
+
+**Difference:**
+
+* Not just preventing failures (Safety-I)
+* But ensuring **continuous successful operation**
+
+---
+
+### 8.3 Application Areas
+
+* Software systems (handling high loads)
+* Cybersecurity systems
+* Critical infrastructure:
+
+  * Power plants
+  * Healthcare systems
+  * Aviation systems
+
+---
+
+### 8.4 Components of a Resilient System
+
+---
+
+#### 8.4.1 Robustness
+
+* Ability to **withstand disturbances** without failure
+
+---
+
+#### 8.4.2 Adaptability
+
+* Ability to **adjust to changing conditions**
+
+---
+
+#### 8.4.3 Recoverability
+
+* Ability to **return to normal operation after failure**
+
+---
+
+### 🔁 Key Insight
+
+* Resilience =
+  **Withstand + Adapt + Recover**
+
+👉 Makes systems not just safe, but **flexible and reliable in real-world conditions**

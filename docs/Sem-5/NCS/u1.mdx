@@ -1,0 +1,964 @@
+---
+sidebar_position: 1
+authors: [ankur]
+---
+
+# Unit - 1
+:::info[Title]
+## Type of Network & OSI Layers
+:::
+
+***
+
+## 1. Network Concept of Security
+
+### 1.1 Introduction to Network Concept of Security
+
+Network security is a broad term that covers a multitude of technologies, devices, and processes. In its simplest form, it is a set of rules and configurations designed to protect the **integrity, confidentiality, and accessibility** of computer networks and data using both software and hardware technologies.
+
+#### The "Scope" of Security
+
+While the PDF introduces this as a general concept, in a professional environment (like the Palo Alto firewalls you are studying), network security is divided into several defensive layers:
+
+1. **Access Control:** You must be able to keep out unauthorized users and devices.
+2. **Application Security:** Protecting the software that runs on your network.
+3. **Behavioral Analytics:** Identifying "abnormal" behavior (e.g., a printer suddenly trying to access a database).
+4. **Network Segmentation:** (Discussed later in **Subnetting** ) This ensures that if one part of the network is breached, the rest remains safe.
+
+#### Why Study Networking for Security?
+
+As noted in your course material, security is often "dependent on the application" and the protocol being used. You cannot secure a network if you do not understand how data moves through it. For example:
+
+* **Protocol Awareness:** Knowing that IPv4 does not have inbuilt encryption , whereas IPv6 has inbuilt **IPsec**.
+* **Path Awareness:** Understanding how NAT masks private addresses to provide a layer of privacy.
+
+***
+
+### 1.2 Unit Overview
+
+This unit (Unit - 1) serves as the architectural foundation for the entire course. It moves from the physical hardware (Types of Networks) to logical addressing (IP/Subnetting) and finally to the conceptual models that govern all digital communication (OSI & TCP/IP).
+
+#### Exhaustive Checklist of Unit Topics
+
+Based on the provided content, here are the core pillars we will master:
+
+* **Network Taxonomy:** Differentiating between PAN, LAN, MAN, and WAN based on coverage and connectivity.
+* **Logical Addressing:** The structure, math, and versions (v4 vs v6) of IP addresses.
+* **Address Management:** How **NAT** translates IPs , how **Subnetting** divides them , and how **DHCP** assigns them.
+* **Application Services:** The role of **Ports** as virtual endpoints , **DNS** as the "phonebook" of the internet , and **Proxy Servers** as intermediaries.
+* **The Frameworks:** A deep-dive into the 7-layer **OSI Model** and the 4-layer **TCP/IP Model**.
+
+> **Professional Insight:** In your **Palo Alto** course, you will learn that the firewall acts as a "Security Gateway." It sits at the edge of these networks (often performing NAT) and inspects traffic at the Application Layer (Layer 7 of the OSI) to decide what is safe.
+
+***
+
+***
+
+## 2. Types of Networks
+
+Networks are primarily categorized by their size, geographical coverage, and the specific technologies used to link devices together.
+
+***
+
+### 2.1 Personal Area Network (PAN)
+
+A PAN is a computer network for interconnecting electronic devices within an individual person's workspace.
+
+#### 2.1.1 Characteristics of PAN
+
+* **Coverage Area:** It covers a small area of coverage, usually around **10 meters**.
+* **Connectivity:** Devices are typically connected via **Bluetooth**, **Zigbee**, or **USB**.
+* **Transmission:** It provides data transmission among devices like computers, smartphones, and tablets.
+* **Security Context:** In a security context, PANs are highly personal and usually rely on short-range pairing protocols which, while convenient, can be vulnerable to "bluejacking" or unauthorized pairing if not configured correctly.
+
+#### 2.1.2 PAN Devices
+
+* **Core Devices:** Computers, smartphones, and tablets.
+* **Peripherals:** Wireless mice, printers, and personal digital assistants.
+* **Modern IoT:** Wearables and various IoT (Internet of Things) devices.
+
+***
+
+### 2.2 Local Area Network (LAN)
+
+A LAN interconnects computers within a limited physical area.
+
+#### 2.2.1 Characteristics of LAN
+
+* **Coverage Area:** Covers up to **hundreds of meters**.
+* **Locations:** Commonly found in residences, schools, laboratories, university campuses, or office buildings.
+* **Transmission Media:** Connectivity is achieved through **Ethernet**, **Fiber optics**, wireless (Wi-Fi), or cellular signals.
+* **Performance:** LANs generally offer higher data transfer speeds and lower latency compared to larger network types because of the short distances involved.
+
+#### 2.2.2 LAN Components
+
+* **End Devices:** Computers and smartphones.
+* **Intermediary Devices:** Access points, **routers**, and **switches**.
+* **Hardware Essentials:** LAN cables (Ethernet) and printers.
+
+***
+
+### 2.3 Metropolitan Area Network (MAN)
+
+A MAN is a network that interconnects users with computer resources in a geographic region the size of a metropolitan area.
+
+#### 2.3.1 Characteristics of MAN
+
+* **Coverage Area:** Typically spans up to **50 km**.
+* **Interconnectivity:** It consists of several LANs connected together within a municipality.
+* **Media:** Uses high-speed connectivity such as **fiber optics**, Ethernet, wireless, or cellular.
+
+#### 2.3.2 MAN Architecture
+
+The architecture of a MAN serves as a backbone to link various institutional LANs:
+
+* **Hospital LANs** connected to **College LANs**.
+* **School LANs** linked with **Factory LANs**.
+* **Centralized Resource Sharing:** MANs allow for the sharing of regional resources (like a city-wide database or high-speed internet backbone) among these distinct entities.
+
+***
+
+### 2.4 Wide Area Network (WAN)
+
+A WAN is a telecommunications network that extends over a large geographic area, potentially covering the globe.
+
+#### 2.4.1 Characteristics of WAN
+
+* **Coverage Area:** **Global**.
+* **Structure:** It is a connection of LANs linked around the world.
+* **Implementation:** Wide area networks are often established with **leased telecommunication circuits**.
+* **Security Importance:** Since WAN traffic travels through public or leased infrastructure, it is the primary environment where encryption and advanced security protocols (like those in **IPv6** or **VPNs**) become critical.
+
+#### 2.4.2 WAN Connectivity
+
+* **Infrastructure:** Uses fiber optics, Ethernet, wireless, and cellular technologies.
+* **Key Hardware:** Requires **gateways**, routers, and switches to manage long-distance data routing.
+* **Examples:** The Internet is the most well-known public WAN. Other examples include **CDNs** (Content Delivery Networks) used to distribute rich media globally.
+
+***
+
+Comparison Table: Network Types
+
+| **Type** | **Size/Coverage**  | **Common Devices**           | **Connectivity**                  |
+| -------- | ------------------ | ---------------------------- | --------------------------------- |
+| **PAN**  | Individual (\~10m) | IoT, tablets, wearables      | Bluetooth, Zigbee, USB            |
+| **LAN**  | Hundreds of meters | Computers, routers, switches | Ethernet, Wi-Fi, Fiber            |
+| **MAN**  | Up to 50 km        | Multiple LANs, routers       | Fiber optics, Wireless            |
+| **WAN**  | Global             | Gateways, routers, switches  | Leased circuits, Fiber, Satellite |
+
+***
+
+***
+
+## 3. IP Address
+
+IP stands for **Internet Protocol**. It is a set of rules that governs how data is sent over the internet or a local network.
+
+***
+
+### 3.1 Definition of IP Address
+
+An IP address is a **unique address** that identifies a specific device on the internet or a local network. These addresses are not random; they are mathematically produced and allocated by the **Internet Assigned Numbers Authority (IANA)**.
+
+#### 3.1.1 Structure of IPv4 Address
+
+* **Format:** An IPv4 address is expressed as a string of numbers separated by dots.
+* **Dot-Decimal Notation:** It consists of a set of **four numbers** (octets).
+* **Range:** Each number in the set can range from **0 to 255**.
+* **Example:** 192.158.1.38.
+
+#### 3.1.2 Binary Representation of IP Address
+
+Computers do not communicate in decimals; they use binary (0s and 1s).
+
+* **Octets:** Each of the four decimal numbers represents **8 bits** (1 byte).
+* **Conversion Example:** The decimal address `172.16.254.1` is converted into binary as `10101100.00010000.11111110.00000001`.
+* **Total Bits:** Since there are 4 octets of 8 bits each, the total length is **32 bits** ($4 \times 8$).
+
+***
+
+### 3.2 IPv4 Addressing
+
+IPv4 (Internet Protocol version 4) is the fourth version of the Internet Protocol and the most widely deployed version.
+
+#### 3.2.1 IPv4 Address Length
+
+* **Bit Size:** IPv4 utilizes a **32-bit** address length.
+* **Address Space:** It can generate approximately **$4.29 \times 10^9$** unique addresses.
+* **Configuration:** It supports both **Manual** (Static) and **DHCP** (Dynamic) address configuration.
+* **Representation:** Addresses are represented in **decimal** format.
+
+#### 3.2.2 IPv4 Header
+
+The header is the portion of the packet that contains instructions for routing and delivery.
+
+* **Size:** The IPv4 header size is variable, typically ranging from **20 to 60 bytes**.
+* **Security Limitation:** In basic IPv4, encryption and authentication facilities are **not provided** within the protocol itself; security features are dependent on the application layer.
+
+***
+
+### 3.3 IPv6 Addressing
+
+IPv6 was developed by the Internet Engineering Task Force (IETF) to deal with the long-anticipated problem of IPv4 address exhaustion.
+
+#### 3.3.1 IPv6 Address Length
+
+* **Bit Size:** IPv6 has a significantly larger **128-bit** address length.
+* **Address Space:** It provides a massive address space of approximately **$3.4 \times 10^{38}$** unique addresses.
+* **Configuration:** It supports **Auto-configuration** and renumbering.
+* **Representation:** IPv6 addresses are represented in **hexadecimal** format.
+* **Example:** `2001:0db8:0000:0000:0000:ff00:0042:7879`.
+
+#### 3.3.2 IPv6 Header
+
+* **Size:** Unlike IPv4, IPv6 has a **fixed header size of 40 bytes**. This simplifies processing for routers and improves efficiency.
+
+#### 3.3.3 IPv6 Security Features
+
+* **Inbuilt Security:** **IPSEC** (Internet Protocol Security) is an inbuilt security feature of the IPv6 protocol.
+* **Authentication & Encryption:** Unlike IPv4, IPv6 provides native support for both **encryption and authentication**.
+
+***
+
+### 3.4 Differences between IPv4 and IPv6
+
+| **Feature**         | **IPv4**                  | **IPv6**             |
+| ------------------- | ------------------------- | -------------------- |
+| **Address Length**  | 32-bit                    | 128-bit              |
+| **Address Space**   | $4.29 \times 10^9$        | $3.4 \times 10^{38}$ |
+| **Representation**  | Decimal                   | Hexadecimal          |
+| **Configuration**   | Manual and DHCP           | Auto and renumbering |
+| **Header Size**     | 20-60 bytes (Variable)    | 40 bytes (Fixed)     |
+| **Encryption/Auth** | Not provided by default   | Inbuilt/Provided     |
+| **IPSEC Support**   | Optional/Dependent on App | Inbuilt              |
+
+***
+
+***
+
+## 4. IP Address Classes
+
+IPv4 addresses are divided into five classes (A, B, C, D, and E) to allow for efficient allocation of IP addresses based on the size of the network.
+
+***
+
+### 4.1 Class A Network
+
+Class A addresses are designed for extremely large networks with a massive number of hosts.
+
+#### 4.1.1 Address Range
+
+* **Decimal Range:** The first octet ranges from **1 to 126**.
+* **Total Networks:** Supports 126 networks.
+* **Loopback Address:** Note that 127.x.x.x is reserved for loopback testing and is not part of the usable Class A range.
+* **Example Address:** 102.168.212.226, where "102" identifies the network.
+
+#### 4.1.2 Network and Host Bits
+
+* **Structure:** The first 8 bits (first octet) identify the **Network**, and the remaining 24 bits identify the **Host** into that network.
+* **Default Subnet Mask:** 255.0.0.0 (or $/8$ in CIDR notation).
+* **Host Capacity:** Allows for approximately $2^{24} - 2$ (over 16 million) hosts per network.
+
+***
+
+### 4.2 Class B Network
+
+Class B addresses are intended for medium-sized to large networks, such as those used by large universities or corporations.
+
+#### 4.2.1 Address Range
+
+* **Decimal Range:** The first octet ranges from **128 to 191**.
+* **Example Address:** 168.212.226.204, where "168.212" identifies the network.
+
+#### 4.2.2 Network and Host Bits
+
+* **Structure:** The first 16 bits (first two octets) identify the **Network**, and the remaining 16 bits identify the **Host**.
+* **Default Subnet Mask:** 255.255.0.0 (or $/16$ in CIDR notation).
+* **Host Capacity:** Allows for $2^{16} - 2$ (65,534) hosts per network.
+
+***
+
+### 4.3 Class C Network
+
+Class C addresses are the most common and are used for small local area networks (LANs).
+
+#### 4.3.1 Address Range
+
+* **Decimal Range:** The first octet ranges from **192 to 223**.
+* **Binary Identifier:** The first three bits are always set to `110`.
+
+#### 4.3.2 Usage of Class C
+
+* **Structure:** The first 24 bits (first three octets) identify the **Network**, and the final 8 bits identify the **Host**.
+* **Default Subnet Mask:** 255.255.255.0 (or $/24$ in CIDR notation).
+* **Application:** Mostly used by small organizations and local area networks to connect devices.
+* **Host Capacity:** Allows for $2^{8} - 2$ (254) hosts per network.
+
+***
+
+### 4.4 Class D Network
+
+Class D is a special class not used for standard host-to-host networking.
+
+#### 4.4.1 Multicasting
+
+* **Decimal Range:** The first octet ranges from **224 to 239**.
+* **Purpose:** Exclusively used for **multicasting** applications, where a single packet is sent to a group of subscribers rather than a single host.
+* **Structure:** Does not have a subnet mask or a host/network bit division; the entire 32-bit address is used to uniquely identify a multicast group.
+* **Binary Identifier:** The first four bits are set to `1110`.
+
+***
+
+### 4.5 Class E Network
+
+Class E is reserved and is generally not seen in production environments.
+
+#### 4.5.1 Research and Experimental Use
+
+* **Decimal Range:** The first octet ranges from **240 to 254** (extending up to 255.255.255.255).
+* **Usage:** Reserved strictly for **Research and Development** or experimental purposes.
+* **Implementation:** Most network stacks and routers discard Class E addresses as illegal or undefined.
+* **Binary Identifier:** The first four bits are set to `1111`.
+
+***
+
+#### Exhaustive Summary Table of IP Classes
+
+| **Class** | **Range (First Octet)** | **Network Bits** | **Host Bits** | **Default Mask** | **Purpose**           |
+| --------- | ----------------------- | ---------------- | ------------- | ---------------- | --------------------- |
+| **A**     | 1 – 126                 | 8 bits           | 24 bits       | 255.0.0.0        | Very large networks   |
+| **B**     | 128 – 191               | 16 bits          | 16 bits       | 255.255.0.0      | Medium networks       |
+| **C**     | 192 – 223               | 24 bits          | 8 bits        | 255.255.255.0    | Small LANs            |
+| **D**     | 224 – 239               | N/A              | N/A           | None             | Multicasting          |
+| **E**     | 240 – 254               | N/A              | N/A           | None             | Research/Experimental |
+
+***
+
+***
+
+## 5. Network Address Translation (NAT)
+
+NAT is a critical networking technology used to bridge the gap between private local networks and the public internet.
+
+***
+
+### 5.1 Definition of NAT
+
+**Network Address Translation (NAT)** is a process where one or more local (private) IP addresses are translated into one or more global (public) IP addresses and vice versa. Its primary purpose is to provide internet access to local hosts that do not have globally unique IP addresses. It acts as an intermediary or gateway between the end-user and the internet.
+
+***
+
+### 5.2 Working of NAT
+
+The translation occurs at a **NAT-enabled router** or device that sits between the internal network and the external network.
+
+* **Outgoing Traffic:** When a packet leaves the local network, NAT converts the local (private) source IP address into a global (public) IP address.
+* **Incoming Traffic:** When a reply packet enters the local network, NAT converts the destination global (public) IP address back into the local (private) IP address.
+* **Resource Exhaustion:** If NAT runs out of available public addresses in its configured pool, it will drop subsequent packets and send an ICMP "host unreachable" message to the destination.
+
+#### 5.2.1 Inside Local Address
+
+* This is the IP address assigned to a host on the **inside (local) network**.
+* These are typically **private IP addresses** not assigned by a service provider.
+* This is how the host is seen from within the internal network.
+
+#### 5.2.2 Inside Global Address
+
+* The IP address that represents one or more inside local IP addresses to the **outside world**.
+* This is the public IP address of the router/NAT device.
+* This is how the inside host is seen from the external (outside) network.
+
+#### 5.2.3 Outside Local Address
+
+* This is the actual IP address of the **destination host** (the outside host) as it appears to the local network after translation.
+
+#### 5.2.4 Outside Global Address
+
+* The IP address of the outside destination host as seen from the **outside network**.
+* This is the actual IP address of the host before any translation occurs.
+
+***
+
+### 5.3 Need for Port Address Translation
+
+Basic NAT only translates IP addresses. However, if multiple internal hosts try to access the same destination simultaneously, a conflict arises.
+
+#### 5.3.1 Port Number Masking
+
+* **The Problem:** If two hosts (A and B) request the same destination on the same port (e.g., port 1000) at the same time, the router receives replies for the same public IP and port, making it impossible to know which internal host the data belongs to.
+* **The Solution:** To solve this, NAT must also "mask" or translate **port numbers**.
+* By assigning a unique source port to each internal session, the router can accurately route returning traffic to the correct local device.
+
+***
+
+### 5.4 Advantages of NAT
+
+* **IP Conservation:** NAT conserves legally registered (public) IP addresses by allowing many private users to share a few public ones.
+* **Privacy and Security:** It provides privacy by hiding the actual internal IP addresses of devices from the public internet.
+* **Flexibility:** It eliminates the need for address renumbering when a network evolves or changes service providers.
+
+***
+
+### 5.5 Disadvantages of NAT
+
+* **Performance Impact:** The translation process introduces switching path delays.
+* **Application Issues:** Certain applications that require end-to-end transparency may not function correctly with NAT enabled.
+* **Protocol Complications:** NAT complicates tunneling protocols like **IPsec**.
+* **Layer Violation:** Routers are Layer 3 (Network) devices, but NAT forces them to tamper with port numbers, which is a Layer 4 (Transport) function.
+
+***
+
+***
+
+## 6. IP Subnetting
+
+In networking, an IP subnet, or simply a subnet, is a logical subdivision of an IP network. Subnetting is the process used to turn a single large network into multiple smaller, more manageable sub-networks.
+
+***
+
+### 6.1 Concept of Subnetting
+
+Subnetting involves dividing an IP network into sub-networks to improve performance and security. It is performed for several critical reasons:
+
+* **Performance Improvement:** By breaking down a large network, you reduce broadcast traffic and congestion.
+* **Enhanced Security:** It allows administrators to isolate specific groups of hosts, making it easier to apply security policies between subnets.
+* **Efficient Address Use:** Subnetting facilitates the efficient allocation of IP addresses by assigning them to smaller groups rather than wasting large blocks.
+
+***
+
+### 6.2 IP Address and Subnet Mask
+
+An IP address is a numerical label assigned to each device connected to a computer network. To divide this address into smaller networks, a **Subnet Mask** is used. A subnet mask is a 32-bit number created by setting all network bits to '1's and all host bits to '0's.
+
+#### 6.2.1 Network Portion
+
+* The network portion identifies the specific network to which a computer belongs.
+* It is defined by the contiguous '1' bits in the subnet mask.
+* For example, in the mask 255.255.255.0, the first 24 bits represent the network.
+
+#### 6.2.2 Host Portion
+
+* The host portion identifies the specific device (computer) within that network.
+* It is defined by the contiguous '0' bits in the subnet mask.
+* In a standard Class C mask (255.255.255.0), the remaining 8 bits are reserved for identifying hosts.
+
+***
+
+### 6.3 CIDR Notation
+
+**CIDR (Classless Inter-Domain Routing)** notation is a modern way to represent IP addresses and their associated routing prefixes. It replaced the traditional "Classful" system to allow for more flexible and efficient address allocation.
+
+#### 6.3.1 CIDR Representation
+
+* Instead of writing out a full decimal subnet mask, CIDR uses a forward slash followed by the number of '1' bits in the mask.
+* **Example:** The address `192.168.1.0` with a subnet mask of `255.255.255.0` is expressed in CIDR as `192.168.1.0/24`.
+* This notation is often used in conjunction with subnetting to define precise network boundaries.
+
+***
+
+### 6.4 Private and Public IP Addresses
+
+IP addresses are categorized based on where they can be routed:
+
+* **Private IP Addresses:** These are reserved for use within a private (local) network and are **not routable** on the public Internet. They allow internal communication without consuming global address space.
+* **Public IP Addresses:** These are assigned by Internet authorities (like IANA) and are **routable** across the global Internet. Every device that communicates directly with the web must be represented by a public IP.
+
+***
+
+### 6.5 Variable Length Subnet Masking (VLSM)
+
+VLSM is an advanced technique that allows network administrators to use different subnet masks for different subnets within the same network address space.
+
+#### 6.5.1 Advantages of VLSM
+
+* **Maximum Efficiency:** VLSM enables the most efficient use of IP addresses by assigning larger subnets to segments with many hosts and smaller subnets to segments with very few hosts (such as point-to-point router links).
+* **Reduced Waste:** Unlike fixed-length subnetting, where every subnet is the same size regardless of need, VLSM ensures that address space is not wasted on nearly empty subnets.
+
+***
+
+***
+
+## 7. DHCP Server
+
+### 7.1 Introduction to DHCP
+
+**Dynamic Host Configuration Protocol (DHCP)** is an application layer protocol used in computer networks to automatically provide configuration information to devices. It allows a server to dynamically assign IP addresses and other related parameters to clients, ensuring they can communicate on the network without manual configuration by an administrator.
+
+***
+
+### 7.2 DHCP Options
+
+DHCP doesn't just provide an IP address; it uses "Options" to deliver essential configuration details to the client.
+
+#### 7.2.1 Subnet Mask Option
+
+* **Option 1:** This provides the client with its subnet mask (e.g., 255.255.255.0).
+* **Function:** It tells the device which portion of the assigned IP address belongs to the network and which belongs to the host.
+
+#### 7.2.2 Router Option
+
+* **Option 3:** This specifies the IP address of the default gateway or router (e.g., 192.168.1.1).
+* **Function:** It allows the client to know where to send traffic that is destined for a different network.
+
+#### 7.2.3 DNS Option
+
+* **Option 6:** This provides the IP addresses of Domain Name System (DNS) servers (e.g., 8.8.8.8).
+* **Function:** It enables the client to resolve human-readable domain names into machine-readable IP addresses.
+
+***
+
+### 7.3 Vendor Class Identifier
+
+The **Vendor Class Identifier (Option 43)** is a specialized field used to identify the type of device or its manufacturer.
+
+#### 7.3.1 Vendor-Specific Configuration
+
+* **Purpose:** It allows DHCP administrators to assign unique, vendor-specific options to specific devices without the risk of duplicating options within a broader DHCP scope.
+* **Example:** A specific identifier like 'unifi' can be mapped to a controller address (e.g., 192.168.1.9) specifically for Ubiquiti hardware.
+
+***
+
+### 7.4 Advantages of DHCP
+
+Implementing a DHCP server offers several management and operational benefits:
+
+* **Centralized Management:** It provides a method for network administrators to configure and manage the entire network from a single, centralized area.
+* **Ease of Scaling:** Adding new clients to a network is simplified as they receive their configuration automatically upon connection.
+* **Efficient Address Reuse:** IP addresses can be reused; when a device leaves the network, its address returns to the pool for a new user, reducing the total number of required IP addresses.
+* **Simple Reconfiguration:** Administrators can change the IP address space or network settings on the DHCP server once, without needing to manually reconfigure every individual client on the network.
+
+***
+
+***
+
+## 8. Ports
+
+A port is a virtual point where network connections start and end. They allow computers to easily differentiate between different kinds of traffic.
+
+***
+
+### 8.1 Concept of Ports
+
+* **Software-Based:** Ports are software-based and managed by a computer's operating system.
+* **Service Association:** Each port is associated with a specific process or service.
+* **Function:** While IP addresses enable messages to go to and from specific devices, port numbers allow targeting of specific services or applications within those devices.
+
+***
+
+### 8.2 Port Numbers
+
+Ports are standardized across all network-connected devices, with each port assigned a unique number. There are a total of **65,535** possible port numbers.
+
+#### 8.2.1 TCP Ports
+
+* **Protocol:** Used by the Transmission Control Protocol (TCP).
+* **Indication:** The TCP header includes a specific section to indicate the destination and source port numbers.
+
+#### 8.2.2 UDP Ports
+
+* **Protocol:** Used by the User Datagram Protocol (UDP).
+* **Indication:** Like TCP, UDP headers also feature a section for port numbers to direct the packet to the correct application.
+
+***
+
+### 8.3 Well-known Ports
+
+* **Range:** **0 to 1023**.
+* **Usage:** Reserved for standardized protocols and prominent services.
+* **Common Examples:**
+  * **Ports 20 & 21:** FTP (File Transfer Protocol) for transferring files.
+  * **Port 22:** SSH (Secure Shell) for secure tunneling and connections.
+  * **Port 25:** SMTP (Simple Mail Transfer Protocol) for email.
+  * **Port 53:** DNS (Domain Name System).
+  * **Port 80:** HTTP (Hypertext Transfer Protocol) for web traffic.
+  * **Port 123:** NTP (Network Time Protocol) for clock synchronization.
+  * **Port 179:** BGP (Border Gateway Protocol) for routing between large networks.
+  * **Port 443:** HTTPS (HTTP Secure) for encrypted web traffic.
+
+***
+
+### 8.4 Registered Ports
+
+* **Range:** **1024 to 49151**.
+* **Usage:** These can be registered to specific protocols or applications by software corporations.
+
+***
+
+### 8.5 Dynamic and Private Ports
+
+* **Range:** **49152 to 65535**.
+* **Usage:** Also known as ephemeral ports; they can be used by just about anybody or any application for temporary communication.
+
+***
+
+### 8.6 Ports and Transport Layer
+
+Ports are strictly a **Transport Layer (Layer 4)** concept.
+
+#### 8.6.1 Role of TCP
+
+* **Reliability:** Ensures that messages are transmitted in the correct order and without duplication.
+* **Segmentation:** Receives data from upper layers and converts them into smaller units known as **segments**.
+* **Port Direction:** The TCP protocol indicates which specific port a packet should go to within the header.
+
+#### 8.6.2 Role of UDP
+
+* **Connectionless:** UDP provides a way to indicate port numbers for applications that do not require the overhead of TCP's reliability features.
+* **Layer Awareness:** While transport protocols like UDP are port-aware, network layer protocols (like IP) are entirely unaware of what port is in use. In a standard IP header, there is no field to indicate a port number.
+
+***
+
+***
+
+## 9. DNS (Domain Name System)
+
+### 9.1 Introduction to DNS
+
+The **Domain Name System (DNS)** is a critical component of computer networks that acts as a hierarchical and distributed translation system. Its primary purpose is to translate human-readable domain names into numerical IP addresses, allowing users to access internet resources without memorizing long lists of numbers. It is considered an essential infrastructure for the modern internet.
+
+***
+
+### 9.2 Domain Names
+
+A **domain name** is a human-readable label assigned to one or more IP addresses.
+
+* **Structure:** Domain names are organized hierarchically.
+* **Top-Level Domain (TLD):** This is the rightmost part of the domain name (e.g., .com, .org, .net).
+* **Example:** In `www.example.com`, "com" is the TLD.
+
+***
+
+### 9.3 DNS Servers
+
+DNS operates through a distributed network of specialized servers.
+
+#### 9.3.1 Root DNS Server
+
+* **Position:** Located at the top of the DNS hierarchy.
+* **Function:** They serve as the starting point for DNS resolution.
+* **Responsibility:** They provide information about the authoritative DNS servers responsible for specific top-level domains.
+
+#### 9.3.2 TLD DNS Server
+
+* **Responsibility:** These servers handle requests for specific TLDs like .com or .org.
+* **Role:** They direct requests toward the authoritative servers for the specific domain being sought.
+
+#### 9.3.3 Authoritative DNS Server
+
+* **Function:** These are the final source of truth for a specific domain.
+* **Data:** They store and provide the actual IP address mapped to the domain name.
+* **Redundancy:** Organizations often use **Primary** and **Secondary** authoritative servers for backup and reliability.
+
+#### 9.3.4 Recursive DNS Server
+
+* **Function:** These servers perform the actual "legwork" of translating a domain name for the client.
+* **Operation:** They query other DNS servers (Root, TLD, and Authoritative) in a hierarchical sequence until the IP address is found.
+* **Provider:** Typically provided by an Internet Service Provider (ISP).
+
+***
+
+### 9.4 DNS Resolution Process
+
+When a user types a domain name into a browser, the following steps occur:
+
+1. **Local Cache Check:** The device first checks its own local DNS cache.
+2. **Recursive Request:** If not found locally, the request goes to a **Recursive DNS Server**.
+3. **Root Query:** The recursive server asks the **Root Server** for the appropriate TLD server.
+4. **TLD Query:** The **TLD Server** directs the recursive server to the domain's **Authoritative Server**.
+5. **Authoritative Query:** The **Authoritative Server** provides the final IP address.
+6. **Response:** The recursive server returns the IP to the user's device and caches the result for future use.
+
+***
+
+### 9.5 DNS Records
+
+DNS servers store information in different record types:
+
+#### 9.5.1 A Record
+
+* Maps a domain name specifically to an **IPv4 address**.
+
+#### 9.5.2 AAAA Record
+
+* Maps a domain name specifically to an **IPv6 address**.
+
+#### 9.5.3 CNAME Record
+
+* **Canonical Name:** Acts as an alias that points one domain to another domain name.
+
+#### 9.5.4 MX Record
+
+* **Mail Exchange:** Specifies the mail servers responsible for receiving email for that domain.
+
+#### 9.5.5 NS Record
+
+* **Name Server:** Specifies which DNS servers are authoritative for the domain.
+
+***
+
+### 9.6 DNS Caching
+
+* **Purpose:** To improve performance and reduce latency by storing the results of previous queries.
+* **Location:** Caching happens on local devices, recursive servers, and ISP servers.
+* **Benefit:** Reduces the need to query the entire hierarchy (Root and TLD) repeatedly, lowering the load on those servers.
+
+***
+
+### 9.7 DNS Security
+
+DNS was originally designed without heavy security, making it vulnerable to various threats.
+
+* **Vulnerabilities:** Common attacks include **DNS spoofing** and **cache poisoning**.
+
+#### 9.7.1 DNSSEC
+
+* **Definition:** **DNS Security Extensions** is a set of extensions designed to add a layer of security.
+* **Function:** It signs DNS data cryptographically to ensure the information has not been tampered with.
+
+***
+
+### 9.8 Recursive and Non-Recursive DNS
+
+DNS servers can operate in two distinct modes:
+
+* **Recursive Mode:** The server performs the entire resolution process on behalf of the client.
+* **Non-Recursive Mode:** The server only provides information it already has in its cache; it does not query other servers if the information is missing.
+
+***
+
+***
+
+## 10. Proxy Server
+
+### 10.1 Introduction to Proxy Server
+
+A **proxy server** is a computer on the internet that acts as an intermediary or gateway between an end-user and the destination web server.
+
+* It possesses its own unique IP address.
+* It separates the client system from the global network, allowing users to access websites with a different IP address than their own.
+* Unlike a VPN, a standard proxy server does not encrypt the traffic it handles.
+
+***
+
+### 10.2 Working of Proxy Server
+
+The proxy server accepts incoming requests from a client and forwards them to the destination server. It essentially acts as both a **client** (to the destination server) and a **server** (to the original client).
+
+#### 10.2.1 Cache Handling
+
+One of the primary efficiency mechanisms of a proxy server is local storage or "caching".
+
+* When a client requests a page or data, the proxy first checks its **local cache**.
+* If the data exists in the cache, the proxy provides it directly to the client without reaching out to the internet, which speeds up retrieval.
+* Replies from the destination server are also cached by the proxy for future use.
+
+#### 10.2.2 Request Forwarding
+
+If the requested data is not present in the local cache, the proxy proceeds with the following steps:
+
+* It forwards the client's request to the destination server on the global network.
+* It collects the information provided by the targeted website.
+* It transfers the replies back to the original client.
+
+***
+
+### 10.3 Functions of Proxy Server
+
+Proxy servers serve multiple roles depending on their configuration and the needs of the network:
+
+* **Anonymity and Privacy:** By changing the IP address seen by the destination, it hides the client's actual identity on the global network.
+* **Performance Optimization:** Through caching, it reduces bandwidth usage and improves load times for frequently accessed resources.
+* **Access Control:** It acts as a gateway that can collect information related to user requests and potentially filter content.
+* **Application-Specific Configuration:** Unlike a VPN which handles the whole connection, a proxy must often be configured individually for each application, such as a specific browser.
+
+#### Proxy vs. VPN Comparison
+
+| **Feature**    | **Proxy Server**                        | **VPN (Virtual Private Network)**      |
+| -------------- | --------------------------------------- | -------------------------------------- |
+| **Encryption** | Does not encrypt data                   | Encrypts the whole connection and data |
+| **Speed**      | Faster due to lack of encryption        | Slower due to encryption overhead      |
+| **Scope**      | Configured per app                      | Handles the entire device connection   |
+| **Software**   | Typically doesn't have its own software | Usually requires its own software      |
+| **Cost**       | Generally cheaper or free               | Generally more costly                  |
+
+***
+
+***
+
+## 11. OSI Model
+
+### 11.1 Introduction to OSI Model
+
+The **Open Systems Interconnection (OSI) model** is a conceptual framework that standardizes the functions of a telecommunication or computing system into seven distinct layers. These layers work together to enable communication over a network. The model is divided into two main categories:
+
+* **Responsibility of the Host:** Includes the Application, Presentation, Session, and Transport layers (Layers 7 down to 4).
+* **Responsibility of the Network:** Includes the Network, Data Link, and Physical layers (Layers 3 down to 1).
+
+***
+
+### 11.2 Physical Layer
+
+The Physical Layer is the lowest layer (Layer 1) of the OSI model.
+
+* **Main Functionality:** It is responsible for transmitting individual bits from one node to another node.
+* **Connectivity:** It establishes, maintains, and deactivates the physical connection between devices.
+* **Specifications:** It defines mechanical, electrical, and procedural network interface specifications.
+
+#### 11.2.1 Transmission Media
+
+* **Role:** Provides the physical medium through which bits are transmitted.
+* **Data Unit:** Operates on raw bitstreams (e.g., `10101000000010`).
+* **Media Types:** Includes various physical cables and wireless frequencies.
+
+***
+
+### 11.3 Data Link Layer
+
+The Data Link Layer (Layer 2) is responsible for providing reliable and efficient communication between two or more devices on a local network.
+
+* **Identification:** It is responsible for the unique identification of each device residing on a local network.
+
+#### 11.3.1 Framing
+
+* **Definition:** It defines the format of the data on the network by organizing bits into **frames**.
+* **Structure:** It encapsulates the Layer 3 data (L3 data) into a frame with a header (H2) and a trailer (T2).
+
+#### 11.3.2 Error Control
+
+* **Function:** It is responsible for the error-free transfer of data frames.
+
+***
+
+### 11.4 Network Layer
+
+The Network Layer (Layer 3) is responsible for moving packets from a source to a destination.
+
+#### 11.4.1 Routing
+
+* **Devices:** **Routers** are primary Layer 3 devices.
+* **Services:** This layer provides routing services within an internetwork or LAN.
+* **Protocols:** Common protocols include IP (IPv4) and IPv6.
+
+#### 11.4.2 Logical Addressing
+
+* **Addressing:** It manages logical addresses (IP addresses) to ensure packets reach the correct host.
+* **Data Unit:** Data at this layer is referred to as **packets**.
+
+***
+
+### 11.5 Transport Layer
+
+The Transport Layer (Layer 4) provides a point-to-point connection between source and destination to deliver data reliably.
+
+#### 11.5.1 Segmentation
+
+* **Process:** It receives data from the upper layer (Session) and converts it into smaller units known as **segments**.
+* **Data Management:** It ensures messages are transmitted in the order they were sent and prevents data duplication.
+
+#### 11.5.2 Flow Control
+
+* **Reliability:** It ensures reliable message delivery from process to process.
+* **Addressing:** This layer uses **Ports** (TCP/UDP) to direct data to specific services.
+
+***
+
+### 11.6 Session Layer
+
+The Session Layer (Layer 5) is responsible for the interaction between communicating devices.
+
+* **Functions:** It is used to establish, manage, and terminate sessions.
+* **Synchronization:** It synchronizes data exchange by using synchronization points (syn) to ensure data integrity during a session.
+
+***
+
+### 11.7 Presentation Layer
+
+The Presentation Layer (Layer 6) acts as a data translator for the network.
+
+* **Syntax and Semantics:** It is concerned with the syntax and semantics of the information exchanged between systems.
+* **Core Tasks:** It is responsible for **translation**, **compression**, and **encryption**.
+* **Common Name:** It is also known as the **syntax layer**.
+
+***
+
+### 11.8 Application Layer
+
+The Application Layer (Layer 7) is the topmost layer and serves as the window for users and application processes to access network services.
+
+* **User Services:** It provides network services directly to end-users.
+* **Management:** It handles network transparency and resource allocation.
+* **Examples:** Includes protocols like HTTP, FTP, and SMTP.
+
+***
+
+***
+
+## 12. TCP/IP Model
+
+### 12.1 Introduction to TCP/IP Model
+
+The **TCP/IP model**, also known as the Internet protocol suite, is a conceptual framework used to organize communication protocols used on the Internet and similar networks. While the OSI model consists of seven layers, the TCP/IP model is a more streamlined architecture consisting of **four layers**. It standardizes network functions according to functional criteria, where each layer provides specific services to enable end-to-end communication.
+
+| **OSI Layer**                      | **TCP/IP Layer**            |
+| ---------------------------------- | --------------------------- |
+| Application, Presentation, Session | Application Layer           |
+| Transport                          | Transport Layer             |
+| Network                            | Internet Layer              |
+| Data Link, Physical                | Link Layer (Network Access) |
+
+***
+
+### 12.2 Link Layer
+
+Also referred to as the **Network Interface Layer**, this is the lowest level of the TCP/IP hierarchy.
+
+#### 12.2.1 Physical and Data Link Functions
+
+* **Combined Functionality:** This layer combines the functionalities found in the OSI **Physical** and **Data Link** layers.
+* **Hardware Scope:** It is concerned with the physical and data link aspects of network communication, such as cabling and media access.
+* **Physical Addressing:** It handles the physical transmission of data across the specific network medium being used.
+
+***
+
+### 12.3 Internet Layer
+
+The Internet Layer corresponds directly to the **Network Layer** of the OSI model.
+
+#### 12.3.1 IP Protocol
+
+* **Addressing:** This layer is responsible for **logical addressing**, primarily using IP addresses to identify hosts.
+* **Routing:** It manages the routing of packets across multiple networks to ensure they reach their final destination.
+* **Protocols:** The core protocol used here is the **Internet Protocol (IP)**, including both IPv4 and IPv6.
+
+#### 12.3.2 ICMP
+
+* **Control Messaging:** It includes the **Internet Control Message Protocol (ICMP)**.
+* **Error Reporting:** ICMP is used by network devices to send error messages and operational information (e.g., indicating that a requested host is unreachable).
+
+***
+
+### 12.4 Transport Layer
+
+The Transport Layer in TCP/IP is similar in function to the OSI **Transport Layer**.
+
+* **End-to-End Communication:** It manages communication between source and destination host processes.
+* **Reliability Options:** It provides either **reliable** (connection-oriented) or **unreliable** (connectionless) delivery of data.
+* **Key Protocols:**
+  * **TCP (Transmission Control Protocol):** Provides reliable, ordered, and error-checked delivery.
+  * **UDP (User Datagram Protocol):** Provides faster, "best-effort" delivery without the overhead of reliability checks.
+
+***
+
+### 12.5 Application Layer
+
+In the TCP/IP model, the Application Layer is broad, encompassing the functions of the OSI **Session**, **Presentation**, and **Application** layers.
+
+* **User Services:** It provides network services directly to end-users or application processes.
+* **Protocol Diversity:** It includes a wide variety of high-level protocols that facilitate different types of network activities.
+* **Common Examples:**
+  * **HTTP:** For web browsing.
+  * **FTP:** For file transfers.
+  * **SMTP:** For email communication.
+  * **DNS:** For domain name resolution.
+
+***

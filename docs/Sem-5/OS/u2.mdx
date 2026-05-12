@@ -1,0 +1,592 @@
+---
+sidebar_position: 2
+---
+
+
+# Unit - 2
+:::info[TITLE]
+## Structure: Processes, Thread & Process Scheduling
+:::
+
+
+## 1. Process Concepts
+
+### 1.1 Process Definition and Attributes
+
+- **Core Definition:** A process is defined simply as a program in execution.
+- **Active vs. Passive:** A process is an "active" entity, whereas a program is considered a "passive" entity.
+- **Conceptual Scope:** A process is not the same as program code; it is "a lot more than it".
+- **Resource Ownership:** It holds specific attributes including hardware state, memory, and CPU usage.
+- **Identification:** Every process in the operating system is identified by a unique integer called a **Process ID (PID)**.
+
+### 1.2 Difference Between Process and Program
+
+The document provides a side-by-side comparison to clarify the relationship between the two:
+
+| **Feature** | **Process** | **Program** |
+| --- | --- | --- |
+| **Basic Nature** | A program in execution. | A set of instructions. |
+| **Entity Type** | Active and dynamic entity. | Passive and static entity. |
+| **Lifespan** | Limited; created when execution starts and terminated when finished. | Longer; stored on disk "forever". |
+| **Resources** | Contains memory addresses, disk, and printers as required. | Stored in a file; does not contain other resources. |
+| **Memory** | Uses an "address space" in main memory. | Requires memory space on a disk for storage. |
+
+### 1.3 Main OS Process Related Goals
+
+The primary goals of the Operating System regarding process management are:
+
+- **Maximizing Utilization:** Interleave the execution of processes to maximize processor utilization.
+- **User Experience:** Provide a reasonable response time to the user.
+- **Management:** Allocate resources effectively to various processes.
+- **Coordination:** Support inter-process communication (IPC), synchronization, and the user-driven creation of processes.
+
+### 1.4 Achieving OS Goals (Scheduling and Dispatching)
+
+To achieve the goals above, the OS performs these specific tasks:
+
+- **Execution Management:** Schedule and dispatch processes for execution by the processor.
+- **Policy Enforcement:** Implement a safe and fair policy for resource allocation.
+- **Responsiveness:** Respond to requests made by user programs.
+- **Record Keeping:** Construct and maintain operating system tables for each process it manages.
+
+### 1.5 Process Creation and Termination Scenarios
+
+#### Process Creation
+
+New processes are triggered by four main events:
+
+- **System Initialization:** Often involves background processes known as Daemons.
+- **System Call:** An existing running process executes a process creation system call.
+- **User Request:** A user explicitly requests to create a new process.
+- **Batch Jobs:** The initiation of a scheduled batch job.
+- **Relationship:** The creator is the **Parent**, and the created sub-process is the **Child**.
+- **Tracking:** The OS stores the Parent PID (**PPID**) for each child process.
+
+#### Process Termination
+
+Processes can terminate voluntarily or involuntarily:
+
+- **Normal Exit:** Voluntary termination upon completion.
+- **Error Exit:** Voluntary termination due to an internal error.
+- **Fatal Error:** Involuntary termination due to a system failure.
+- **Killed:** Involuntary termination by another process.
+- **System Call:** Processes request their own termination using the `exit` system call.
+
+### 1.6 Memory Sections: Stack, Heap, Data, and Text
+
+In order to execute, a program (stored as an .exe in secondary memory) must be loaded into main memory. Once loaded as a process, its memory is divided into four distinct sections:
+
+- **Text Section:** Consists of the compiled program code read from storage.
+- **Data Section:** Contains global and static variables initialized before the `main` function executes.
+- **Heap Section:** Used for dynamic memory allocation at runtime (managed via `new`, `delete`, `malloc`, `free`).
+- **Stack Section:** Used for local variables; space is reserved when they are declared.
+
+---
+
+
+## 2. Process States and Control
+
+### 2.1 Process States (New, Ready, Running, Waiting, Terminated)
+
+As a process executes, it changes state based on its current activity. The PDF defines five primary states:
+
+- **NEW:** The initial state where the process is currently being created.
+- **READY:** The process is in main memory and waiting to be assigned to a processor by the operating system.
+- **RUNNING:** The state where instructions are actually being executed by the CPU.
+- **WAITING:** The process is waiting for a specific event to occur, such as I/O completion, a signal, or a timer to go off.
+- **TERMINATED (or Exit):** The process has finished its execution or has been stopped by the OS and is waiting to be removed from main memory.
+
+### 2.2 Process State Transitions and Descriptions
+
+The movement between these states is managed by the scheduler and dispatcher.
+
+- **Admitted (New $\rightarrow$ Ready):** Once creation is complete, the process is admitted to the ready queue.
+- **Scheduler Dispatch (Ready $\rightarrow$ Running):** The dispatcher selects a process from the ready queue to run on the CPU.
+- **Interrupt (Running $\rightarrow$ Ready):** A running process is moved back to ready if its time slot expires or a higher priority process enters the ready state.
+- **I/O or Event Wait (Running $\rightarrow$ Waiting):** Occurs when a process requests a resource not yet available, initiates I/O, or waits for inter-process communication (IPC).
+- **I/O or Event Completion (Waiting $\rightarrow$ Ready):** When the event the process was waiting for occurs, it moves back to the ready state.
+- **Exit (Running $\rightarrow$ Terminated):** Triggered when the process completes its task or is killed.
+
+### 2.3 Process Suspension (Blocked_Suspend and Ready_Suspend)
+
+To aid OS operations, especially when main memory is full and no processes are in a "Ready" state, the OS swaps processes out to secondary memory (disk). This introduces the **Suspended** states:
+
+- **Blocked_Suspend (Blocked Swapped):** The process is in secondary memory and awaiting an event.
+- **Ready_Suspend (Ready Swapped):** The process is in secondary memory but is ready to execute as soon as it is loaded back into main memory.
+- **Swapping:** The OS "Swaps out" a blocked process to make room and "Swaps in" a process when memory becomes available or the event completes.
+
+### 2.4 Process Control Block (PCB) and Process ID
+
+- **Definition:** The PCB is a data structure maintained by the Operating System for every single process.
+- **Identification:** Each PCB is identified by a unique integer called a **Process ID (PID)**.
+- **Lifespan:** The PCB is created when the process starts and is deleted only after the process terminates.
+- **Purpose:** It stores all the information required by the OS to keep track of and manage the process.
+
+### 2.5 Process State Attributes and PCB Information
+
+The PCB contains the following detailed attributes:
+
+| **Attribute** | **Description** |
+| --- | --- |
+| **Process State** | The current state (Ready, Running, Waiting, etc.). |
+| **Process ID (PID)** | Unique identification for each process. |
+| **Process Privileges** | Required to allow or disallow access to system resources. |
+| **Pointer** | A pointer to the parent process. |
+| **Program Counter** | Address of the next instruction to be executed. |
+| **CPU Registers** | Locations where process data is stored during execution. |
+| **CPU Scheduling Info** | Includes process priority and other scheduling parameters. |
+| **Memory Management Info** | Page tables, segment tables, and memory limits. |
+| **Accounting Info** | Amount of CPU used, time limits, and execution ID. |
+| **I/O Status Info** | List of I/O devices and files allocated to the process. |
+
+---
+
+---
+
+## 3. Context Switching
+
+### 3.1 Context Switch Procedure
+
+A context switch is the procedure that a computer's CPU follows to change from one task (or process) to another while ensuring that the tasks do not conflict. Effective context switching is critical for a computer to provide a user-friendly multitasking environment.
+
+The procedure involves:
+
+- **Saving the State:** The CPU saves the state of the currently running process.
+- **Loading the State:** The CPU loads the previously saved state for the new process to be executed.
+- **CPU Sharing:** This technique enables multiple processes to share a single CPU.
+
+### 3.2 Mechanism for Storing and Restoring Context
+
+The Operating System uses the **Process Control Block (PCB)** as the primary storage mechanism for this procedure.
+
+- **Mechanism:** The context of a CPU is stored in and restored from the PCB so that process execution can be resumed from the exact same point at a later time.
+- **Specific Actions (P0 to P1):**
+    - An interrupt or system call occurs.
+    - The state of process $P_0$ is saved into $PCB_0$.
+    - While the OS handles this, $P_0$ and $P_1$ are idle.
+    - The state of process $P_1$ is reloaded from $PCB_1$.
+    - Process $P_1$ begins executing.
+
+### 3.3 Context Switching Performance and Overhead
+
+While essential, context switching has a direct impact on system performance:
+
+- **Pure Overhead:** Context switch time is considered pure overhead because the system does no "useful work" while switching.
+- **Performance Bottleneck:** It has become such a performance bottleneck that programmers use new structures, such as **threads**, to avoid it whenever possible.
+- **System Inefficiency:** During the switch, the CPU is not executing user instructions, making the time spent switching a loss in terms of total throughput.
+
+---
+
+---
+
+## 4. Threads
+
+### 4.1 Thread Definition and Execution Units
+
+- **Definition:** A thread is a single sequence stream within a process.
+- **Lightweight Nature:** They are sometimes referred to as "lightweight processes".
+- **Execution Unit:** A thread is an execution unit that consists of its own program counter, a stack, and a set of registers.
+- **Process Relationship:** Each thread belongs to exactly one process and cannot exist outside of a process.
+- **Parallelism:** Multiple threads within a process allow for multiple execution streams, enabling parallel execution by increasing the number of threads.
+
+### 4.2 Single and Multithreaded Processes
+
+- **Single-threaded Process:** A process that contains only one thread of execution.
+- **Multithreaded Process:** A process that contains multiple threads.
+- **Shared Resources:** Threads within a multithreaded process share the same code section, data section, and OS resources like open files and signals.
+- **Independent Resources:** Each thread maintains its own independent registers and stack.
+
+### 4.3 Advantages of Threads
+
+- **Responsiveness:** Multithreading allows an application to stay responsive even if part of it is blocked or performing a lengthy operation.
+- **Resource Sharing:** Threads share the memory and resources of the process they belong to by default, allowing better utilization of resources.
+- **Economy:** It is more economical to create and context switch threads than processes because threads share the same address space.
+- **Scalability:** Threads can be distributed over a series of processors in multiprocessor architectures, increasing efficiency.
+- **Context Switching:** Threads minimize the context switching time.
+- **Communication:** Communication between threads is more efficient.
+
+### 4.4 Detailed Comparison: Process vs. Thread
+
+The PDF provides a detailed comparison between processes and threads:
+
+| **Feature** | **Process** | **Thread** |
+| --- | --- | --- |
+| **Weight** | Heavy weight or resource intensive. | Light weight, taking fewer resources than a process. |
+| **Switching** | Switching needs interaction with the operating system. | Switching does not need to interact with the operating system. |
+| **Blocking** | If one process is blocked, no other process can execute until it's unblocked. | While one thread is blocked, a second thread in the same task can run. |
+| **Independence** | Each process operates independently of the others. | One thread can read, write, or change another thread's data. |
+| **Resources** | Uses more resources. | Uses fewer resources as threads share open files and child processes. |
+
+### 4.5 Types of Threads: User Level vs. Kernel Level
+
+- **User Level Threads (ULT):** These are managed by the user through a thread library; the kernel is unaware of their existence.
+- **Kernel Level Threads (KLT):** These are managed directly by the Operating System acting on the kernel (the OS core).
+
+### 4.6 User Level Thread: Advantages and Disadvantages
+
+- **Advantages:**
+    - Thread switching does not require Kernel mode privileges.
+    - ULTs can run on any operating system.
+    - Scheduling can be application-specific.
+    - They are fast to create and manage.
+- **Disadvantages:**
+    - A multithreaded application using ULTs cannot take advantage of multiprocessing.
+    - If one ULT performs a blocking system call, the entire process is blocked.
+
+### 4.7 Kernel Level Thread: Advantages and Disadvantages
+
+- **Advantages:**
+    - The Kernel can simultaneously schedule multiple threads from the same process on multiple processors.
+    - If one thread is blocked, the Kernel can schedule another thread of the same process.
+    - Kernel routines themselves can be multithreaded.
+- **Disadvantages:**
+    - KLTs are generally slower to create and manage than user threads.
+    - Transfer of control from one thread to another within the same process requires a mode switch to the Kernel.
+
+### 4.8 Comparison of User and Kernel Level Threads
+
+The document summarizes the differences in a comparison table:
+
+| **User-Level Threads** | **Kernel-Level Threads** |
+| --- | --- |
+| Faster to create and manage. | Slower to create and manage. |
+| Implemented by a thread library at the user level. | OS supports the creation of Kernel threads. |
+| Generic and can run on any OS. | Specific to the operating system. |
+| Cannot take advantage of multiprocessing. | Can take advantage of multiprocessing. |
+
+---
+
+---
+
+## 5. Multithreading Models
+
+Multithreading refers to the ability of an operating system to execute multiple threads. Some operating systems provide a combined facility for both user-level and kernel-level threads.
+
+### 5.1 Many to One Model
+
+- In the Many to One model, many user-level threads are all mapped onto a single kernel thread.
+- Thread management is handled efficiently by the thread library in user space.
+- However, the entire process will block if a thread makes a blocking system call.
+- Because only one thread can access the kernel at a time, multiple threads are unable to run in parallel on multiprocessors.
+
+### 5.2 One to One Model
+
+- The One to One model creates a separate kernel thread to handle each and every user thread.
+- It provides more concurrency than the many-to-one model by allowing another thread to run when a thread makes a blocking system call.
+- It allows multiple threads to run in parallel on multiprocessors.
+- Most implementations of this model place a limit on the number of threads that can be created due to the overhead of creating kernel threads.
+- Examples of operating systems using this model include Linux and Windows (from 95 to XP).
+
+### 5.3 Many to Many Model
+
+- The Many to Many model multiplexes any number of user threads onto an equal or smaller number of kernel threads.
+- This model combines the best features of the one-to-one and many-to-one models.
+- Users can create any number of threads.
+- Blocking kernel system calls do not block the entire process.
+- Processes can be split across multiple processors for execution.
+
+### 5.4 Benefits of Multithreading (Responsiveness, Economy, Scalability)
+
+- **Responsiveness:** Multithreading allows an application to continue running even if part of it is blocked or performing a lengthy operation.
+- **Resource Sharing:** Threads share the memory and resources of the process they belong to, allowing better utilization of resources.
+- **Economy:** Creating and managing threads is easier and more economical than process creation because threads share the same address space.
+- **Scalability:** In multithreaded processes, threads can be distributed over a series of processors to scale the application.
+- **Smooth Context Switching:** Context switching between threads is smoother and faster than switching between processes.
+
+---
+
+---
+
+## 6. Process Scheduling
+
+### 6.1 Definition and Foundations of Scheduling
+
+- **Definition:** Process scheduling is the act of determining which process is in the ready state and should be moved to the running state.
+- **Core Function:** It allows one process to use the CPU while the execution of another process is on hold (in a waiting state) due to the unavailability of resources like I/O, thereby making full use of the CPU.
+- **Selection:** Whenever the CPU becomes idle, the operating system must select one of the processes in the ready queue to be executed.
+- **Role of Scheduler:** This selection process is carried out by the short-term scheduler (or CPU scheduler), which allocates the CPU to one of the processes in memory that are ready to execute.
+
+### 6.2 Objectives and Aims of Scheduling
+
+- **CPU Efficiency:** The primary aim is to keep the CPU busy all the time and not waste any CPU cycles.
+- **Response Time:** To deliver minimum response time for all programs.
+- **System Performance:** To make the system efficient, fast, and fair.
+- **Optimization:** The scheduler must apply appropriate rules for swapping processes in and out of the CPU to achieve maximum utilization.
+
+### 6.3 Scheduling Types: Pre-emptive and Non Pre-emptive
+
+Scheduling is categorized into two main types based on how the CPU is taken from a process:
+
+- **Non Pre-emptive Scheduling:** * Occurs when the currently executing process gives up the CPU voluntarily.
+    - Once a process starts execution, all other jobs in the ready queue must wait until the current job completes its task.
+- **Pre-emptive Scheduling:** * Occurs when the operating system decides to favor another process, pre-empting (interrupting) the currently executing process.
+    - The OS can preempt the CPU if a newly arrived process has a higher priority than the currently running one.
+
+### 6.4 Scheduling Queues (Job, Ready, and Device Queues)
+
+Processes migrate between various scheduling queues throughout their lifetime:
+
+- **Job Queue:** All processes, upon entering the system, are stored in the Job Queue.
+- **Ready Queue:** Processes that are in main memory, in the ready state, and waiting to be assigned to a processor are placed in the Ready Queue.
+- **Device Queues:** * Processes waiting for a specific I/O device to become available are placed in Device Queues.
+    - There are unique device queues available for each individual I/O device.
+
+---
+
+---
+
+## 7. Schedulers
+
+Schedulers are specialized OS modules that handle the selection of processes for various states. The PDF categorizes them into three distinct types based on their function and frequency of execution.
+
+### 7.1 Long Term Scheduler (Job Scheduler)
+
+- **Function:** The Long Term Scheduler determines which programs are admitted to the system for processing.
+- **Job Queue:** It selects processes from a pool (Job Queue) and loads them into memory for execution.
+- **Frequency:** This scheduler runs less frequently compared to others.
+- **Primary Aim:** Its main goal is to maintain a good degree of multiprogramming by balancing the number of processes in memory.
+
+### 7.2 Short Term Scheduler (CPU Scheduler)
+
+- **Function:** This is the most active scheduler, responsible for selecting a process from the ready queue to be executed by the CPU.
+- **Frequency:** It runs very frequently (often every few milliseconds) to ensure the CPU is always occupied.
+- **Primary Aim:** The goal is to enhance CPU performance and increase the overall process execution rate.
+- **Allocation:** It is responsible for allocating the CPU to the selected process.
+
+### 7.3 Medium Term Scheduler (Swapping)
+
+- **Function:** This scheduler is used during times of extra system load to reduce the number of processes in the ready queue.
+- **Mechanism (Swapping):** It "swaps out" or picks big processes from the ready queue and moves them to secondary storage.
+- **Reintroduction:** At a later time, the process can be "swapped in" or reintroduced into memory to continue execution from where it left off.
+- **Benefit:** This helps in managing memory more effectively and allows smaller processes to execute during high-load periods.
+
+---
+
+---
+
+## 8. Scheduling Criteria and Calculations
+
+### 8.1 Scheduling Criteria (Utilization, Throughput, Turnaround, Waiting, Response)
+
+To compare CPU scheduling algorithms and judge their performance, several criteria are used. The goal is typically to maximize utilization and throughput while minimizing the various time intervals.
+
+- **CPU Utilization:** This is the measure of how busy the CPU is. Ideally, the CPU should be working 100% of the time to avoid wasting cycles. In real systems, usage ranges from 40% (lightly loaded) to 90% (heavily loaded).
+- **Throughput:** The total number of processes completed per unit of time. This measures the total amount of work done and can range from 10 processes per second to 1 per hour depending on the complexity of the tasks.
+- **Turnaround Time (TAT):** The total amount of time taken to execute a particular process. It is the interval from the time of submission (Arrival Time) to the time of completion (Wall clock time).
+- **Waiting Time (WT):** The sum of the periods a process spends waiting in the ready queue to acquire control of the CPU.
+- **Response Time:** The amount of time it takes from when a request was submitted until the first response is produced. Note that this is the time until the *first* response, not the time it takes to output the entire result.
+- **Load Average:** The average number of processes residing in the ready queue waiting for their turn to access the CPU.
+
+### 8.2 Calculation Formulas (TAT, WT, Response Time)
+
+The PDF provides standard mathematical definitions for calculating these performance metrics:
+
+- **Turnaround Time (TAT):**
+    
+    $TAT = \text{"Completion Time"} - \text{"Arrival Time"}$
+    
+- **Waiting Time (WT):**
+    
+    $WT = \text{"Turnaround Time"} - \text{"Burst Time"}$
+    
+- **Response Time (RT):**
+    
+    $RT = \text{"Start Time of Process"} - \text{"Arrival Time"}$
+    
+
+Definitions of Terms used in Formulas:
+
+- **Arrival Time:** The time at which the process arrives in the ready queue.
+- **Completion Time:** The time at which the process finishes its execution.
+- **Burst Time:** The actual time required by a process for CPU execution.
+
+---
+
+---
+
+## 9. Scheduling Algorithms
+
+To achieve maximum CPU utilization, various algorithms are used to decide the execution order of processes.
+
+### 9.1 First Come First Serve (FCFS)
+
+- **Mechanism:** The process that requests the CPU first gets the CPU allocated first. It operates like a FIFO (First-In-First-Out) queue data structure.
+- **System Type:** Primarily used in Batch Systems.
+- **Nature:** It is a **Non-Preemptive** algorithm.
+- **Example Calculation (Same Arrival Time):**
+    - **Processes:** P1 (BT: 21), P2 (BT: 3), P3 (BT: 6), P4 (BT: 2). All arrive at Time 0.
+    - **Waiting Times:** P1=0, P2=21, P3=24, P4=30.
+    - **Average Waiting Time (AWT):** $(0 + 21 + 24 + 30) / 4 = 18.75$ ms.
+- **Problem - Convoy Effect:** A situation where many processes requiring short CPU time are blocked by one process holding the resource for a long time. This leads to poor resource utilization.
+    
+    #### Example 1: Same Arrival Time
+    
+    Consider four processes arriving at **Time 0**:
+    
+    | **PROCESS** | **BURST TIME** | **ARRIVAL TIME** | **COMPLETION TIME** | **TAT (CT-AT)** | **WT (TAT-BT)** |
+    | --- | --- | --- | --- | --- | --- |
+    | P1 | 21 | 0 | 21 | 21 | 0 |
+    | P2 | 3 | 0 | 24 | 24 | 21 |
+    | P3 | 6 | 0 | 30 | 30 | 24 |
+    | P4 | 2 | 0 | 32 | 32 | 30 |
+    
+    **CPU Gantt Chart:**
+    
+    - **Average Waiting Time (AWT):** $(0 + 21 + 24 + 30) / 4 = 18.75$ ms.
+    
+    #### Example 2: Different Arrival Times
+    
+    Consider processes with different arrival times:
+    
+    | **PROCESS** | **ARRIVAL TIME** | **BURST TIME** | **COMPLETION TIME** | **TAT (CT-AT)** | **WT (TAT-BT)** |
+    | --- | --- | --- | --- | --- | --- |
+    | P1 | 0 | 2 | 2 | 2 | 0 |
+    | P2 | 1 | 2 | 4 | 3 | 1 |
+    | P3 | 5 | 3 | 8 | 3 | 0 |
+    | P4 | 6 | 4 | 12 | 6 | 2 |
+
+### 9.2 Shortest Job First (SJF)
+
+- **Mechanism:** Works on the process with the shortest burst time (duration) first. It is optimal if all jobs are available at the same time.
+
+#### Non Pre-emptive SJF
+
+- **Logic:** Once a process starts, it won't be stopped even if a shorter job arrives.
+- **Example (Same Arrival Time):** Using the same processes as FCFS (P1:21, P2:3, P3:6, P4:2).
+    - **Order:** P4 $\rightarrow$ P2 $\rightarrow$ P3 $\rightarrow$ P1.
+    - **AWT:** $(0 + 2 + 5 + 11) / 4 = 4.5$ ms.
+- **Problem - Starvation:** Shorter processes must wait for a long time if a long process is currently executing.
+
+#### Pre-emptive SJF (Shortest Remaining Time First)
+
+- **Logic:** If a new process arrives with a shorter burst time than the remaining time of the current process, the current one is preempted.
+- **Example (Different Arrival Times):** P1 (BT:21, AT:0), P2 (BT:3, AT:1), P3 (BT:6, AT:2), P4 (BT:2, AT:3).
+    - **AWT:** 4 ms.
+
+SJF executes the process with the shortest burst time first. It is optimal for minimizing average waiting time.
+
+#### Non Pre-emptive SJF
+
+Once the CPU is assigned to a process, it cannot be preempted until it completes.
+
+- **Example (Same Arrival Time 0):** P1:21, P2:3, P3:6, P4:2.
+- **Order of execution:** P4 (2) $\rightarrow$ P2 (3) $\rightarrow$ P3 (6) $\rightarrow$ P1 (21).
+
+**CPU Gantt Chart:**
+
+- **AWT:** $(0 + 2 + 5 + 11) / 4 = 4.5$ ms.
+
+#### Pre-emptive SJF
+
+Also known as Shortest Remaining Time First. If a new process arrives with a shorter burst time than the current process, the current one is preempted.
+
+- **Example:** P1(21, AT:0), P2(3, AT:1), P3(6, AT:2), P4(2, AT:3).
+- **AWT:** 4 ms.
+
+### 9.3 Priority Scheduling
+
+- **Mechanism:** A priority is assigned to each process; the highest priority process executes first. FCFS is used to break ties for same-priority processes.
+- **Pre-emptive vs. Nonpreemptive:** Pre-emptive will preempt the CPU if a higher priority process arrives. Nonpreemptive puts the new process at the head of the ready queue.
+- **Example Calculation:** P1 (BT:21, Pri:2), P2 (BT:3, Pri:1), P3 (BT:6, Pri:4), P4 (BT:2, Pri:3).
+    - **Order:** P2 $\rightarrow$ P1 $\rightarrow$ P4 $\rightarrow$ P3.
+    - **AWT:** $(0 + 3 + 24 + 26) / 4 = 13.25$ ms.
+- **Problem - Indefinite Blocking/Starvation:** Low priority processes may wait indefinitely in a heavily loaded system.
+- **Solution - Aging:** Gradually increasing the priority of processes that wait for a long time.
+
+A priority is assigned to each process; the CPU is allocated to the process with the highest priority.
+
+| **PROCESS** | **BURST TIME** | **PRIORITY** |
+| --- | --- | --- |
+| P1 | 21 | 2 |
+| P2 | 3 | 1 |
+| P3 | 6 | 4 |
+| P4 | 2 | 3 |
+
+**CPU Gantt Chart:**
+
+- **AWT:** $(0 + 3 + 24 + 26) / 4 = 13.25$ ms.
+- **Problem:** **Starvation** (low priority processes wait indefinitely).
+- **Solution:** **Aging** (gradually increasing priority over time).
+
+### 9.4 Round Robin (RR)
+
+- **Mechanism:** Each process gets a small unit of CPU time called a **Time Quantum ($q$)**, usually 10-100 ms. After this, the process is preempted and added to the end of the ready queue.
+- **Example (Quantum = 5):** Using P1:21, P2:3, P3:6, P4:2.
+    - **AWT:** 11 ms.
+- **Performance Factor:** If $q$ is very large, it behaves like FCFS. If $q$ is very small, the overhead of context switching becomes too high.
+
+Each process gets a small unit of CPU time (Time Quantum $q$). After the quantum expires, the process is preempted and added to the end of the ready queue.
+
+#### Comprehensive Example (Time Quantum = 3)
+
+| **Process ID** | **Arrival Time** | **Burst Time** | **Completion Time** | **TAT (CT-AT)** | **WT (TAT-BT)** |
+| --- | --- | --- | --- | --- | --- |
+| P1 | 5 | 5 | 32 | 27 | 22 |
+| P2 | 4 | 6 | 27 | 23 | 17 |
+| P3 | 3 | 7 | 33 | 30 | 23 |
+| P4 | 1 | 9 | 30 | 29 | 20 |
+| P5 | 2 | 2 | 6 | 4 | 2 |
+| P6 | 6 | 3 | 21 | 15 | 12 |
+
+**CPU Gantt Chart:**
+
+- **AWT:** 16 ms.
+- **Note:** If $q$ is large, RR becomes FCFS. If $q$ is small, context switch overhead becomes too high.
+
+### 9.5 Multilevel Queue Scheduling
+
+- **Mechanism:** Partitions the ready queue into separate queues (e.g., Foreground/Interactive and Background/Batch).
+- **Rules:** Processes are permanently assigned to a queue. Each queue has its own algorithm (e.g., RR for foreground, FCFS for background).
+- **Priority:** Fixed-priority pre-emptive scheduling exists between queues; higher-priority queues must be empty before lower-priority ones can run.
+
+Partitions the ready queue into several separate queues based on process type (e.g., Foreground/Interactive vs. Background/Batch).
+
+- Each queue has its own scheduling algorithm (e.g., Foreground uses RR, Background uses FCFS).
+- Higher-priority queues have absolute priority over lower ones.
+
+### 9.6 Multilevel Feedback Queue Scheduling (MLFQ)
+
+- **Mechanism:** Similar to Multilevel Queue but allows processes to **move between queues**.
+- **Logic:** It analyzes process behavior (execution time) and changes its priority accordingly.
+- **Example Configuration:**
+    - **Q0:** RR with $q=8$ ms.
+    - **Q1:** RR with $q=16$ ms.
+    - **Q2:** FCFS.
+    - **Flow:** New jobs enter Q0. If they don't finish in 8ms, they move to Q1. If they don't finish in Q1 (additional 16ms), they are moved to Q2.
+
+Unlike the standard multilevel queue, processes can move between queues based on their execution behavior.
+
+- **Example:** A new job enters Q0 (RR $q=8$). If it doesn't finish, it moves to Q1 (RR $q=16$). If it still doesn't finish, it moves to Q2 (FCFS).
+
+---
+
+## 10. Scheduling Problems and Solutions
+
+The various scheduling algorithms discussed in the previous topics are subject to specific performance issues depending on the nature of the workload. The PDF highlights these problems and provides a primary solution used in modern operating systems.
+
+
+
+### 10.1 Convoy Effect in FCFS
+
+The **Convoy Effect** is a significant performance bottleneck associated specifically with the First Come First Serve (FCFS) algorithm.
+
+- **Definition:** It is a situation where many processes that need to use a resource for a short time are blocked by one process holding that resource for a very long duration.
+- **Impact:** This leads to poor utilization of resources (CPU, I/O, etc.) and overall poor system performance.
+- **Nature:** Because FCFS is a **non-preemptive** algorithm, process priority is not considered; therefore, the long process must finish its entire burst before the "convoy" of smaller processes can proceed.
+
+### 10.2 Starvation and Indefinite Blocking
+
+Starvation is a common problem in algorithms that prioritize specific job characteristics over arrival time, such as **Shortest Job First (SJF)** and **Priority Scheduling**.
+
+- **Definition:** Also known as **Indefinite Blocking**, it occurs when a process is ready to run but is never allocated the CPU because higher-priority (or shorter) processes are constantly being submitted.
+- **In SJF:** In non-preemptive SJF, a shorter process may have to wait a long time for a current longer process to finish, or if short jobs keep arriving, a long job may never get to run.
+- **In Priority Scheduling:** In heavily loaded systems, low-priority processes can be blocked indefinitely because there is a continuous stream of high-priority processes occupying the CPU.
+
+### 10.3 Solution: Aging
+
+To combat the issue of starvation/indefinite blocking, operating systems implement a technique called **Aging**.
+
+- **Mechanism:** Aging is a technique that involves gradually increasing the priority of processes that have been waiting in the system for a long time.
+- **Result:** Eventually, even a very low-priority process will "age" into a high-priority status, ensuring that it is guaranteed a turn on the CPU and preventing it from being blocked forever.
+
+---

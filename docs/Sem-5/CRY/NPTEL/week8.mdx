@@ -1,0 +1,941 @@
+---
+sidebar_position: 8
+---
+
+# Week - 8
+:::info[TITLE]
+## Lecture 36: <br />Message Authentication
+:::
+
+## Message Authentication (Basic Idea)
+
+* Goal: verify message is from sender
+
+---
+
+## Using Symmetric Key
+
+* Alice sends:
+  $$
+  (M,; E_K(H(M)))
+  $$
+
+---
+
+## At Receiver
+
+* Compute:
+  $$
+  H(M)
+  $$
+
+* Decrypt:
+  $$
+  D_K(y) = H(M)
+  $$
+
+* Compare
+
+✔ If equal → authenticated
+
+---
+
+## Issue
+
+* Receiver can forge message
+* No proof of origin
+
+---
+
+## Hash Function
+
+* Input: arbitrary size
+
+* Output:
+  $$
+  \text{fixed size digest}
+  $$
+
+* Public (no key)
+
+---
+
+## MAC (Message Authentication Code)
+
+* Uses secret key
+
+$$
+\text{MAC} = E_K(H(M))
+$$
+
+---
+
+## Limitation
+
+* Protects from third party
+* Not from malicious receiver
+
+---
+
+## Digital Signature
+
+* Uses **private key**
+
+---
+
+## Signing
+
+$$
+y = D_{A}(M)
+$$
+
+---
+
+## Verification
+
+$$
+M = E_{A}(y)
+$$
+
+✔ Only sender can sign
+
+---
+
+## Property
+
+* Non-repudiation
+* Cannot be forged by receiver
+
+---
+
+## Public Key Directory
+
+* Stores:
+
+  * Public keys of users
+
+---
+
+## Authentication + Confidentiality (Hybrid)
+
+---
+
+### Step 1: Sign
+
+$$
+y = D_A(M)
+$$
+
+---
+
+### Step 2: Encrypt
+
+$$
+C = E_K(M, y)
+$$
+
+---
+
+### Receiver
+
+* Decrypt:
+  $$
+  (M, y)
+  $$
+
+* Verify:
+  $$
+  M = E_A(y)
+  $$
+
+---
+
+## Alternative (Pure Public Key)
+
+---
+
+### Sender
+
+* Sign:
+  $$
+  y = D_A(M)
+  $$
+
+* Encrypt:
+  $$
+  C = E_B(M, y)
+  $$
+
+---
+
+### Receiver
+
+* Decrypt:
+  $$
+  (M, y)
+  $$
+
+* Verify:
+  $$
+  M = E_A(y)
+  $$
+
+---
+
+## Final Properties
+
+* Confidentiality:
+  $$
+  E_B(\cdot)
+  $$
+
+* Authentication:
+  $$
+  D_A(\cdot)
+  $$
+
+---
+
+## Key Insight
+
+* Signature → proves sender
+* Encryption → hides message
+
+---
+
+## Conclusion
+
+* Combine:
+
+  * Hash + MAC → basic authentication
+  * Digital signature → strong authentication
+  * Encryption → confidentiality
+
+✔ Used together in secure communication 
+
+:::info[TITLE]
+## Lecture 37: <br />Digital Signature
+:::
+
+## Purpose
+
+* Authentication
+* Integrity
+* Non-repudiation 
+
+---
+
+## Basic Idea
+
+* Sender signs using **private key**
+* Receiver verifies using **public key**
+
+---
+
+## RSA Signature
+
+### Key Setup
+
+$$
+n = p \cdot q
+$$
+
+$$
+\phi(n) = (p-1)(q-1)
+$$
+
+$$
+e \cdot d \equiv 1 \pmod{\phi(n)}
+$$
+
+---
+
+### Signing
+
+$$
+y = m^d \mod n
+$$
+
+---
+
+### Verification
+
+$$
+m' = y^e \mod n
+$$
+
+Valid if:
+
+$$
+m' = m
+$$
+
+---
+
+### Correctness
+
+$$
+ed = k\phi(n) + 1
+$$
+
+$$
+y^e = (m^d)^e = m^{ed} = m^{k\phi(n)+1}
+$$
+
+$$
+= (m^{\phi(n)})^k \cdot m \equiv 1^k \cdot m \equiv m \pmod{n}
+$$
+
+---
+
+## Signature Scheme (Formal)
+
+* Tuple:
+  $$
+  (P, S, K, \text{Sign}, \text{Verify})
+  $$
+
+* $P$ → plaintext space
+
+* $S$ → signature space
+
+* $K$ → key space
+
+---
+
+### Functions
+
+$$
+\text{Sign}_k(m) \rightarrow s
+$$
+
+$$
+\text{Verify}_k(m, s) \rightarrow {\text{true}, \text{false}}
+$$
+
+---
+
+### Property
+
+$$
+\text{Verify}_k(m, \text{Sign}_k(m)) = \text{true}
+$$
+
+---
+
+## ElGamal Signature
+
+### Setup
+
+* Choose prime:
+  $$
+  p
+  $$
+
+* Generator:
+  $$
+  \alpha
+  $$
+
+* Private key:
+  $$
+  a
+  $$
+
+* Public key:
+  $$
+  \beta = \alpha^a \mod p
+  $$
+
+---
+
+### Signing
+
+Choose random:
+$$
+k \text{ such that } \gcd(k, p-1)=1
+$$
+
+$$
+\gamma = \alpha^k \mod p
+$$
+
+$$
+\delta = (x - a\gamma)\cdot k^{-1} \mod (p-1)
+$$
+
+* Signature:
+  $$
+  (\gamma, \delta)
+  $$
+
+---
+
+### Verification
+
+$$
+\beta^\gamma \cdot \gamma^\delta \equiv \alpha^x \mod p
+$$
+
+---
+
+### Correctness
+
+$$
+\beta^\gamma \cdot \gamma^\delta
+= (\alpha^a)^\gamma \cdot (\alpha^k)^\delta
+= \alpha^{a\gamma + k\delta}
+$$
+
+$$
+k\delta \equiv x - a\gamma \pmod{p-1}
+$$
+
+$$
+a\gamma + k\delta \equiv x \pmod{p-1}
+$$
+
+$$
+\Rightarrow \alpha^{a\gamma + k\delta} \equiv \alpha^x \mod p
+$$
+
+---
+
+## Key Points
+
+* RSA → based on factorization
+* ElGamal → based on discrete log
+* Signing uses private key
+* Verification uses public key
+
+---
+
+## Final Insight
+
+* Signature ensures:
+
+  * Message origin
+  * Message integrity
+  * Sender accountability
+
+:::info[TITLE]
+## Lecture 38: <br />Key Management
+:::
+
+## Key Management
+
+* Goal: securely obtain receiver’s **public key** before communication 
+
+---
+
+## Problem
+
+* Alice needs Bob’s public key $e_B$
+* How to get it securely?
+
+---
+
+## Public Key Distribution Methods
+
+### 1. Public Announcement
+
+* Users broadcast their public keys
+
+**Issue:**
+
+* Vulnerable to impersonation (attacker can replace key)
+
+---
+
+### 2. Public Key Directory (PKD)
+
+* Central directory storing:
+
+  * User ID
+  * Public key
+
+* Sender:
+
+  * Looks up receiver’s key
+  * Encrypts message
+
+**Issue:**
+
+* If directory is public → can be modified
+* Needs protection
+
+---
+
+### 3. Trusted Public Key Authority
+
+* Central trusted authority maintains keys
+
+* Process:
+
+  * User requests receiver’s key from authority
+  * Authority provides authentic key
+
+**Issue:**
+
+* Bottleneck (handles all requests)
+* High communication overhead
+
+---
+
+## Solution → Public Key Certificates
+
+* Authority issues **certificate** containing:
+
+  * User ID
+  * Public key
+  * Timestamp
+  * Digital signature of authority
+
+---
+
+## Certificate Creation
+
+For user ( B ):
+
+$$
+C_B = E_{d_{auth}}(T,; ID_B,; e_B)
+$$
+
+* Signed using authority’s **private key**
+
+---
+
+## Certificate Verification
+
+Alice verifies Bob’s certificate:
+
+$$
+D_{e_{auth}}(C_B) \rightarrow (T,; ID_B,; e_B)
+$$
+
+* Check:
+
+  * Timestamp valid
+  * ID matches
+  * Signature valid
+
+✔ Then trust ( e_B )
+
+---
+
+## Communication Using Certificate
+
+1. Bob sends certificate ( C_B )
+2. Alice verifies it
+3. Extracts ( e_B )
+4. Encrypts message using ( e_B )
+
+---
+
+## Advantages
+
+* No need to contact authority every time
+* Prevents key tampering
+* Scalable
+
+---
+
+## Certificate Update
+
+* If key compromised:
+
+  * User generates new key pair
+  * Requests new certificate
+  * Authority signs new certificate
+
+---
+
+## Certificate Contains
+
+* Timestamp
+* User ID
+* Public key
+* Authority signature
+
+---
+
+## X.509 Certificate Standard
+
+* Widely used format
+
+### Fields:
+
+* Version
+* Serial number
+* Signature algorithm
+* Issuer (authority)
+* Validity period
+* Subject (user)
+* Public key
+* Extensions
+* Digital signature
+
+---
+
+## Key Insight
+
+* Trust shifts from:
+
+  * “Anyone can publish key” ❌
+  * To “Authority verifies identity” ✔
+
+---
+
+## Final Flow
+
+* Authority signs → certificate trusted
+* User verifies → gets correct public key
+* Secure communication enabled
+
+:::info[TITLE]
+## Lecture 39: <br />Key Exchange
+:::
+
+## Key Exchange (Goal)
+
+* Share **symmetric key (k)** over insecure channel 
+* Needed because symmetric crypto (DES/AES) is faster
+
+---
+
+## Diffie–Hellman (Recap)
+
+* Public:
+  $$
+  g,; p
+  $$
+
+* Secrets:
+  $$
+  a,; b
+  $$
+
+* Exchange:
+  $$
+  A = g^a \mod p,\quad B = g^b \mod p
+  $$
+
+* Shared key:
+  $$
+  K = g^{ab} \mod p
+  $$
+
+---
+
+## Problem → Active Attack (MITM)
+
+* Attacker (Oscar) intercepts messages
+* Replaces:
+
+  * (g^a, g^b) with (g^c)
+
+---
+
+### Result
+
+* Alice computes:
+  $$
+  K_1 = g^{ac}
+  $$
+
+* Bob computes:
+  $$
+  K_2 = g^{bc}
+  $$
+
+* Oscar knows both:
+  $$
+  K_1,; K_2
+  $$
+
+✔ Can decrypt + re-encrypt messages
+
+---
+
+## Using Public Key for Key Exchange
+
+### Basic Scheme
+
+1. Alice sends:
+   $$
+   (ID_A,; e_A)
+   $$
+
+2. Bob chooses:
+   $$
+   k
+   $$
+
+3. Bob sends:
+   $$
+   E_{e_A}(k)
+   $$
+
+4. Alice decrypts:
+   $$
+   k = D_{d_A}(y)
+   $$
+
+✔ Shared key established
+
+---
+
+## Problem → Still Vulnerable
+
+* Oscar replaces Alice’s public key
+* Bob encrypts (k) using Oscar’s key
+* Oscar decrypts → learns (k)
+* Re-encrypts for Alice
+
+✔ Key leaked
+
+---
+
+## Secure Key Exchange (Authenticated)
+
+### Step 1
+
+Alice → Bob:
+$$
+E_{e_B}(N_1,; ID_A)
+$$
+
+---
+
+### Step 2
+
+Bob → Alice:
+$$
+E_{e_A}(N_1,; N_2)
+$$
+
+---
+
+### Step 3
+
+Alice → Bob:
+$$
+E_{e_B}(N_2)
+$$
+
+✔ Mutual authentication using nonces
+
+---
+
+### Step 4 (Key Transfer)
+
+Bob sends:
+
+$$
+E_{e_A}(k)
+$$
+
+Then signs:
+
+$$
+E_{d_B}(E_{e_A}(k))
+$$
+
+---
+
+### Final Decryption (Alice)
+
+1. Verify signature:
+   $$
+   D_{e_B}(\cdot)
+   $$
+
+2. Decrypt:
+   $$
+   k = D_{d_A}(\cdot)
+   $$
+
+---
+
+## Why Secure?
+
+* Nonces → prevent replay
+* Encryption → confidentiality
+* Signature → authentication
+
+✔ Stops active attacker
+
+---
+
+## Key Insight
+
+* Diffie–Hellman alone ❌ (no authentication)
+* Public key alone ❌ (key substitution attack)
+* Combined (auth + encryption) ✔ secure
+
+---
+
+## Final Flow
+
+* Authenticate → verify identity
+* Exchange key → securely
+* Use symmetric key for communication
+
+:::info[TITLE]
+## Lecture 40: <br />Hash Function
+:::
+
+## Hash Function (Concept)
+
+* Map large key space → fixed size table
+  $$
+  h: U \rightarrow {0,1,\dots,m-1}
+  $$
+
+* Operations supported:
+
+  * Insert
+  * Delete
+  * Search 
+
+---
+
+## Hash Table
+
+* Size:
+  $$
+  m
+  $$
+
+* Keys:
+  $$
+  k_1, k_2, \dots, k_n
+  $$
+
+* Load factor:
+  $$
+  \alpha = \frac{n}{m}
+  $$
+
+---
+
+## Collision
+
+* When:
+  $$
+  h(k_1) = h(k_2)
+  $$
+
+* Happens because:
+  $$
+  |U| \gg m
+  $$
+
+---
+
+## Good Hash Function
+
+* Uniform distribution:
+  $$
+  P(h(k)=j) = \frac{1}{m}
+  $$
+
+---
+
+## Division Method
+
+$$
+h(k) = k \mod m
+$$
+
+* Choose:
+  $$
+  m \text{ as prime}
+  $$
+
+* Avoid:
+  $$
+  m = 2^r
+  $$
+
+---
+
+## Multiplication Method
+
+* Formula:
+  $$
+  h(k) = \lfloor m \cdot (kA \mod 1) \rfloor
+  $$
+
+* Or binary form (practical):
+  $$
+  h(k) = \text{right-shift}(k \cdot A,; w-r)
+  $$
+
+---
+
+## Collision Resolution
+
+### 1. Chaining
+
+* Store list at each slot
+
+---
+
+### 2. Open Addressing
+
+* No extra memory
+
+---
+
+## Linear Probing
+
+$$
+h_i(k) = (h(k) + i) \mod m
+$$
+
+* Problem:
+
+  * Clustering
+
+---
+
+## Double Hashing
+
+$$
+h_i(k) = (h_1(k) + i \cdot h_2(k)) \mod m
+$$
+
+* Better distribution
+* Reduces clustering
+
+---
+
+## Deletion Issue
+
+* Cannot mark slot empty directly
+* Use:
+
+  * **Deleted marker**
+
+---
+
+## Performance
+
+* Unsuccessful search (approx):
+  $$
+  \frac{1}{1-\alpha}
+  $$
+
+* Examples:
+
+  * If $\alpha = 0.5$ → ~2 probes
+  * If $\alpha = 0.9$ → ~10 probes
+
+---
+
+## Key Insight
+
+* Small $\alpha$ → faster search
+* Good hash → uniform distribution
+* Double hashing > linear probing

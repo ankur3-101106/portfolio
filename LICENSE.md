@@ -5,7 +5,7 @@ Copyright (C) 2007 Free Software Foundation, Inc.
 
 Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
----
+
 
 ## Permissions
 
@@ -33,7 +33,7 @@ This license includes the following limitations:
 - No liability
 - No warranty
 
----
+
 
 ## Full License Text
 
@@ -45,7 +45,7 @@ You can read the complete license here:
 
 Or include the official `LICENSE` file from the GNU GPL v3 distribution in your repository.
 
----
+
 
 ## How to Apply This License
 
@@ -62,7 +62,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
 
----
 
 For more details about the GNU GPL v3 license, visit:
 

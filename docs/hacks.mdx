@@ -1,10 +1,25 @@
 ---
 title: "Hacks"
 ---
----
+
+:::danger[Disclaimer]
+This page contains various hacks and tips for using Docusaurus effectively (<span style={{ color: 'rgb(230, 91, 255)', fontWeight: 'bold' }}>as used in the current documentation</span>). Use these hacks to enhance your documentation and make it more engaging for your readers. Please note that these hacks are not official features of Docusaurus and may not be supported in future versions. Use them at your own risk!
+:::
+
 ## Use these hacks in docusaurus
 
 ### Code
+
+#### 1. Show line numbers in code blocks
+
+Use the `showLineNumbers` option in your code blocks to display line numbers. For example:
+
+```md
+```js showLineNumbers
+// Example of a Docusaurus hack
+console.log("This is a Docusaurus hack!");
+ ```
+```
 
 ```js showLineNumbers
 // Example of a Docusaurus hack
@@ -17,3 +32,27 @@ fn main() {
     println!("This is a Rust hack!");
 }
 ```
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+#### 2. Create tabs in your documentation
+```tsx
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+Use the above imports to create tabs in your Docusaurus documentation. For example:
+```jsx showLineNumbers
+<Tabs>
+  <TabItem value="apple" label="Apple">This is an apple 🍎</TabItem>
+  <TabItem value="orange" label="Orange">This is an orange 🍊</TabItem>
+  <TabItem value="banana" label="Banana">This is a banana 🍌</TabItem>
+</Tabs>
+```
+
+
+<Tabs>
+  <TabItem value="apple" label="Apple">This is an apple 🍎</TabItem>
+  <TabItem value="orange" label="Orange">This is an orange 🍊</TabItem>
+  <TabItem value="banana" label="Banana">This is a banana 🍌</TabItem>
+</Tabs>

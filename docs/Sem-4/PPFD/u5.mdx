@@ -1971,7 +1971,7 @@ ALLOWED_HOSTS = ['yourdomain.com']
 
 * Install dependencies:
 
-```python showLineNumbers id="install_requirements"
+```bash showLineNumbers id="install_requirements"
 pip install -r requirements.txt
 ```
 
@@ -2024,7 +2024,7 @@ flowchart TD
 
 Run using Gunicorn:
 
-```python showLineNumbers id="gunicorn_django"
+```bash showLineNumbers id="gunicorn_django"
 gunicorn myproject.wsgi:application
 ```
 
@@ -2062,7 +2062,7 @@ In production:
 
 Command:
 
-```python showLineNumbers id="collectstatic"
+```bash  id="collectstatic"
 python manage.py collectstatic
 ```
 

@@ -56,7 +56,7 @@ const config = {
         docs: {
           sidebarPath: './sidebars.js',
 
-          editUrl: 'https://github.com/ankur3-101106/',
+          editUrl: 'https://github.com/ankur3-101106/portfolio/tree/main/',
 
           // ✅ KaTeX
           remarkPlugins: [remarkMath],
@@ -69,7 +69,7 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl: 'https://github.com/ankur3-101106/',
+          editUrl: 'https://github.com/ankur3-101106/portfolio/tree/main/',
 
           // ✅ KaTeX
           remarkPlugins: [remarkMath],
@@ -135,7 +135,7 @@ const config = {
         },
         // { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/ankur3-101106',
+          href: 'https://github.com/ankur3-101106/',
           label: 'GitHub',
           position: 'right',
         },
@@ -154,7 +154,7 @@ const config = {
           items: [{ label: 'Notes', to: '/docs/intro' }],
         },
         {
-          title: 'Community',
+          title: 'Socials',
           items: [
             {
               label: 'Stack Overflow',

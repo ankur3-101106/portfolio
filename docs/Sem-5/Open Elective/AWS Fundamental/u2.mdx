@@ -7,3 +7,203 @@ authors: [ankur]
 :::info[Title]
 ## Networking Services on AWS
 :::
+
+# Unit 2: Networking Services on AWS
+
+## 1. Networking Basics
+
+### 1.1 IP Addressing
+#### 1.1.1 IPv4 Addressing
+#### 1.1.2 IPv6 Addressing
+#### 1.1.3 CIDR Notation
+##### 1.1.3.1 CIDR Block Example (10.0.0.0/16)
+
+### 1.2 Routing
+#### 1.2.1 Purpose of Routing
+#### 1.2.2 Route Tables
+#### 1.2.3 Traffic Flow Management
+##### 1.2.3.1 Internal VPC Routing
+##### 1.2.3.2 Internet Routing
+##### 1.2.3.3 Inter-Network Routing
+
+### 1.3 Firewalls in AWS
+#### 1.3.1 Purpose of Firewalls
+#### 1.3.2 Security Groups
+##### 1.3.2.1 Stateful Firewall
+#### 1.3.3 Network Access Control Lists (NACLs)
+##### 1.3.3.1 Stateless Firewall
+
+### 1.4 Domain Name System (DNS)
+#### 1.4.1 DNS Fundamentals
+#### 1.4.2 Domain Name Resolution
+#### 1.4.3 AWS Route 53 Overview
+
+## 2. Amazon Virtual Private Cloud (VPC)
+
+### 2.1 Introduction to Amazon VPC
+#### 2.1.1 Definition of VPC
+#### 2.1.2 Logical Isolation in AWS
+#### 2.1.3 Benefits of VPC
+
+### 2.2 VPC Configuration
+#### 2.2.1 Custom IP Address Range
+##### 2.2.1.1 CIDR Block Configuration
+#### 2.2.2 Subnet Creation
+##### 2.2.2.1 Public Subnets
+##### 2.2.2.2 Private Subnets
+#### 2.2.3 Route Table Configuration
+#### 2.2.4 Network Gateway Configuration
+
+### 2.3 VPC Components
+#### 2.3.1 Internet Gateway (IGW)
+##### 2.3.1.1 Internet Connectivity
+#### 2.3.2 NAT Gateway
+##### 2.3.2.1 Outbound Internet Access for Private Subnets
+#### 2.3.3 VPC Peering
+##### 2.3.3.1 Private VPC-to-VPC Communication
+
+## 3. Subnets and Route Tables
+
+### 3.1 Public Subnets
+#### 3.1.1 Definition
+#### 3.1.2 Public IP Addresses
+#### 3.1.3 Internet Gateway Requirement
+#### 3.1.4 Use Cases
+##### 3.1.4.1 Web Servers
+##### 3.1.4.2 Load Balancers
+#### 3.1.5 Example CIDR Block
+##### 3.1.5.1 10.0.1.0/24
+
+### 3.2 Private Subnets
+#### 3.2.1 Definition
+#### 3.2.2 Private IP Addresses
+#### 3.2.3 NAT Gateway Access
+#### 3.2.4 Security Benefits
+#### 3.2.5 Use Cases
+##### 3.2.5.1 Databases
+##### 3.2.5.2 Application Servers
+#### 3.2.6 Example CIDR Block
+##### 3.2.6.1 10.0.2.0/24
+
+### 3.3 Route Tables
+#### 3.3.1 Definition
+#### 3.3.2 Routing Rules
+#### 3.3.3 Internet Gateway Routes
+#### 3.3.4 NAT Gateway Routes
+#### 3.3.5 Traffic Flow Control
+
+## 4. VPC Security
+
+### 4.1 Network Access Control Lists (NACLs)
+#### 4.1.1 Definition
+#### 4.1.2 Subnet-Level Security
+#### 4.1.3 Allow Rules
+#### 4.1.4 Deny Rules
+#### 4.1.5 Stateless Behavior
+#### 4.1.6 Rule Evaluation Order
+#### 4.1.7 Default Behavior
+
+### 4.2 Security Groups
+#### 4.2.1 Definition
+#### 4.2.2 Instance-Level Security
+#### 4.2.3 Allow Rules Only
+#### 4.2.4 Stateful Behavior
+#### 4.2.5 Rule Evaluation Process
+#### 4.2.6 Default Behavior
+
+### 4.3 NACLs vs Security Groups
+#### 4.3.1 Level of Operation
+#### 4.3.2 Rule Types
+#### 4.3.3 Stateful vs Stateless
+#### 4.3.4 Rule Evaluation
+#### 4.3.5 Default Behavior
+#### 4.3.6 Use Cases
+
+## 5. AWS Route 53
+
+### 5.1 Introduction to Route 53
+#### 5.1.1 What is Route 53
+#### 5.1.2 Managed DNS Service
+#### 5.1.3 Domain Name Resolution
+
+### 5.2 Route 53 Features
+#### 5.2.1 High Availability
+#### 5.2.2 Scalability
+#### 5.2.3 Domain Registration
+#### 5.2.4 Health Checks
+#### 5.2.5 Endpoint Monitoring
+
+### 5.3 Route 53 Routing Policies
+#### 5.3.1 Simple Routing
+#### 5.3.2 Weighted Routing
+#### 5.3.3 Latency-Based Routing
+#### 5.3.4 Geolocation Routing
+#### 5.3.5 Failover Routing
+
+### 5.4 Route 53 Integrations
+#### 5.4.1 Elastic Load Balancer (ELB)
+#### 5.4.2 Amazon S3
+#### 5.4.3 Amazon CloudFront
+
+## 6. Amazon CloudFront
+
+### 6.1 Introduction to CloudFront
+#### 6.1.1 What is CloudFront
+#### 6.1.2 Content Delivery Network (CDN)
+#### 6.1.3 Purpose of CloudFront
+
+### 6.2 CloudFront Architecture
+#### 6.2.1 Edge Locations
+#### 6.2.2 Content Caching
+#### 6.2.3 Content Distribution
+
+### 6.3 CloudFront Features
+#### 6.3.1 Global Content Delivery
+#### 6.3.2 Latency Reduction
+#### 6.3.3 Static Content Caching
+#### 6.3.4 Dynamic Content Caching
+#### 6.3.5 HTTPS Support
+#### 6.3.6 Custom SSL Certificates
+#### 6.3.7 AWS Shield Integration
+##### 6.3.7.1 DDoS Protection
+
+### 6.4 Benefits of CloudFront
+#### 6.4.1 Improved Performance
+#### 6.4.2 Reduced Latency
+#### 6.4.3 Enhanced Security
+#### 6.4.4 Global Reach
+
+## 7. Building a VPC and Launching a Web Server
+
+### 7.1 VPC Creation
+#### 7.1.1 Define CIDR Block
+#### 7.1.2 Create VPC
+
+### 7.2 Subnet Configuration
+#### 7.2.1 Create Public Subnet
+#### 7.2.2 Create Private Subnet
+
+### 7.3 Internet Connectivity
+#### 7.3.1 Create Internet Gateway
+#### 7.3.2 Attach Internet Gateway
+#### 7.3.3 Configure Route Tables
+
+### 7.4 Security Configuration
+#### 7.4.1 Create Security Groups
+#### 7.4.2 Configure Firewall Rules
+
+### 7.5 Launching a Web Server
+#### 7.5.1 Create EC2 Instance
+#### 7.5.2 Assign Public IP Address
+#### 7.5.3 Configure Security Group Rules
+#### 7.5.4 Verify Web Server Access
+
+## 8. Chapter Summary
+
+### 8.1 VPC Overview
+### 8.2 Subnet Types
+### 8.3 Route Tables
+### 8.4 Security Groups
+### 8.5 Network ACLs
+### 8.6 AWS Route 53
+### 8.7 Amazon CloudFront

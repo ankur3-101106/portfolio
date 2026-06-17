@@ -1,8 +1,11 @@
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import { gsap } from 'gsap';
+import emailjs from '@emailjs/browser';
 
 import Heading from '@theme/Heading';
 import styles from './index.module.css';
@@ -13,8 +16,10 @@ function Hero() {
   return (
     <header className={clsx('hero ', styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
-          Hi, I'm Ankur 👋
+        <Heading
+          as="h1"
+          className="hero__title floating-title"
+        >  Hi, I'm Ankur 👋
         </Heading>
         <p className="hero__subtitle">
           Penetration Tester | Network Administrator | Network Security
@@ -60,7 +65,7 @@ function Projects() {
               <p>Short description of your project.</p>
             </div>
             <div className="card__footer">
-              <a href="https://github.com/your-repo">GitHub</a>
+              <a href="https://github.com/ankur3-101106">GitHub</a>
             </div>
           </div>
         </div>
@@ -83,7 +88,7 @@ function Contact() {
     <section className="container margin-vert--lg">
       <Heading as="h2">Contact</Heading>
 
-      <p class="social-icons">
+      <p className="social-icons">
         <a href="https://instagram.com/ankur3_101106">
           <img src="https://skillicons.dev/icons?i=instagram" />
         </a>
@@ -110,16 +115,267 @@ function Contact() {
   );
 }
 
+// Full-screen Matrix-style canvas background, interactive with cursor + scroll
+function ThreeAnimations() {
+  const containerRef = React.useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.zIndex = '-9999';
+    canvas.style.opacity = '1';
+    canvas.style.pointerEvents = 'none';
+    // append to body so canvas sits behind page content reliably
+    document.body.appendChild(canvas);
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const fontSize = 14;
+    let columns = Math.floor(width / fontSize);
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*()[]{}<>/\\|~';
+    const drops = new Array(columns).fill(0).map(() => Math.floor(Math.random() * height));
+
+    // mouse influence
+    let mouse = { x: -9999, y: -9999 };
+    function onMove(e){ mouse.x = e.clientX; mouse.y = e.clientY; }
+    function onLeave(){ mouse.x = -9999; mouse.y = -9999; }
+
+    // scroll influence (affects speed/density)
+    function onScroll(){ scrollT = document.documentElement.scrollTop / (document.documentElement.scrollHeight - window.innerHeight) || 0; }
+    let scrollT = 0;
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseleave', onLeave);
+    window.addEventListener('scroll', onScroll);
+
+    function resize(){
+      width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight;
+      columns = Math.floor(width / fontSize);
+      drops.length = columns;
+      for (let i=0;i<columns;i++) drops[i] = Math.floor(Math.random()*height);
+    }
+    window.addEventListener('resize', resize);
+
+    ctx.fillStyle = '#000'; ctx.fillRect(0,0,width,height);
+
+    let rafId;
+    function draw(){
+      // clear each frame (avoid dimming foreground by not drawing a dark overlay)
+      ctx.clearRect(0,0,width,height);
+
+      ctx.font = `${fontSize}px monospace`;
+      for (let i=0;i<columns;i++){
+        const x = i * fontSize;
+        // adapt speed by distance to cursor
+        const cx = mouse.x === -9999 ? 9999 : Math.abs(mouse.x - x);
+        const proximity = Math.max(0, 1 - (cx / 400));
+        const speed = 1 + proximity * 20 + scrollT * 12; // faster near cursor and on scroll
+        // choose char
+        const text = chars.charAt(Math.floor(Math.random()*chars.length));
+        const y = drops[i] * fontSize;
+        // brightness based on proximity
+        const green = Math.floor(60 + proximity * 80);
+        const alpha = Math.max(0.12, 0.28 - scrollT * 0.18);
+        ctx.fillStyle = `rgba(0,${green},0,${alpha})`;
+        ctx.fillText(text, x, y);
+        drops[i] += speed/ fontSize;
+        if (drops[i]*fontSize > height && Math.random() > 0.98) drops[i] = 0;
+      }
+
+      rafId = requestAnimationFrame(draw);
+    }
+    draw();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseleave', onLeave);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', resize);
+      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+    };
+  }, []);
+
+  return <div ref={containerRef} aria-hidden="true" />;
+}
+
+// Minimal Starship-style terminal emulator
+function TerminalEmulator() {
+  const [lines, setLines] = React.useState([
+    'ankur@starship:~$ welcome to Ankur\'s shell. Type "help" for commands.'
+  ]);
+  const [input, setInput] = React.useState('');
+  const [isConnecting, setIsConnecting] = React.useState(false);
+  const [connectData, setConnectData] = React.useState({ name: '', email: '', message: '' });
+  const bottomRef = React.useRef(null);
+
+  const serviceID = 'service_qevelsu';
+  const templateID = 'template_wime712';
+  const publicKey = 'kCGt5u2Dec5LkConG';
+
+  React.useEffect(() => { if (bottomRef.current) bottomRef.current.scrollIntoView({behavior:'smooth'}); }, [lines]);
+
+  function pushLine(text){ setLines(l=>[...l, text]); }
+
+  function handleEnter(e){
+    e.preventDefault();
+    const cmd = input.trim();
+    if (!cmd) return;
+    pushLine('ankur@starship:~$ ' + cmd);
+    setInput('');
+    runCommand(cmd);
+  }
+
+  function runCommand(cmdRaw){
+    const cmd = cmdRaw.trim().toLowerCase();
+    if (isConnecting && cmd !== 'cancel') { pushLine('Type cancel to abort connect process.'); return; }
+    switch (true) {
+      case cmd === 'help':
+        pushLine('Available commands: help, about, projects, certifications, contact, connect');
+        break;
+      case cmd === 'about':
+        pushLine('Hi, I\'m Ankur — penetration tester and network security enthusiast.');
+        pushLine('Use "projects" to list projects and "certifications" to see certs.');
+        break;
+      case cmd === 'projects':
+        pushLine('Projects:\n- Project One: description\n- Project Two: description');
+        break;
+      case cmd === 'certifications':
+        pushLine('Certifications:\n- Certified Ethical Hacker (CEH)\n- CompTIA Security+');
+        break;
+      case cmd === 'contact':
+        pushLine('Email: ankurdcs101106@gmail.com | GitHub: github.com/ankur3-101106');
+        break;
+      case cmd === 'connect':
+        pushLine('Starting connect. You can type cancel anytime.');
+        setIsConnecting(true);
+        pushLine('Enter your name (type: name Your Name):');
+        break;
+      default:
+        // support simple 'name John' 'email a@b.com' 'message hi' when connecting
+        if (cmd.startsWith('name ')){
+          const val = cmdRaw.substring(5).trim(); setConnectData(d=>({ ...d, name: val })); pushLine('Name set to: ' + val); return;
+        }
+        if (cmd.startsWith('email ')){
+          const val = cmdRaw.substring(6).trim(); setConnectData(d=>({ ...d, email: val })); pushLine('Email set to: ' + val); return;
+        }
+        if (cmd.startsWith('message ')){
+          const val = cmdRaw.substring(8).trim(); setConnectData(d=>({ ...d, message: val })); pushLine('Message set.'); return;
+        }
+        if (cmd === 'send' && isConnecting){
+          // validate
+          const { name, email, message } = connectData;
+          if (!name || !email || !message) { pushLine('Missing fields. Set name, email and message. Example: name John'); return; }
+          pushLine('Sending message...');
+          emailjs.send(serviceID, templateID, { from_name: name, from_email: email, message }, publicKey)
+            .then(()=>{ pushLine('Message sent. Thank you!'); setIsConnecting(false); setConnectData({ name:'', email:'', message:'' }); })
+            .catch(err=>{ console.error(err); pushLine('Failed to send: ' + (err.text || err.message || 'unknown error')); });
+          return;
+        }
+        if (cmd === 'cancel' && isConnecting){ setIsConnecting(false); setConnectData({ name:'', email:'', message:'' }); pushLine('Connect cancelled.'); return; }
+        pushLine('Command not found: ' + cmd);
+    }
+  }
+
+  return (
+    <section className="terminal-panel" style={{background:'rgba(11,12,16,0.95)', color:'#c9d1d9', fontFamily:'monospace', padding:16, borderRadius:8, border:'1px solid rgba(255,255,255,0.06)', boxShadow:'0 6px 18px rgba(0,0,0,0.6)', width:'100%', maxHeight:520, overflow:'hidden'}}>
+      <div style={{height:360, overflow:'auto', padding:12, background:'transparent'}}>
+        {lines.map((l,i)=>(<div key={i} style={{whiteSpace:'pre-wrap'}}>{l}</div>))}
+        <div ref={bottomRef} />
+      </div>
+
+      {isConnecting ? (
+        <div style={{marginTop:8}}>
+          <div style={{marginBottom:6}}>Connect mode. Set name/email/message via commands:</div>
+          <div style={{fontSize:13, opacity:0.9}}>name Your Name</div>
+          <div style={{fontSize:13, opacity:0.9}}>email you@domain.com</div>
+          <div style={{fontSize:13, opacity:0.9}}>message Your message text</div>
+          <div style={{fontSize:13, opacity:0.9}}>When ready, type: send</div>
+        </div>
+      ) : null}
+
+      <form onSubmit={handleEnter} style={{marginTop:8, display:'flex', gap:8, alignItems:'center'}}>
+        <div style={{flex:'0 0 auto', color:'#7ee787', fontWeight:700}}>ankur@starship:~$</div>
+        <input value={input} onChange={e=>setInput(e.target.value)} autoFocus style={{flex:1, background:'transparent', border:'none', outline:'none', color:'#c9d1d9', fontFamily:'monospace'}} />
+        <button type="submit" style={{background:'#0f1720', color:'#c9d1d9', border:'1px solid rgba(255,255,255,0.04)', padding:'6px 10px', borderRadius:4}}>↵</button>
+      </form>
+      <div style={{marginTop:8, fontSize:12, opacity:0.75}}>Tip: Use 'help' to see commands. Use 'connect' to send a message (emailjs must be configured).</div>
+    </section>
+  );
+}
+
 export default function Home() {
+
+  useEffect(() => {
+
+    gsap.from(".hero__title", {
+      y: 80,
+      opacity: 0,
+      duration: 1.2,
+      ease: "power4.out"
+    });
+
+    gsap.from(".hero__subtitle", {
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      delay: 0.3
+    });
+
+    gsap.from(".about-section", {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      delay: 0.5
+    });
+
+    gsap.from(".contact-section", {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      delay: 0.8
+    });
+
+    gsap.from(".social-icons a", {
+      scale: 0,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.5,
+      ease: "back.out(2)"
+    });
+
+  }, []);
+
   return (
     <Layout
       title="Home"
-      description="Personal portfolio website">
+      description="Personal portfolio website"
+    >
       <Hero />
-      <main>
-        <About />
-        <Contact />
+
+      <main style={{position: 'relative', zIndex: 100}}>
+        <ThreeAnimations />
+        <div style={{display:'flex', gap:24, alignItems:'flex-start', padding:'24px', maxWidth:1100, margin:'0 auto', width:'100%'}}>
+          <div style={{flex:1, minWidth:0}}>
+            <About />
+            <Projects />
+            <Contact />
+          </div>
+          <div style={{flex:'0 0 420px'}}>
+            <TerminalEmulator />
+          </div>
+        </div>
       </main>
+
     </Layout>
   );
 }

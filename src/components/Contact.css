@@ -1,0 +1,203 @@
+/* ============================================================
+   Contact Section Styles
+   ============================================================ */
+
+.contact {
+  position: relative;
+}
+
+.contact__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-8);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Headline */
+.contact__headline {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary),
+    var(--color-accent)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact__subtext {
+  font-size: var(--text-body);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-loose);
+  max-width: 520px;
+}
+
+/* Email CTA Card */
+.contact__email-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  width: 100%;
+  max-width: 480px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-snappy);
+}
+
+.contact__email-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow:
+    var(--glow-accent),
+    0 20px 40px oklch(0.10 0.02 260 / 0.4);
+}
+
+.contact__email-card:hover .contact__email-arrow {
+  transform: translateX(6px);
+  color: var(--color-accent);
+}
+
+.contact__email-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.contact__email-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.contact__email-address {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast);
+}
+
+.contact__email-card:hover .contact__email-address {
+  color: var(--color-accent);
+}
+
+.contact__email-arrow {
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    color var(--duration-fast);
+  flex-shrink: 0;
+}
+
+/* Social Icons Grid */
+.contact__socials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 600px;
+}
+
+.contact__social-link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-3);
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-snappy),
+    color var(--duration-fast);
+}
+
+.contact__social-link::before {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--link-color, var(--color-accent));
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(
+    calc(var(--glow-x, 50%) - 60px),
+    calc(var(--glow-y, 50%) - 60px)
+  );
+  filter: blur(30px);
+  transition: opacity var(--duration-normal);
+}
+
+.contact__social-link:hover::before {
+  opacity: 0.15;
+}
+
+.contact__social-link:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: var(--link-color, var(--color-accent));
+  color: var(--color-text-primary);
+}
+
+.contact__social-icon {
+  width: 48px;
+  height: 48px;
+  filter: grayscale(0.3);
+  transition: filter var(--duration-normal);
+}
+
+.contact__social-link:hover .contact__social-icon {
+  filter: grayscale(0);
+}
+
+.contact__social-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact__socials {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  .contact__social-link {
+    padding: var(--space-4) var(--space-2);
+  }
+
+  .contact__social-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .contact__email-card {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .contact__socials {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

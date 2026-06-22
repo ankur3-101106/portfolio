@@ -1,0 +1,179 @@
+/* ── Experience Section ── */
+.experience {
+  position: relative;
+  background: var(--color-bg-deepest);
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-8) 0;
+}
+
+/* Central line */
+.timeline__line-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.timeline__line {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-accent-dim) 10%,
+    var(--color-accent) 50%,
+    var(--color-accent-dim) 90%,
+    transparent 100%
+  );
+  transform-origin: top center;
+  border-radius: var(--radius-full);
+}
+
+/* Timeline Item */
+.timeline__item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-12);
+}
+
+.timeline__item:last-child {
+  margin-bottom: 0;
+}
+
+/* Dot */
+.timeline__dot {
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-bg-deepest);
+  border: 2px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-above);
+}
+
+.timeline__dot-inner {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+
+/* Card */
+.timeline__card {
+  width: calc(50% - 50px);
+  padding: var(--space-6);
+  will-change: transform, opacity;
+}
+
+.timeline__card--left {
+  margin-right: auto;
+  margin-left: 0;
+  text-align: left;
+}
+
+.timeline__card--right {
+  margin-left: auto;
+  margin-right: 0;
+  text-align: left;
+}
+
+.timeline__card-header {
+  margin-bottom: var(--space-4);
+}
+
+.timeline__role {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: var(--space-2);
+  line-height: var(--leading-snug);
+}
+
+.timeline__company {
+  font-size: var(--text-body);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+.timeline__description {
+  font-size: var(--text-small);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-loose);
+  margin-bottom: var(--space-4);
+}
+
+/* Achievements */
+.timeline__achievements {
+  list-style: none;
+  margin-bottom: var(--space-5);
+}
+
+.timeline__achievement {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-small);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+  line-height: var(--leading-normal);
+}
+
+.timeline__achievement-icon {
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Tags */
+.timeline__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .timeline__line-wrapper {
+    left: 20px;
+  }
+
+  .timeline__dot {
+    left: 20px;
+    top: 0;
+  }
+
+  .timeline__item {
+    justify-content: flex-start;
+    padding-left: 50px;
+    margin-bottom: var(--space-8);
+  }
+
+  .timeline__card {
+    width: 100%;
+    margin: 0;
+  }
+
+  .timeline__card--left,
+  .timeline__card--right {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

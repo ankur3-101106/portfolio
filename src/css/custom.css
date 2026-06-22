@@ -1,3 +1,6 @@
+@import '../styles/index.css';
+@import '../styles/components.css';
+
 /* *
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -31,15 +34,15 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 html[data-theme='dark'] {
-  --ifm-color-primary: #fbbf24;
-  --ifm-color-primary-dark: #f59e0b;
-  --ifm-color-primary-darker: #d97706;
-  --ifm-color-primary-darkest: #b45309;
+  --ifm-color-primary: #3bc4f6;
+  --ifm-color-primary-dark: #6ef0f4;
+  --ifm-color-primary-darker: #1d9dd8;
+  --ifm-color-primary-darkest: #1e888a;
 
   /*  */
-  --ifm-color-primary-light: #fcd34d;
-  --ifm-color-primary-lighter: #fde68a;
-  --ifm-color-primary-lightest: #fef3c7;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #dbeafe;
   --docusaurus-highlighted-code-line-bg: rgb(0, 0, 0);
 
   /* Background Colors */
@@ -130,8 +133,8 @@ html[data-theme='light'] .navbar__inner {
   height: 2px;
   width: var(--scroll-progress, 0%);
 
-  background: linear-gradient(90deg, #c2400c68, #fbbe2468);
-  box-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+  background: linear-gradient(90deg, #0088ff68, #00ffff68);
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.6);
   transition: width 0.1s ease-out;
 }
 
@@ -166,15 +169,17 @@ html[data-theme='dark'] .navbar-sidebar {
   backdrop-filter: blur(var(--blur-amount, 8px)) saturate(180%);
 }
 
-pre{
+pre {
   border-radius: 4px;
 }
-code{
+
+code {
   background: rgba(247, 247, 247, 0.849);
   color: rgb(175, 0, 0);
   border: #00000023 1px solid;
 }
-html[data-theme='dark'] code{
+
+html[data-theme='dark'] code {
   border: rgba(255, 255, 255, 0.137) 1px solid;
   background: rgba(37, 37, 37, 0.849);
   color: rgb(255, 106, 106);

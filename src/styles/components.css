@@ -1,0 +1,133 @@
+/* ============================================================
+   KingsMan — Shared Component Styles
+   ============================================================ */
+
+/* ── Glassmorphism Card ── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo),
+              border-color var(--duration-normal) var(--ease-snappy);
+}
+
+.glass-card:hover {
+  border-color: var(--color-accent-dim);
+  box-shadow: var(--glow-accent);
+}
+
+/* ── Glow Text ── */
+.glow-text {
+  color: var(--color-accent);
+  text-shadow: var(--glow-text);
+}
+
+/* ── Mono Label ── */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-accent-subtle);
+  border: 1px solid oklch(0.75 0.15 200 / 0.15);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--color-accent);
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+
+.badge--danger {
+  background: oklch(0.65 0.20 25 / 0.08);
+  border-color: oklch(0.65 0.20 25 / 0.15);
+  color: var(--color-danger);
+}
+
+/* ── Divider Line ── */
+.divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+  border: none;
+  margin: var(--space-4) 0;
+}
+
+/* ── Section Number ── */
+.section-number {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-accent-dim);
+  letter-spacing: var(--tracking-widest);
+}
+
+/* ── Animated Underline Link ── */
+.link-underline {
+  position: relative;
+  color: var(--color-accent);
+  transition: color var(--duration-fast);
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent);
+  transition: width var(--duration-normal) var(--ease-out-expo);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ── Progress Bar ── */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-dim));
+  z-index: calc(var(--z-nav) + 1);
+  transform-origin: left;
+  will-change: transform;
+}
+
+/* ── Grid Patterns ── */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(oklch(0.25 0.02 260 / 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.25 0.02 260 / 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+  z-index: var(--z-behind);
+}
+
+/* ── Responsive adjustments ── */
+@media (max-width: 768px) {
+  .badge {
+    font-size: 0.625rem;
+    padding: 2px var(--space-2);
+  }
+}

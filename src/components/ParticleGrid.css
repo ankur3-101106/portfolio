@@ -1,0 +1,86 @@
+/* ── Particle Grid Background ── */
+.particle-grid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: var(--z-behind);
+}
+
+/* Grid lines */
+.particle-grid__lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(oklch(0.30 0.03 200 / 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.30 0.03 200 / 0.12) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: grid-shift 20s linear infinite;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 80%);
+}
+
+@keyframes grid-shift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(80px, 80px); }
+}
+
+/* Floating dots */
+.particle-grid__dots {
+  position: absolute;
+  inset: 0;
+}
+
+.particle-grid__dot {
+  position: absolute;
+  left: var(--dot-x);
+  top: var(--dot-y);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0;
+  animation: dot-pulse var(--dot-duration) ease-in-out var(--dot-delay) infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+    box-shadow: 0 0 0 transparent;
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1);
+    box-shadow: 0 0 12px var(--color-accent-glow);
+  }
+}
+
+/* Central glow */
+.particle-grid__glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    oklch(0.75 0.15 200 / 0.06) 0%,
+    oklch(0.75 0.15 200 / 0.02) 40%,
+    transparent 70%
+  );
+  animation: glow-breathe 6s ease-in-out infinite;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-grid__lines { animation: none; }
+  .particle-grid__dot { animation: none; opacity: 0.3; }
+  .particle-grid__glow { animation: none; }
+}

@@ -1,0 +1,35 @@
+/* ── Section Heading ── */
+.section-heading {
+  margin-bottom: var(--space-10);
+}
+
+.section-heading__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.section-heading__line {
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-accent-dim), transparent);
+  transform-origin: left center;
+}
+
+.section-heading__title {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: var(--tracking-tight);
+}
+
+.section-heading__subtitle {
+  margin-top: var(--space-3);
+  font-size: var(--text-body);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  line-height: var(--leading-loose);
+}

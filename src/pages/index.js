@@ -208,15 +208,25 @@ function ThreeAnimations() {
   return <div ref={containerRef} aria-hidden="true" />;
 }
 
-// Minimal Starship-style terminal emulator
+// Minimal Starship-style terminal emulator (real terminal behavior)
 function TerminalEmulator() {
-  const [lines, setLines] = React.useState([
-    'ankur@starship:~$ welcome to Ankur\'s shell. Type "help" for commands.'
-  ]);
+  React.useEffect(()=>{
+    const id = 'jetbrains-mono-font';
+    if (!document.getElementById(id)) {
+      const link = document.createElement('link');
+      link.id = id;
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap';
+      document.head.appendChild(link);
+    }
+  }, []);
+
+  const [lines, setLines] = React.useState([]); // history
   const [input, setInput] = React.useState('');
   const [isConnecting, setIsConnecting] = React.useState(false);
   const [connectData, setConnectData] = React.useState({ name: '', email: '', message: '' });
   const bottomRef = React.useRef(null);
+  const inputRef = React.useRef(null);
 
   const serviceID = 'service_qevelsu';
   const templateID = 'template_wime712';
@@ -228,11 +238,15 @@ function TerminalEmulator() {
 
   function handleEnter(e){
     e.preventDefault();
-    const cmd = input.trim();
+    const cmdRaw = input;
+    const cmd = cmdRaw.trim();
     if (!cmd) return;
+    // append prompt + command to history
     pushLine('ankur@starship:~$ ' + cmd);
     setInput('');
-    runCommand(cmd);
+    runCommand(cmdRaw);
+    // keep focus
+    setTimeout(()=>{ inputRef.current && inputRef.current.focus(); }, 10);
   }
 
   function runCommand(cmdRaw){
@@ -247,21 +261,25 @@ function TerminalEmulator() {
         pushLine('Use "projects" to list projects and "certifications" to see certs.');
         break;
       case cmd === 'projects':
-        pushLine('Projects:\n- Project One: description\n- Project Two: description');
+        pushLine('Projects:');
+        pushLine('- Project One: description');
+        pushLine('- Project Two: description');
         break;
       case cmd === 'certifications':
-        pushLine('Certifications:\n- Certified Ethical Hacker (CEH)\n- CompTIA Security+');
+        pushLine('Certifications:');
+        pushLine('- Certified Ethical Hacker (CEH)');
+        pushLine('- CompTIA Security+');
         break;
       case cmd === 'contact':
-        pushLine('Email: ankurdcs101106@gmail.com | GitHub: github.com/ankur3-101106');
+        pushLine('Email: ankurdcs101106@gmail.com');
+        pushLine('GitHub: github.com/ankur3-101106');
         break;
       case cmd === 'connect':
         pushLine('Starting connect. You can type cancel anytime.');
         setIsConnecting(true);
-        pushLine('Enter your name (type: name Your Name):');
+        pushLine('Enter your name (type: name Your Name)');
         break;
       default:
-        // support simple 'name John' 'email a@b.com' 'message hi' when connecting
         if (cmd.startsWith('name ')){
           const val = cmdRaw.substring(5).trim(); setConnectData(d=>({ ...d, name: val })); pushLine('Name set to: ' + val); return;
         }
@@ -272,7 +290,6 @@ function TerminalEmulator() {
           const val = cmdRaw.substring(8).trim(); setConnectData(d=>({ ...d, message: val })); pushLine('Message set.'); return;
         }
         if (cmd === 'send' && isConnecting){
-          // validate
           const { name, email, message } = connectData;
           if (!name || !email || !message) { pushLine('Missing fields. Set name, email and message. Example: name John'); return; }
           pushLine('Sending message...');
@@ -287,14 +304,19 @@ function TerminalEmulator() {
   }
 
   return (
-    <section className="terminal-panel" style={{background:'rgba(11,12,16,0.95)', color:'#c9d1d9', fontFamily:'monospace', padding:16, borderRadius:8, border:'1px solid rgba(255,255,255,0.06)', boxShadow:'0 6px 18px rgba(0,0,0,0.6)', width:'100%', maxHeight:520, overflow:'hidden'}}>
-      <div style={{height:360, overflow:'auto', padding:12, background:'transparent'}}>
-        {lines.map((l,i)=>(<div key={i} style={{whiteSpace:'pre-wrap'}}>{l}</div>))}
+    <section className="terminal-panel" style={{background:'rgba(11,12,16,0.95)', color:'#c9d1d9', fontFamily:"'JetBrains Mono', 'JetBrains Mono Nerd Font', monospace", padding:12, borderRadius:8, border:'1px solid rgba(255,255,255,0.06)', boxShadow:'0 6px 18px rgba(0,0,0,0.6)', width:'100%', height:'100%', display:'flex', flexDirection:'column'}}>
+
+      {/* output history */}
+      <div style={{flex:1, overflowY:'auto', padding:12, background:'transparent'}}>
+        {lines.length === 0 ? (<div style={{opacity:0.6}}>No output yet. Type a command below and press enter.</div>) : (
+          lines.map((l,i)=>(<div key={i} style={{whiteSpace:'pre-wrap'}}>{l}</div>))
+        )}
         <div ref={bottomRef} />
       </div>
 
+      {/* connect helper (above input if active) */}
       {isConnecting ? (
-        <div style={{marginTop:8}}>
+        <div style={{position:'sticky', bottom:56, padding:'8px 12px', borderTop:'1px solid rgba(255,255,255,0.03)', background:'rgba(11,12,16,0.7)'}}>
           <div style={{marginBottom:6}}>Connect mode. Set name/email/message via commands:</div>
           <div style={{fontSize:13, opacity:0.9}}>name Your Name</div>
           <div style={{fontSize:13, opacity:0.9}}>email you@domain.com</div>
@@ -303,12 +325,13 @@ function TerminalEmulator() {
         </div>
       ) : null}
 
-      <form onSubmit={handleEnter} style={{marginTop:8, display:'flex', gap:8, alignItems:'center'}}>
-        <div style={{flex:'0 0 auto', color:'#7ee787', fontWeight:700}}>ankur@starship:~$</div>
-        <input value={input} onChange={e=>setInput(e.target.value)} autoFocus style={{flex:1, background:'transparent', border:'none', outline:'none', color:'#c9d1d9', fontFamily:'monospace'}} />
-        <button type="submit" style={{background:'#0f1720', color:'#c9d1d9', border:'1px solid rgba(255,255,255,0.04)', padding:'6px 10px', borderRadius:4}}>↵</button>
+      {/* input/prompt fixed at bottom */}
+      <form onSubmit={handleEnter} style={{position:'sticky', bottom:0, display:'flex', gap:8, alignItems:'center', padding:'10px 12px', background:'linear-gradient(180deg, rgba(11,12,16,0.0), rgba(11,12,16,0.95))', borderTop:'1px solid rgba(255,255,255,0.03)'}}>
+        <div style={{flex:'0 0 auto', color:'#7ee787', fontWeight:700, fontSize:14}}>ankur@starship:~$</div>
+        <input ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} autoFocus style={{flex:1, background:'transparent', border:'none', outline:'none', color:'#c9d1d9', fontFamily:"'JetBrains Mono', monospace", fontSize:14}} placeholder="Type a command and press Enter" />
       </form>
-      <div style={{marginTop:8, fontSize:12, opacity:0.75}}>Tip: Use 'help' to see commands. Use 'connect' to send a message (emailjs must be configured).</div>
+
+      <div style={{position:'absolute', left:12, bottom:8, fontSize:12, opacity:0.75}}>Tip: Use 'help' to see commands. Use 'connect' to send a message (emailjs must be configured).</div>
     </section>
   );
 }
@@ -364,13 +387,13 @@ export default function Home() {
 
       <main style={{position: 'relative', zIndex: 100}}>
         <ThreeAnimations />
-        <div style={{display:'flex', gap:24, alignItems:'flex-start', padding:'24px', maxWidth:1100, margin:'0 auto', width:'100%'}}>
+        <div style={{display:'flex', gap:24, alignItems:'stretch', padding:'24px', maxWidth:1100, margin:'0 auto', width:'100%'}}>
           <div style={{flex:1, minWidth:0}}>
             <About />
             <Projects />
             <Contact />
           </div>
-          <div style={{flex:'0 0 420px'}}>
+          <div style={{flex:'0 0 420px', alignSelf:'stretch', display:'flex', flexDirection:'column'}}>
             <TerminalEmulator />
           </div>
         </div>

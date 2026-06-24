@@ -1,7 +1,10 @@
 {
   "terminal": {
     "shell": {
-      "program": "git-bash.exe",
+      "program": [
+        "git-bash.exe",
+        "git"
+      ],
     },
   },
 }

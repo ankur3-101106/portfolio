@@ -8,7 +8,7 @@ import './Hero.css';
 
 const HERO_NAME = 'ANKUR-MACWAN';
 const TYPING_LINES = [
-  { command: 'whoami', delay: 80 },
+  { command: 'whoami', delay: 160 },
   { command: 'cat /etc/profile | head -3', delay: 160 },
   { command: 'nmap -sV portfolio.ankur.dev', delay: 240 },
 ];
@@ -42,9 +42,9 @@ const ARCH_LOGO = [
   '         ./ooosssso++osssssso+`       ',
   '        .oossssso-````/ossssss+`      ',
   '       -osssssso.      :ssssssso.     ',
-  '      :osssssss/        osssso+++.    ',
-  '     /ossssssss/sssssssss\\ssssooo/-    ',
-  '   `/ossssso+/:-        -:/+osssso+-  ',
+  '      :osssssss/        \\sssso+++.    ',
+  '     /osssssss/ssssssssss\\ssssooo/-   ',
+  '   `/ossssso+/            \\+osssso+-  ',
   '  `+sso+:-`                 `.-/+oso: ',
   ' `++:.                           `-/+/',
   ' .`                                 `/',
@@ -55,13 +55,11 @@ const NEOFETCH_INFO = [
   { label: '', value: '──────────', type: 'separator' },
   { label: 'OS', value: 'Ankur OS x96_69' },
   { label: 'Kernel', value: '7.2.7-archy-1' },
+  { label: 'CPU', value: '2 x AMD EPYC 9965 192-Core Processor (768) @ 2.25 GHz' },
+  { label: 'GPU', value: '16 x NVIDIA B300 SXM 288GB (4608 GB VRAM)' },
+  { label: 'Uptime', value: '17624:58:36' },
+  { label: 'Memory', value: '167.92 PiB / 256 PiB' },
   { label: 'Shell', value: 'bash 2.11' },
-  { label: 'WM', value: 'Hyprland' },
-  { label: 'Terminal', value: 'Alacritty' },
-  { label: 'Theme', value: 'Catppuccin-Mocha [GTK3]' },
-  { label: 'Icons', value: 'Papirus-Dark' },
-  { label: 'CPU', value: 'AMD EPYC 9965' },
-  { label: 'Memory', value: '8.2 PiB / 32 PiB' },
 ];
 
 const HELP_TEXT = `Available commands:
@@ -81,7 +79,7 @@ export default function Hero() {
   const inputRef = useRef(null);
   const skillsRef = useRef(null);
   const [showTerminal, setShowTerminal] = useState(false);
-  const [typedLines, setTypedLines] = useState([]);
+  const [animStep, setAnimStep] = useState(0);
   const [showNeofetch, setShowNeofetch] = useState(false);
   const [startTyping, setStartTyping] = useState(false);
 
@@ -101,39 +99,55 @@ export default function Hero() {
   });
 
   // ── Initial typewriter animation ──
+  // animStep progression:
+  //   0 = nothing, 1 = cmd1 typing, 2 = cmd1 output shown,
+  //   3 = cmd2 typing, 4 = cmd2 output shown,
+  //   5 = cmd3 typing, 6 = cmd3 output shown → interactive ready
   useEffect(() => {
     if (!nameRevealed || !startTyping) return;
 
-    const timeouts = [];
     setShowTerminal(true);
 
-    // Show neofetch first
-    const neoTimeout = setTimeout(() => setShowNeofetch(true), 300);
-    timeouts.push(neoTimeout);
-
-    TYPING_LINES.forEach((line) => {
-      const t = setTimeout(() => {
-        setTypedLines((prev) => [...prev, line]);
-      }, line.delay + 600);
-      timeouts.push(t);
-    });
-
-    // After all initial lines finish, enable interactive mode
-    const readyTimeout = setTimeout(() => {
-      setInteractiveReady(true);
-      setCmdLines([{ type: 'system', text: '  Type "help" for available commands.' }]);
-    }, TYPING_LINES[TYPING_LINES.length - 1].delay + 2100);
-    timeouts.push(readyTimeout);
+    const timeouts = [];
+    // Show neofetch first, then start command 1
+    timeouts.push(setTimeout(() => setShowNeofetch(true), 300));
+    timeouts.push(setTimeout(() => setAnimStep(1), 800));
 
     return () => timeouts.forEach(clearTimeout);
   }, [nameRevealed, startTyping]);
+
+  // When a command finishes typing (onComplete from TypewriterText),
+  // advance to the next step after a short pause to show the output
+  const advanceAnim = useCallback((currentStep) => {
+    // currentStep is the typing step (1, 3, or 5)
+    // Show output after a brief pause, then start next command
+    const outputDelay = 200; // pause before showing output
+    const nextCmdDelay = 600; // pause before next command starts
+
+    setTimeout(() => {
+      setAnimStep(currentStep + 1); // show output
+
+      if (currentStep + 1 < 6) {
+        // Start next command after pause
+        setTimeout(() => {
+          setAnimStep(currentStep + 2); // start next command typing
+        }, nextCmdDelay);
+      } else {
+        // All done → enable interactive mode
+        setTimeout(() => {
+          setInteractiveReady(true);
+          setCmdLines([{ type: 'system', text: '  Type "help" for available commands.' }]);
+        }, nextCmdDelay);
+      }
+    }, outputDelay);
+  }, []);
 
   // ── Auto-scroll terminal body ──
   useEffect(() => {
     if (terminalBodyRef.current) {
       terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
     }
-  }, [cmdLines, typedLines]);
+  }, [cmdLines, animStep]);
 
   // ── Anime.js animations ──
   useEffect(() => {
@@ -190,6 +204,18 @@ export default function Hero() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+
+      // Matrix rain fade-out on scroll
+      gsap.to('.matrix-rain', {
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: '40% top',
           end: 'bottom top',
           scrub: 1,
         },
@@ -392,7 +418,7 @@ export default function Hero() {
         break;
 
       default:
-        pushLine(`  zsh: command not found: ${cmdRaw}`, 'error');
+        pushLine(`  bash: command not found: ${cmdRaw}`, 'error');
         pushLine('  Type \"help\" to see available commands.', 'system');
     }
   }
@@ -555,42 +581,79 @@ export default function Hero() {
                 </div>
               )}
 
-              {/* ── Initial animated lines with Starship prompt ── */}
-              {typedLines.map((line, i) => (
-                <div key={`init-${i}`} className="arch-term__cmd-block">
-                  <StarshipPrompt />
-                  <div className="arch-term__cmd-line">
-                    <TypewriterText text={line.command} speed={40} />
+              {/* ── Initial animated lines with Starship prompt + output ── */}
+
+              {/* Command 1: whoami (step 1 = typing, step 2+ = output) */}
+              {animStep >= 1 && (
+                <>
+                  <div className="arch-term__cmd-block">
+                    <StarshipPrompt />
+                    <div className="arch-term__cmd-line">
+                      <TypewriterText
+                        text={TYPING_LINES[0].command}
+                        speed={40}
+                        onComplete={() => advanceAnim(1)}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-
-              {typedLines.length >= 1 && (
-                <div className="arch-term__output">
-                  <span className="arch-term__out-result">ankur-macwan</span>
-                </div>
+                  {animStep >= 2 && (
+                    <div className="arch-term__output">
+                      <span className="arch-term__out-result">ankur-macwan</span>
+                    </div>
+                  )}
+                </>
               )}
 
-              {typedLines.length >= 2 && (
-                <div className="arch-term__output">
-                  <span className="arch-term__out-comment"># Cybersecurity Student</span>
-                  <br />
-                  <span className="arch-term__out-comment"># Arch Linux · Pentester · Networker</span>
-                  <br />
-                  <span className="arch-term__out-comment"># Fast learner · Labs {'>'} Theory</span>
-                </div>
+              {/* Command 2: cat /etc/profile | head -3 (step 3 = typing, step 4+ = output) */}
+              {animStep >= 3 && (
+                <>
+                  <div className="arch-term__cmd-block">
+                    <StarshipPrompt />
+                    <div className="arch-term__cmd-line">
+                      <TypewriterText
+                        text={TYPING_LINES[1].command}
+                        speed={40}
+                        onComplete={() => advanceAnim(3)}
+                      />
+                    </div>
+                  </div>
+                  {animStep >= 4 && (
+                    <div className="arch-term__output">
+                      <span className="arch-term__out-comment"># Cybersecurity Student</span>
+                      <br />
+                      <span className="arch-term__out-comment"># Arch Linux · Pentester · Networker</span>
+                      <br />
+                      <span className="arch-term__out-comment"># Fast learner · Labs {'>'} Theory</span>
+                    </div>
+                  )}
+                </>
               )}
 
-              {typedLines.length >= 3 && (
-                <div className="arch-term__output arch-term__output--scan">
-                  <span className="arch-term__out-success">PORT&nbsp;&nbsp;&nbsp;&nbsp;STATE&nbsp;&nbsp;SERVICE</span>
-                  <br />
-                  <span className="arch-term__out-success">443/tcp open&nbsp;&nbsp;https ✓</span>
-                  <br />
-                  <span className="arch-term__out-success">22/tcp&nbsp;&nbsp;open&nbsp;&nbsp;ssh ✓</span>
-                  <br />
-                  <span className="arch-term__out-warn">All systems secured.</span>
-                </div>
+              {/* Command 3: nmap -sV portfolio.ankur.dev (step 5 = typing, step 6+ = output) */}
+              {animStep >= 5 && (
+                <>
+                  <div className="arch-term__cmd-block">
+                    <StarshipPrompt />
+                    <div className="arch-term__cmd-line">
+                      <TypewriterText
+                        text={TYPING_LINES[2].command}
+                        speed={40}
+                        onComplete={() => advanceAnim(5)}
+                      />
+                    </div>
+                  </div>
+                  {animStep >= 6 && (
+                    <div className="arch-term__output arch-term__output--scan">
+                      <span className="arch-term__out-success">PORT&nbsp;&nbsp;&nbsp;&nbsp;STATE&nbsp;&nbsp;SERVICE</span>
+                      <br />
+                      <span className="arch-term__out-success">443/tcp open&nbsp;&nbsp;https ✓</span>
+                      <br />
+                      <span className="arch-term__out-success">22/tcp&nbsp;&nbsp;open&nbsp;&nbsp;ssh ✓</span>
+                      <br />
+                      <span className="arch-term__out-warn">All systems secured.</span>
+                    </div>
+                  )}
+                </>
               )}
 
               {/* ── Interactive command output ── */}
@@ -705,11 +768,19 @@ function StarshipPrompt({ compact }) {
 }
 
 /* ── Typewriter sub-component ── */
-function TypewriterText({ text, speed = 50 }) {
+function TypewriterText({ text, speed = 50, onComplete }) {
   const [displayed, setDisplayed] = useState('');
+  const onCompleteRef = useRef(onComplete);
+  const calledRef = useRef(false);
+
+  // Keep the ref up to date without triggering the effect
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     let i = 0;
+    calledRef.current = false;
     setDisplayed('');
     const timer = setInterval(() => {
       if (i < text.length) {
@@ -717,6 +788,10 @@ function TypewriterText({ text, speed = 50 }) {
         i++;
       } else {
         clearInterval(timer);
+        if (onCompleteRef.current && !calledRef.current) {
+          calledRef.current = true;
+          onCompleteRef.current();
+        }
       }
     }, speed);
     return () => clearInterval(timer);

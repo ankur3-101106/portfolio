@@ -20,6 +20,10 @@ export default function MatrixRain() {
     const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF<>/{}[]|;:=+*&#@!?$%^~';
     const fontSize = 14;
 
+    function getTheme() {
+      return document.documentElement.dataset.theme || 'dark';
+    }
+
     function resize() {
       canvas.width = canvas.parentElement?.offsetWidth || window.innerWidth;
       canvas.height = canvas.parentElement?.offsetHeight || window.innerHeight;
@@ -30,7 +34,14 @@ export default function MatrixRain() {
     }
 
     function draw() {
-      ctx.fillStyle = 'rgba(10, 14, 23, 0.06)';
+      const isLight = getTheme() === 'light';
+
+      // Trail fade
+      if (isLight) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      } else {
+        ctx.fillStyle = 'rgba(10, 14, 23, 0.06)';
+      }
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (let i = 0; i < columns; i++) {
@@ -41,12 +52,23 @@ export default function MatrixRain() {
         // Lead character is brighter
         const isLead = Math.random() > 0.97;
         if (isLead) {
-          ctx.fillStyle = 'rgba(0, 255, 180, 0.9)';
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = 'rgba(0, 255, 180, 0.5)';
+          if (isLight) {
+            ctx.fillStyle = 'rgba(50, 130, 180, 0.35)';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = 'rgba(50, 130, 180, 0.2)';
+          } else {
+            ctx.fillStyle = 'rgba(0, 255, 180, 0.9)';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(0, 255, 180, 0.5)';
+          }
         } else {
-          const opacity = 0.05 + Math.random() * 0.15;
-          ctx.fillStyle = `rgba(0, 200, 140, ${opacity})`;
+          if (isLight) {
+            const opacity = 0.03 + Math.random() * 0.07;
+            ctx.fillStyle = `rgba(80, 140, 180, ${opacity})`;
+          } else {
+            const opacity = 0.05 + Math.random() * 0.15;
+            ctx.fillStyle = `rgba(0, 200, 140, ${opacity})`;
+          }
           ctx.shadowBlur = 0;
         }
 
@@ -67,9 +89,19 @@ export default function MatrixRain() {
     draw();
     window.addEventListener('resize', resize);
 
+    // Watch for theme changes to clear canvas on switch
+    const observer = new MutationObserver(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
+      observer.disconnect();
     };
   }, []);
 

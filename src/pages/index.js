@@ -11,7 +11,7 @@ import Experience from '../components/Experience';
 import Projects from '../components/Projects';
 import Certifications from '../components/Certifications';
 import Contact from '../components/Contact';
-import Footer from '../components/Footer';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,7 +67,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Layout noFooter={true}>
+    <Layout>
       <div className="home-page-container">
         <Head>
           <title>Ankur Macwan | Cybersecurity Student & Linux Enthusiast</title>
@@ -97,7 +97,6 @@ export default function Home() {
           <Contact />
         </main>
 
-        <Footer />
       </div>
     </Layout>
   );

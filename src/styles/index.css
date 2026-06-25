@@ -99,6 +99,46 @@
                  0 0 40px oklch(0.75 0.15 200 / 0.15);
 }
 
+/* ── Light Theme Token Overrides ── */
+html[data-theme='light'] :root {
+  /* Backgrounds — clean white scale */
+  --color-bg-deepest:    #ffffff;
+  --color-bg-deep:       #f8f9fb;
+  --color-bg-surface:    #f0f2f5;
+  --color-bg-elevated:   #e8eaed;
+  --color-bg-glass:      rgba(255, 255, 255, 0.7);
+
+  /* Text — dark grays */
+  --color-text-primary:   #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-muted:     #9ca3af;
+
+  /* Accent — deeper teal for contrast on light */
+  --color-accent:         oklch(0.48 0.14 200);
+  --color-accent-dim:     oklch(0.40 0.10 200);
+  --color-accent-glow:    oklch(0.48 0.14 200 / 0.2);
+  --color-accent-subtle:  oklch(0.48 0.14 200 / 0.06);
+
+  /* Danger */
+  --color-danger:         oklch(0.55 0.22 25);
+  --color-danger-dim:     oklch(0.45 0.18 25);
+
+  /* Borders — light grays */
+  --color-border:         #d1d5db;
+  --color-border-subtle:  #e5e7eb;
+
+  /* Glassmorphism */
+  --glass-blur: 20px;
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.08);
+
+  /* Glows — softened for light mode */
+  --glow-accent: 0 0 20px oklch(0.48 0.14 200 / 0.12),
+                 0 0 40px oklch(0.48 0.14 200 / 0.06);
+  --glow-text:   0 0 12px oklch(0.48 0.14 200 / 0.2),
+                 0 0 24px oklch(0.48 0.14 200 / 0.08);
+}
+
 /* ── Reset & Base for Custom Portfolio ── */
 .home-page-container {
   -webkit-font-smoothing: antialiased;
@@ -111,6 +151,10 @@
   color: var(--color-text-primary);
   background-color: var(--color-bg-deepest);
   min-height: 100vh;
+}
+
+html[data-theme='light'] .home-page-container {
+  color-scheme: light;
 }
 
 .home-page-container h1, 

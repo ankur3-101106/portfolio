@@ -173,3 +173,21 @@
     padding: var(--space-4);
   }
 }
+
+/* ── Light Theme Overrides ── */
+html[data-theme='light'] .bento__tool {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme='light'] .bento__tool:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme='light'] .bento__list-bullet {
+  box-shadow: 0 0 6px var(--card-accent, var(--color-accent-glow));
+}
+
+html[data-theme='light'] .bento__corner {
+  opacity: 0.08;
+}

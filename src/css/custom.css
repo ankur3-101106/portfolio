@@ -322,3 +322,78 @@ summary {
 .social-icons img:hover {
   transform: scale(1.05);
 }
+
+/* ── Docusaurus Footer — match homepage dark theme ── */
+.footer {
+  background: rgb(0, 2, 5);
+  border-top: 1px solid rgb(255, 255, 255, 0.2);
+  text-align: center;
+  color: rgb(151, 159, 171);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: oklch(0.08 0.02 260);
+  --ifm-footer-color: oklch(0.70 0.02 260);
+  --ifm-footer-link-color: oklch(0.75 0.15 200);
+  --ifm-footer-title-color: oklch(0.95 0.01 260);
+}
+
+.footer .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Center the link columns */
+.footer .row {
+  justify-content: center;
+}
+
+.footer__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.footer__col {
+  text-align: center;
+}
+
+.footer__title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: oklch(0.95 0.01 260);
+  margin-bottom: 0.75rem;
+}
+
+.footer__item {
+  margin-bottom: 0.4rem;
+}
+
+.footer__link-item {
+  color: rgb(151, 159, 171);
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.footer__link-item:hover {
+  color: oklch(0.75 0.15 200);
+  text-decoration: none;
+}
+
+.footer__bottom {
+  border-top: 1px solid oklch(0.18 0.015 260);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+.footer__copyright {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: oklch(0.45 0.02 260);
+  letter-spacing: 0.03em;
+  margin-bottom: auto;
+}

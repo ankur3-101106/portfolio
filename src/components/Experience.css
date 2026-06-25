@@ -177,3 +177,17 @@
     margin-right: 0;
   }
 }
+
+/* ── Light Theme Overrides ── */
+html[data-theme='light'] .experience {
+  background: var(--color-bg-deepest);
+}
+
+html[data-theme='light'] .timeline__dot {
+  background: #ffffff;
+  border-color: var(--color-accent);
+}
+
+html[data-theme='light'] .timeline__dot-inner {
+  box-shadow: 0 0 6px var(--color-accent);
+}

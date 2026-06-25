@@ -721,3 +721,73 @@
   .hero__status-dot { animation: none; }
   .hero__char--resolved { animation: none; }
 }
+
+/* ── Light Theme Overrides ── */
+html[data-theme='light'] .hero {
+  background: var(--color-bg-deepest);
+}
+
+html[data-theme='light'] .hero__status-badge {
+  background: oklch(0.48 0.14 200 / 0.06);
+  border-color: oklch(0.48 0.14 200 / 0.15);
+}
+
+html[data-theme='light'] .hero__char--resolved {
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary) 0%,
+    oklch(0.45 0.15 200) 50%,
+    var(--color-text-primary) 100%
+  );
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+html[data-theme='light'] .hero__skill-tag {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--color-text-secondary);
+}
+
+html[data-theme='light'] .hero__skill-tag:hover {
+  background: oklch(0.48 0.14 200 / 0.08);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 4px 20px oklch(0.48 0.14 200 / 0.1);
+}
+
+/* Orbit rings — lighter in light mode */
+html[data-theme='light'] .hero__orbit-ring {
+  border-color: oklch(0.48 0.14 200 / 0.08);
+}
+
+html[data-theme='light'] .hero__orbit-ring--1 {
+  border-color: oklch(0.48 0.14 200 / 0.1);
+}
+
+html[data-theme='light'] .hero__orbit-ring--2 {
+  border-color: oklch(0.48 0.14 200 / 0.05);
+}
+
+html[data-theme='light'] .hero__orbit-ring--3 {
+  border-color: oklch(0.48 0.14 200 / 0.07);
+}
+
+/* Scan line — softer */
+html[data-theme='light'] .hero__scan-line {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    oklch(0.48 0.14 200 / 0.15) 30%,
+    oklch(0.48 0.14 200 / 0.3) 50%,
+    oklch(0.48 0.14 200 / 0.15) 70%,
+    transparent 100%
+  );
+}
+
+/* Terminal — keep dark but soften shadow frame */
+html[data-theme='light'] .arch-term {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+              0 0 0 1px rgba(0, 0, 0, 0.08);
+}

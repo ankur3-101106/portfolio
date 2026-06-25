@@ -131,3 +131,28 @@
     padding: 2px var(--space-2);
   }
 }
+
+/* ── Light Theme Overrides ── */
+html[data-theme='light'] .glass-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme='light'] .glass-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme='light'] .grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+html[data-theme='light'] .badge {
+  background: oklch(0.48 0.14 200 / 0.06);
+  border-color: oklch(0.48 0.14 200 / 0.12);
+}
+
+html[data-theme='light'] .badge--danger {
+  background: oklch(0.55 0.22 25 / 0.06);
+  border-color: oklch(0.55 0.22 25 / 0.12);
+}

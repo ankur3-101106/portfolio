@@ -157,3 +157,18 @@
     transform: none !important;
   }
 }
+
+/* ── Light Theme Overrides ── */
+html[data-theme='light'] .projects {
+  background: var(--color-bg-deep);
+}
+
+html[data-theme='light'] .project-card__glow {
+  mix-blend-mode: multiply;
+  opacity: 0;
+}
+
+html[data-theme='light'] .project-card__corner--tl,
+html[data-theme='light'] .project-card__corner--br {
+  opacity: 0.15;
+}

@@ -471,7 +471,7 @@ export default function Hero() {
               <span className="hero__status-dot" />
               <span>System Active</span>
               <span className="hero__status-separator">|</span>
-              <span className="hero__status-role">Cybersecurity Student</span>
+              <span className="hero__status-role">Digital Forensics & Incident Response</span>
             </div>
 
             <h1 className="hero__name" aria-label={HERO_NAME}>

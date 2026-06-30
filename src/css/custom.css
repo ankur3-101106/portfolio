@@ -292,10 +292,8 @@ html[data-theme='dark'] h1 {
 hr {
   border: none;
   height: 1px;
-  background-image: url('colors.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: auto;
+  background-color: rgba(255, 111, 0, 0.285);
+  stroke: #00ffff;
 }
 
 details {

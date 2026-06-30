@@ -2,7 +2,7 @@
 
 This is the format for the structure of the Unit PPT or PDF.
 Provide the outline of all the headings and topics in the below format.
-Do not use and `---` separators.
+Do not use `---` separators.
 Always start from ## heading.
 
 ```
@@ -72,10 +72,20 @@ Always start from ## heading.
 You need to read the provided PPT or PDF for notes on the topics covered.
 You need to output the notes in the below format.
 
-- Properly MDX compatible format.
-- You can provide Mermaid diagrams for visualizations.
-- You can use React components for visualizations but include the `import` argument in the code block. and include the library or package which needs to be installed for the component to work.
-- You can access online resources for additional information.
-- Provide concise and clear explanations.
-- Provide complete and accurate information, and do not miss out on any important details or information that is provided in the PPT or PDF.
-- Provide code examples and explanations for the concepts covered (if required). Also, add the `showLineNumbers` argument in the code block to show line numbers.
+- **Properly MDX compatible format:**
+  - Ensure all JSX tag elements are properly closed.
+  - Do not use HTML comments (e.g., `<!-- comment -->`). Use MDX comments like `{/* comment */}` or omit comments entirely.
+  - Escape special characters: Do not use raw `{` or `}` in plain text (escape them as `\{` and `\}`). Escape or place in inline code blocks any raw `<` or `>` characters to avoid JSX parsing errors.
+- **You can provide Mermaid diagrams for visualizations:** Use standard Mermaid syntax blocks to visually explain structures, sequences, or flows.
+- **You can use React components for visualizations. Include imports and specify the library or package required for the component to function:**
+  - If a React component is used, place imports at the top of the MDX file.
+  - Clearly state in a note/comment if any external package (like `lucide-react`, `recharts`, etc.) needs to be installed.
+- **You can access online resources for additional information:** Use verified external information to fill in gaps, but prioritize grounding the notes in the provided PPT/PDF materials.
+- **Provide concise and clear explanations optimized for exam review:** Avoid conversational preambles/postambles. Use bullet points, tables, and bold key technical terms. Keep explanations high-density and direct; avoid writing long narrative paragraphs. Focus on definitions, core steps, pros/cons, and formula sheets suitable for quick study.
+- **Provide complete and accurate information, and do not miss out on any important details or information that is provided in the PPT or PDF:** Cover every topic and sub-topic from the outline without exceptions. However, state these details succinctly to keep the notes comprehensive yet brief. Do not hallucinate or make up facts. If a topic is in the outline but lacks detail in the sources, supplement it with accurate technical details or explicitly mention the source limitation.
+- **Provide code examples and explanations for the concepts covered (if required). Also, add the `showLineNumbers` argument in the code block to show line numbers:**
+  - Ensure code blocks specify the language and append `showLineNumbers` for the code block longer than 5 lines.
+  - Example:
+    ```typescript showLineNumbers
+    const example = "value";
+    ```

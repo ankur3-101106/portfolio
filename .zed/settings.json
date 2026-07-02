@@ -3,7 +3,8 @@
     "shell": {
       "program": [
         "git-bash.exe",
-        "git"
+        "git",
+        "cmd.exe"
       ],
     },
   },

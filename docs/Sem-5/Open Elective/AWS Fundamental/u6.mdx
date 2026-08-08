@@ -4,6 +4,152 @@ authors: [ankur]
 ---
 
 # Unit - 6
+
 :::info[Title]
 ## AWS Security, Monitoring, Scaling & Billing
 :::
+
+## 1. Identity and Access Management (IAM)
+
+### 1.1 What is IAM?
+- **Formal Definition:** AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. You use IAM to control who is authenticated (signed in) and authorized (has permissions) to use resources.
+- **In Your Own Words:** Think of IAM as the security bouncer at a corporate building. The bouncer checks your ID to see exactly who you are (Authentication), and then checks a master list to see which specific rooms you are allowed to enter (Authorization).
+
+### 1.2 The 4 Core Components of IAM
+
+*Exam Tip: Memorize these 4 components. Be prepared to explain the difference between a User, a Group, and a Role.*
+
+1. **IAM Users**
+   - *What it is:* Represents a single person or application that interacts with AWS.
+   - *Credentials:* Has long-term credentials (a password for the console, and Access Keys for the CLI/API).
+   - *Rule:* Best practice is strictly **one user per person**. Never share user accounts.
+2. **IAM Groups**
+   - *What it is:* A collection of IAM Users. 
+   - *Why use it:* Instead of giving permissions to 50 individual developers, you create a "Developers" group, attach the permissions to the group, and add the users. If a developer leaves, you just remove them from the group.
+3. **IAM Roles**
+   - *What it is:* A set of permissions that you can "assume" temporarily. Unlike a User, a Role does **not** have long-term credentials (no password or access keys).
+   - *Use Case:* Used by AWS services (e.g., an EC2 instance assuming a role to read from an S3 bucket safely without hardcoding passwords) or by temporary federated users (like someone logging in via their corporate Google account).
+4. **IAM Policies**
+   - *What it is:* JSON documents that strictly define what actions are allowed or denied on specific AWS resources. 
+   - *Usage:* You create a Policy and then attach it to a User, Group, or Role.
+
+## 2. IAM Best Practices
+
+*Exam Tip: These are heavily tested. If an exam question asks "What is the most secure way to...", look for these principles.*
+
+- **Lock away your AWS Account Root User:** The Root user has absolute, unrestricted access to everything, including closing the account and changing billing. Never use it for everyday tasks. Lock it down immediately.
+- **Create Individual IAM Users:** Never share credentials. Everyone gets their own username.
+- **Grant Least Privilege:** This is the most important security concept. Give a user *only* the absolute minimum permissions actually required to perform their specific task, and nothing more.
+- **Use Groups for Permissions:** It is much easier and safer to manage permissions at scale by attaching policies to Groups rather than individual users.
+- **Enable MFA (Multi-Factor Authentication):** Enforce MFA for all privileged users, and absolutely mandate it for the Root account. Even if a hacker steals a password, they cannot log in without the physical MFA device.
+
+## 3. Monitoring: AWS CloudWatch
+
+### 3.1 What is CloudWatch?
+- **Formal Definition:** A monitoring and observability service built for DevOps engineers, developers, site reliability engineers (SREs), and IT managers. 
+- **In Your Own Words:** CloudWatch is like the dashboard on your car. It tells you how fast you're going (CPU usage), how much gas you have (Storage), and turns on a bright red warning light if the engine overheats (Alarms).
+
+### 3.2 Key Features of CloudWatch
+- **Metrics:** It collects and tracks numerical data over time (e.g., CPU utilization, network traffic, disk I/O of EC2 instances).
+- **Alarms:** You can set a rule to watch a metric. If the metric crosses a threshold (e.g., CPU > 80% for 5 minutes), the Alarm triggers an action (like sending you an email via SNS, or triggering Auto Scaling to add more servers).
+- **Logs:** A centralized place to collect, monitor, and store log files from EC2, Lambda, RDS, and API Gateway. You can search these logs to troubleshoot application errors.
+- **Dashboards:** Customizable visual graphs of your resource metrics.
+- **Events (EventBridge):** Responds to state changes in your AWS environment. (e.g., If someone stops an EC2 instance, EventBridge can instantly trigger a Lambda function to restart it).
+- **Container Insights:** Specifically collects metrics and logs from containerized applications (like ECS and EKS).
+
+## 4. Elastic Load Balancing & Auto Scaling Architecture
+
+*Exam Tip: Understand how these two services work together to create a "Self-Healing" architecture.*
+
+### 4.1 The Architecture Pattern
+Together, ELB and Auto Scaling enable a highly available, fault-tolerant, and perfectly scaled architecture. Here is the step-by-step flow:
+
+1. **Inbound Traffic:** Users send requests from their browsers over the internet.
+2. **Distribution (ELB):** The requests hit the Elastic Load Balancer (ELB). The ELB acts as a traffic cop and evenly distributes the requests across only the *healthy* EC2 instances across multiple Availability Zones.
+3. **Monitoring (CloudWatch):** CloudWatch is constantly monitoring the CPU metrics of those EC2 instances.
+4. **Scale Out (Demand Rises):** If thousands of new users suddenly log on, CPU usage spikes. CloudWatch triggers an Alarm, which tells Auto Scaling to automatically launch new EC2 instances and register them with the ELB.
+5. **Scale In (Demand Drops):** When the users go to sleep, CPU drops. CloudWatch tells Auto Scaling to terminate the excess instances to save money.
+6. **The Result:** The application never crashes (Highly Available), it survives instance failures (Fault Tolerant), and costs are perfectly optimized.
+
+## 5. Cloud Economics & AWS Billing
+
+### 5.1 Pricing Models
+- **Pay As You Go:** You pay only for the individual services you use, for as long as you use them. There are no upfront costs and no long-term contracts. You stop paying the exact second you turn the service off.
+- **Save When You Commit:** If you know you will use a certain amount of compute power for the next 1 or 3 years, you can buy **Reserved Instances** or **Savings Plans**. In exchange for the commitment, AWS gives you up to a 72% discount compared to On-Demand pricing.
+- **Pay Less with More Usage:** AWS offers volume-based discounts. For example, the more terabytes of data you store in Amazon S3, the cheaper the per-gigabyte price becomes.
+
+### 5.2 AWS Free Tier
+AWS offers three types of Free Tier to help new users learn:
+- **Always Free:** Services that do not expire (e.g., 1 Million AWS Lambda requests per month, 25GB of DynamoDB storage forever).
+- **12-Month Free:** Limits that reset monthly for the first year after you create an account (e.g., 750 hours of a `t2.micro` EC2 instance per month, 5GB of standard S3 storage).
+- **Trials:** Short-term free trials for specific software or advanced services.
+
+## 6. Lab Workflow (Practical Steps for Exam)
+
+### 6.1 Lab: Implement IAM Policies & Scale Architecture
+*How to practically secure and scale a web app environment:*
+
+1. **Create an IAM Policy:** Write a JSON document that explicitly allows `s3:GetObject` on a specific bucket.
+2. **Create an IAM Role:** Create a Role for an EC2 service. Attach the JSON Policy to this Role.
+3. **Attach Role to EC2:** Instead of putting hardcoded passwords in your code, attach the IAM Role directly to the EC2 instance. The instance can now securely read from S3.
+4. **Create a Launch Template:** Define exactly how your web servers should boot up (specify the AMI, the Instance Type, and attach the IAM Role you just created).
+5. **Create an Auto Scaling Group (ASG):** Select the Launch Template. Set Minimum capacity to 2, Maximum to 10. Select multiple subnets across different Availability Zones for fault tolerance.
+6. **Attach to ELB:** Connect the ASG to an Application Load Balancer so all new instances automatically receive web traffic.
+7. **Configure Scaling Policies:** Set a Target Tracking Policy to keep average CPU utilization at 50%.
+
+## 7. Quick Revision
+
+1. **IAM (Security):** Focuses on Authentication (Who are you?) and Authorization (What can you do?).
+2. **IAM Components:** Users (people), Groups (teams), Roles (temporary permissions for services), Policies (JSON rule documents).
+3. **Least Privilege:** The golden rule of security. Only give the exact permissions required.
+4. **CloudWatch (Monitoring):** Uses Metrics (data points), Alarms (triggers), and Logs to monitor the health of your AWS environment.
+5. **Self-Healing Architecture:** ELB distributes traffic, CloudWatch monitors health, and Auto Scaling adds/removes instances dynamically.
+6. **Billing:** Pay-as-you-go gives flexibility. Reserved Instances (1 or 3-year commitments) give massive discounts.
+
+## 8. Important Terms
+
+- **Authentication:** The process of verifying the identity of a user, device, or system.
+- **Authorization:** The process of granting or denying a user access to specific resources based on their identity.
+- **Principle of Least Privilege (PoLP):** The practice of limiting access rights for users to the bare minimum permissions they need to perform their work.
+- **MFA (Multi-Factor Authentication):** A security system that requires more than one method of authentication from independent categories of credentials.
+- **Observability:** A measure of how well internal states of a system can be inferred from knowledge of its external outputs (like logs and metrics).
+
+## 9. Exam Questions
+
+**Short-Answer Questions:**
+1. What is the fundamental difference between Authentication and Authorization in IAM?
+2. What are the four core components of AWS IAM?
+3. Briefly define the Principle of Least Privilege.
+
+**Descriptive Questions:**
+4. Explain the difference between an IAM User and an IAM Role. Provide a specific scenario where you must use an IAM Role instead of a User.
+5. Describe the end-to-step workflow of a "Self-Healing Architecture" using AWS Elastic Load Balancing (ELB), Amazon CloudWatch, and Auto Scaling. 
+
+**Compare / Differentiate:**
+6. Differentiate between CloudWatch Metrics and CloudWatch Logs.
+7. Compare the "Pay As You Go" billing model with "Reserved Instances". When would a company choose one over the other?
+
+**Scenario-Based Questions:**
+8. You have a team of 50 developers who all need access to read and write to a specific S3 bucket. What is the most efficient and secure way to manage their permissions using IAM?
+9. A company’s EC2 server occasionally spikes to 100% CPU utilization, causing the application to crash. They want the system to automatically launch a new server whenever this happens. Which AWS services should they configure to achieve this automation?
+
+**MCQs:**
+10. Which of the following does NOT have long-term credentials (like a password or access keys)?
+    - A) IAM Root User
+    - B) IAM User
+    - C) IAM Role
+    - D) AWS Account Owner
+
+## 10. Key Takeaways
+
+- **IAM** is your first line of defense. Never use the Root user, always enable MFA, and strictly enforce the Principle of Least Privilege.
+- **CloudWatch** is the central nervous system of your AWS environment, allowing you to see what is happening (Metrics/Logs) and react automatically (Alarms).
+- **Cost optimization** requires choosing the right billing model (On-demand for unpredictable traffic, Reserved Instances for steady traffic).
+
+## 11. AWS References
+
+- [AWS Identity and Access Management (IAM) Documentation](https://docs.aws.amazon.com/iam/)
+- [Amazon CloudWatch Documentation](https://docs.aws.amazon.com/cloudwatch/)
+- [AWS Billing and Cost Management](https://docs.aws.amazon.com/billing/)
+
+{/* Source: AWS IAM, CloudWatch & Billing Docs — aws.amazon.com */}

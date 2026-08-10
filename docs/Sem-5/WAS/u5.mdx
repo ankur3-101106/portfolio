@@ -6,3 +6,154 @@ sidebar_position: 5
 :::info[Title]
 ## Advanced Web Application Attacks - 2
 :::
+
+## 1. Security Misconfiguration
+
+### 1.1 What is a Security Misconfiguration?
+A security misconfiguration occurs when system or application configuration settings are missing, insecurely configured, or erroneously implemented, allowing unauthorized access or exposing sensitive data. It happens when security options are not defined to maximize security, or when services are deployed with insecure default settings.
+- **Scope:** This vulnerability can exist anywhere in the application stack: network services, the platform, web server, application server, database, frameworks, custom code, and pre-installed virtual machines/containers.
+- **OWASP Status:** It is a consistent member of the OWASP Top 10, frequently ranking high (e.g., #6) due to how common and easy it is to exploit.
+
+### 1.2 Common Causes of Security Misconfiguration
+- **Human Error:** The leading cause of misconfigurations. Administrators may simply forget to apply a security patch, leave a debug flag on in production, or improperly configure cloud storage permissions.
+- **Poor or Weak Encryption:** Failing to enforce encryption (like HTTPS/SSL) for data in transit, or neglecting to encrypt data at rest, exposing confidential information to interception.
+- **Excess Privilege:** Granting employees, contractors, or application service accounts more administrative rights than necessary (violating the Principle of Least Privilege). This often happens when users change roles but retain old permissions.
+- **Misconfigured Logging:** Logging might be disabled, misconfigured to point to inadequate storage, or fail to capture the necessary events (like failed logins), severely hindering incident response efforts.
+- **Improper Versioning:** In storage applications (like Amazon S3), disabling versioning can prevent the recovery of maliciously overwritten or deleted objects.
+- **Insecure Services:** Running services that exchange credentials in plaintext (like FTP or Telnet) or improperly configuring SSL/TLS certificates.
+- **Using Out-of-the-Box Settings:** Deploying software with default vendor configurations, which often include default administrative passwords (e.g., `admin`/`admin`) or unnecessary open ports designed to make initial setup easy but completely insecure for production.
+
+### 1.3 Types of Security Misconfigurations
+1. **Unpatched Systems:** Attackers routinely scan for outdated software with known CVEs (Common Vulnerabilities and Exposures) to exploit unpatched bugs.
+2. **Default Account Settings:** Failing to change default vendor credentials on routers, IoT devices, or web frameworks.
+3. **Unencrypted Files:** Storing backups or sensitive documents without encryption.
+4. **Unsecured Devices:** Reusing passwords across different systems or failing to secure endpoints.
+5. **Web Application & Cloud Misconfiguration:** Leaving cloud storage buckets (like AWS S3 or Azure Blobs) publicly accessible.
+6. **Insufficient Firewall Protection:** Leaving unnecessary services exposed to the public internet rather than restricting them to an internal subnet.
+
+### 1.4 Real-World Examples
+- **Nissan (2021):** A misconfiguration in a company Git server left it exposed online with the default credentials `admin`/`admin`, resulting in source code leakage.
+- **Mercedes-Benz (2020):** A Git server belonging to Daimler AG was compromised via Google Dorking because it lacked basic access controls, exposing proprietary code.
+
+### 1.5 Prevention & Mitigation Strategies
+- **Adopt Repeatable Hardening Processes:** Automate the secure deployment of environments. Ensure development, QA, and production environments have synchronized security settings.
+- **Automate Repetitive Tasks:** Use Infrastructure as Code (IaC) and configuration management tools (like Ansible, Terraform, or Chef) to enforce secure baselines automatically.
+- **Regularly Update Software:** Apply security patches to all operating systems, web servers, databases, and third-party libraries promptly.
+- **Conduct Frequent Audits:** Employ periodic security inspections and vulnerability scanning to detect configuration drift.
+- **Build Segmented Architecture:** Use containerization, VLANs, and strict Access Control Lists (ACLs) to separate components, preventing an attacker from moving laterally if one component is compromised.
+- **Avoid Unused Features:** Disable unnecessary ports, services, pages, accounts, and sample applications. If you don't need it, turn it off.
+
+## 2. Sensitive Data Exposure
+
+### 2.1 Overview
+Sensitive Data Exposure occurs when an organization unknowingly exposes sensitive information or when a security incident leads to the accidental or unlawful destruction, loss, alteration, or unauthorized disclosure of data.
+- **Sensitive Data Includes:** Personally Identifiable Information (PII) like Social Security numbers, banking information (PCI data), healthcare records (PHI), and authentication credentials.
+
+### 2.2 Types of Data Breaches
+1. **Confidentiality Breach:** Unauthorized or accidental disclosure of sensitive data (e.g., a database dump leaked online).
+2. **Integrity Breach:** Unauthorized or accidental alteration of sensitive data (e.g., an attacker modifying financial records).
+3. **Availability Breach:** Unauthorized or accidental loss of access to data (e.g., a ransomware attack encrypting databases).
+
+### 2.3 Data Exposure vs. Data Breach
+- **Data Breach:** A deliberate, targeted attack where an unauthorized individual actively exploits a vulnerability to gain access to a company's data. (e.g., an attacker uses SQL injection to steal passwords).
+- **Data Exposure:** An unintentional event where sensitive information is left exposed to the public due to human error, lack of encryption, or misconfiguration. (e.g., a developer accidentally uploads a database backup to a public GitHub repository). Exposure often leads to a breach if discovered by malicious actors.
+
+### 2.4 Vulnerability States of Data
+- **Data in Transit:** Data actively moving across networks (e.g., between a client and a web server, or between microservices via APIs).
+  - *Threats:* Man-in-the-Middle (MITM) attacks, packet sniffing on public Wi-Fi.
+  - *Defense:* TLS/SSL encryption (HTTPS).
+- **Data at Rest:** Data stored physically in databases, file systems, or backups.
+  - *Threats:* Physical theft of drives, directory traversal attacks, OS-level compromise.
+  - *Defense:* Strong database encryption (AES-256), hashing passwords using bcrypt/Argon2.
+
+### 2.5 Real-World Examples
+- **Yahoo! (2013/2014):** The largest breach in history, affecting 3 billion user accounts. Attackers stole emails, hashed passwords, and security questions.
+- **Equifax (2017):** Hackers exploited an unpatched Apache Struts vulnerability to steal PII (including SSNs) of 147 million Americans. The breach was exacerbated by an expired internal encryption certificate that prevented security tools from inspecting malicious traffic.
+
+## 3. Insecure Direct Object Reference (IDOR)
+
+### 3.1 What is IDOR?
+Insecure Direct Object Reference (IDOR) is an access control vulnerability that occurs when an application provides direct access to internal objects (like database records, files, or user profiles) based entirely on user-supplied input, without verifying if the user is authorized to access that specific object.
+
+### 3.2 How IDOR Works
+An attacker manipulates a parameter (usually an ID, account number, or filename) in an HTTP request to access another user's data.
+- **Example (Database Object):** 
+  A user views their profile via the URL: `https://bank.com/account?id=1001`
+  If the application lacks authorization checks, the attacker changes the URL to `https://bank.com/account?id=1002` and successfully views user 1002's account details.
+- **Example (Static Files):**
+  An application stores invoices at `https://site.com/invoices/inv-005.pdf`. An attacker iterates the number (`inv-006.pdf`, `inv-007.pdf`) to download sensitive financial documents belonging to other customers.
+
+### 3.3 Types of Privilege Escalation via IDOR
+- **Horizontal Privilege Escalation:** An attacker accesses data belonging to another user with the *same* level of privileges (e.g., User A viewing User B's private messages).
+- **Vertical Privilege Escalation:** An attacker manipulates parameters to access data or functions restricted to a *higher* privilege level (e.g., a standard user changing a URL parameter to access an admin-only dashboard).
+
+## 4. Cross-Site Request Forgery (CSRF)
+
+### 4.1 What is CSRF?
+Cross-Site Request Forgery (CSRF) is a web security vulnerability that forces an authenticated end-user to execute unwanted actions on a web application without their knowledge or consent.
+- **Mechanism:** Attackers use social engineering (like a phishing email) to trick the victim into clicking a link or loading a page containing a forged HTTP request. Because the victim's browser automatically attaches their active session cookies to the request, the vulnerable application processes it as a legitimate action requested by the user.
+
+### 4.2 Anatomy of a CSRF Attack
+For a CSRF attack to be possible, three conditions must generally be met:
+1. **A Relevant Action:** There is a state-changing action the attacker wants to induce (e.g., transferring funds, changing an email address, updating a password). CSRF is a "blind attack" because the attacker doesn't see the response; therefore, it's useless for data theft but highly effective for state modification.
+2. **Cookie-Based Session Handling:** The application relies solely on HTTP cookies to track sessions. If the app uses custom Authorization headers (like Bearer tokens in APIs), standard CSRF is entirely mitigated because the browser won't automatically attach the token.
+3. **No Unpredictable Request Parameters:** The forged request must not require any secret parameters (like the user's current password or a random CSRF token) that the attacker cannot guess.
+
+### 4.3 HTTP Verbs and CSRF
+- **GET Requests:** Should *never* be used for state-changing operations. If a site uses `GET /transfer?amount=1000&to=attacker`, an attacker can simply embed `<img src="http://bank.com/transfer?amount=1000&to=attacker">` on any forum, forcing the transfer when the image attempts to load.
+- **POST Requests:** Generally used for state changes. Browsers enforce the **Same-Origin Policy (SOP)** and **Cross-Origin Resource Sharing (CORS)**, which restrict cross-origin requests. However, HTML forms can still submit POST requests across origins, which is why anti-CSRF tokens (unique, unpredictable tokens validated on the server) are required for all sensitive forms.
+
+## 5. HTTP Response Splitting
+
+### 5.1 Overview
+HTTP Response Splitting is a vulnerability where an attacker passes malicious data containing specific control characters (Carriage Return `\r` or `%0d` and Line Feed `\n` or `%0a`) to a vulnerable application, which then includes that data directly in an HTTP response header.
+
+### 5.2 How it Works
+1. **Injection:** The attacker injects `CRLF` characters into an input field that is reflected in an HTTP header (like the `Location` header in a redirect or a `Set-Cookie` header).
+2. **Splitting:** The `CRLF` characters signify the end of an HTTP header. By injecting two pairs of `CRLF` (`\r\n\r\n`), the attacker signals the end of the HTTP headers entirely and the beginning of the HTTP body.
+3. **Exploitation:** The attacker can then inject an entirely fabricated second HTTP response hidden within the original response. 
+4. **Impact:** Intermediate proxies (like web caches or reverse proxies) or the client's browser parse this as two separate HTTP responses. This can lead to severe cache poisoning (forcing the cache to serve malicious content to all users), Cross-Site Scripting (XSS), or page hijacking.
+
+## 6. Using Components with Known Vulnerabilities
+
+### 6.1 The Threat
+Modern web applications rely heavily on third-party frameworks, libraries, modules, and open-source packages (e.g., React, Express, Apache Struts, jQuery). If any of these components contain a known vulnerability (a published CVE), the entire application is at risk.
+- **OWASP Status:** Consistently ranks high in the OWASP Top 10 because exploitation is often trivial and automated.
+
+### 6.2 Business Impact
+Hackers use automated tools to scan the internet for sites running outdated, vulnerable software. Once identified, they can easily exploit the flaw using public exploits to breach databases, steal PII, or execute arbitrary code on the server.
+
+### 6.3 Detecting & Exploiting Vulnerable Components
+1. **Identification:** Attackers use tools like Wappalyzer, built-in browser developer tools, or specific scanners (like Nmap version detection) to identify the specific versions of software the target is running.
+2. **Exploit Databases:** Attackers search databases like `https://www.exploit-db.com` using the component name and version.
+3. **Execution:** If a match is found, the exploit database often provides a fully functional proof-of-concept (PoC) script, allowing the attacker to compromise the site with minimal effort.
+
+### 6.4 Prevention Steps
+- Maintain a comprehensive Software Bill of Materials (SBOM) listing all third-party dependencies.
+- Regularly monitor dependency databases for published CVEs.
+- Automate patching using tools like Dependabot or Snyk.
+- Remove unused dependencies, features, and files to reduce the attack surface.
+- Only obtain components from official, secure sources.
+
+## 7. Unvalidated Redirects and Forwards
+
+### 7.1 Overview
+If a web application accepts untrusted URL inputs and uses them to redirect the user to a different page without proper validation, it is susceptible to Unvalidated Redirects (or Open Redirects).
+- **Forwards:** Changes the URL to another internal URL *within the same web application*. Handled entirely on the server side.
+- **Redirects:** Changes the destination URL externally, instructing the browser to navigate to a new location. Often implemented using HTTP `301` or `302` response codes alongside the `Location` header.
+
+### 7.2 The Attack Vector
+An attacker crafts a malicious URL pointing to the legitimate site but containing a redirect payload.
+- **Example Payload:** `http://www.trusted-bank.com/login?redirect=http://www.evil-hacker-site.com`
+- **Exploitation:** The attacker sends this link in a phishing email. The victim sees the trusted domain (`trusted-bank.com`), clicks it, and logs in. The legitimate site then blindly redirects the victim to the attacker's fabricated site, which looks identical. The attacker's site steals the credentials or serves malware.
+
+### 7.3 Impact
+- **Phishing & Social Engineering:** The primary use case. It destroys the credibility of the legitimate site because the initial click relies on its trusted domain.
+- **Cross-Site Scripting (XSS):** If the redirect uses JavaScript (`window.location = params`) or accepts `javascript:` protocol URIs.
+- **SSRF / Bypassing Filters:** Attackers can use open redirects to bypass SSRF filters or Content Security Policies that whitelist the vulnerable domain.
+
+### 7.4 Prevention Mechanisms
+- **Avoid Redirects:** The best defense is to avoid dynamic URL redirection entirely.
+- **Use Safe URL Redirects (Allow-listing):** If redirection is necessary, do not accept raw URLs from the user. Instead, use an indirect mapping (e.g., `?redirect_id=1`). The server maps `1` to a hardcoded, trusted internal destination.
+- **Strict Validation:** If raw URLs must be accepted, rigorously validate them against a strict regular expression ensuring they match exactly the intended domain.
+- **Notify Users:** If redirecting to an external, unverified site, display a warning page forcing the user to manually click a link acknowledging they are leaving the trusted domain.

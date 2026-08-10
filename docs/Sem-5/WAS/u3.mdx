@@ -1,9 +1,284 @@
 ---
 sidebar_position: 3
-
 ---
 
 # Unit - 3
 :::info[Title]
 ## SQL Injections & Authentication Vulnerabilities
 :::
+
+## 1. SQL Statements Overview
+
+SQL (Structured Query Language) is the standard language for managing and manipulating relational databases. Understanding its categories is crucial for identifying how injections occur and what an attacker can achieve.
+
+### 1.1 Data Definition Language (DDL)
+DDL statements are used to define or modify the database structure (schema). Attackers rarely inject DDL unless they have escalated privileges.
+- **`CREATE`:** Creates a new table, view, index, or other object in the database.
+- **`ALTER`:** Modifies an existing database object, such as adding a column to a table or changing a data type.
+- **`DROP`:** Deletes an entire table, view, or object from the database. Extremely dangerous if executed maliciously.
+- **`TRUNCATE`:** Removes all records from a table quickly, but keeps the table structure intact.
+
+**Examples:**
+```sql
+CREATE TABLE users (id INT, username VARCHAR(50));
+ALTER TABLE users ADD email VARCHAR(100);
+DROP TABLE users;
+```
+
+### 1.2 Data Manipulation Language (DML)
+DML statements are used for managing data within schema objects. These are the most common targets for SQL injections because web applications frequently use them to interact with user data.
+- **`SELECT`:** Retrieves data from the database. The most common vector for data exfiltration.
+- **`INSERT`:** Inserts new data into a table. Can be abused to insert malicious admin accounts.
+- **`UPDATE`:** Updates existing data within a table. Attackers can use this to change their privileges.
+- **`DELETE`:** Deletes existing records from a table.
+
+**Examples:**
+```sql
+SELECT username, email FROM users WHERE id = 1;
+INSERT INTO users (username, email) VALUES ('admin', 'admin@example.com');
+UPDATE users SET email = 'new@example.com' WHERE username = 'admin';
+DELETE FROM users WHERE id = 1;
+```
+
+### 1.3 Data Control Language (DCL)
+DCL statements are used to control access to data within the database and manage security policies.
+- **`GRANT`:** Gives a user specific privileges to perform tasks (e.g., granting read access to a specific table).
+- **`REVOKE`:** Takes away privileges previously granted to a user.
+
+**Examples:**
+```sql
+GRANT SELECT, INSERT ON users TO 'readonly_user';
+REVOKE INSERT ON users FROM 'readonly_user';
+```
+
+### 1.4 Transaction Control Statements (TCL)
+TCL statements manage the changes made by DML statements and ensure database integrity.
+- **`COMMIT`:** Saves the work done during the current transaction permanently.
+- **`ROLLBACK`:** Restores the database to its original state since the last COMMIT, undoing changes.
+- **`SAVEPOINT`:** Identifies a point in a transaction to which you can later roll back without discarding the entire transaction.
+
+**Examples:**
+```sql showLineNumbers
+BEGIN TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+SAVEPOINT sp1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT; -- or ROLLBACK TO sp1;
+```
+
+### 1.5 Common SQL Functions
+SQL provides numerous built-in functions to perform calculations on data.
+- **Aggregate Functions:** Operate on a set of values and return a single value.
+  - `COUNT()`: Returns the number of rows.
+  - `SUM()`: Returns the total sum of a numeric column.
+  - `AVG()`: Returns the average value of a numeric column.
+  - `MIN()` / `MAX()`: Returns the smallest/largest value of the selected column.
+- **Scalar Functions:** Operate on a single value and return a single value.
+  - `UPPER()` / `LOWER()`: Converts a field to uppercase/lowercase.
+  - `SUBSTRING()`: Extracts a substring from a string.
+  - `LENGTH()`: Returns the length of a string.
+  
+**Examples:**
+```sql showLineNumbers
+SELECT COUNT(*) FROM users;
+SELECT MAX(salary) FROM employees;
+SELECT UPPER(username) FROM users WHERE id = 1;
+```
+
+## 2. SQL Injection (SQLi) Introduction
+
+### 2.1 What is SQL Injection?
+SQL injection is a critical web security vulnerability that allows an attacker to interfere with the queries that an application makes to its database. This happens when untrusted user input is directly concatenated into a dynamic SQL query string without proper sanitization or parameterization. The database engine cannot distinguish between the developer's intended command and the attacker's injected payload.
+
+### 2.2 Impact of SQL Injection
+- **Data Confidentiality (Exfiltration):** Attackers can view data they are not normally authorized to retrieve, including plaintext passwords, credit card details, intellectual property, and personal user information.
+- **Data Integrity (Modification):** Attackers can modify or delete data, causing persistent changes to the application's content or behavior. For example, changing financial balances, defacing websites, or escalating privileges by altering their user role in the database.
+- **System Compromise (RCE):** In some situations, an attacker can escalate an SQL injection attack to compromise the underlying operating system. For instance, using `xp_cmdshell` in Microsoft SQL Server, or `INTO OUTFILE` in MySQL to write a malicious PHP web shell to the server's file system.
+
+## 3. Detecting SQL Injection Vulnerabilities
+
+### 3.1 Manual Detection Techniques
+SQL injection can be detected manually by using a systematic set of tests against every entry point in the application. This includes URL query parameters, form fields, HTTP headers (like User-Agent or Referer), and cookies.
+
+- **Single Quote Test:** Submitting the single quote character `'` (or double quote `"`) and looking for database errors or other anomalies in the response. If the application crashes or throws a syntax error (e.g., "Unclosed quotation mark"), it strongly indicates that the input is breaking out of the intended string literal and is being evaluated as SQL code.
+- **Boolean Inference:** Submitting SQL-specific syntax that evaluates to a known Boolean state and observing differences in the application's response (e.g., different content, missing elements, or different HTTP status codes).
+  - Test 1 (TRUE): `id=1 AND 1=1` (Should return the normal page data)
+  - Test 2 (FALSE): `id=1 AND 1=2` (Should return an empty page, a 'not found' message, or an error)
+- **Time Delay Triggers:** Submitting payloads designed to trigger time delays when executed within an SQL query and looking for differences in the time taken for the server to respond. Examples include `WAITFOR DELAY '0:0:10'` (MSSQL) or `SLEEP(10)` (MySQL). If the page takes exactly 10 extra seconds to load, it's vulnerable.
+- **Out-of-Band (OAST) Payloads:** Submitting payloads designed to trigger an out-of-band network interaction (like an external DNS lookup or HTTP request) when executed within an SQL query. The attacker monitors their external server (like Burp Collaborator) for any resulting interactions.
+
+## 4. Exploiting SQL Injections
+
+### 4.1 Retrieving Hidden Data
+An attacker can manipulate the `WHERE` clause of a query to alter the logic and return additional, unintended results.
+Consider a shopping application that uses this query to display products in a specific category:
+```sql
+SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+```
+If the application doesn't sanitize the `category` URL parameter, an attacker can construct the URL:
+`https://insecure-website.com/products?category=Gifts'--`
+This modifies the underlying database query to:
+```sql
+SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
+```
+The `--` sequence represents an SQL comment, effectively neutralizing the `AND released = 1` check. The application will now display hidden or unreleased gifts. 
+To bypass the category filter entirely and display *all* items in the database, the payload `Gifts'+OR+1=1--` is used, making the `WHERE` clause evaluate to true for every row.
+
+### 4.2 Subverting Application Logic (Authentication Bypass)
+Attackers can easily bypass login screens by altering the authentication logic.
+If the backend query checking credentials is:
+```sql
+SELECT * FROM users WHERE username = 'admin' AND password = 'password'
+```
+An attacker inputs `administrator'--` as the username and leaves the password blank. The query becomes:
+```sql
+SELECT * FROM users WHERE username = 'administrator'--' AND password = ''
+```
+The password check is commented out completely. The database simply verifies if the user 'administrator' exists, allowing the attacker to log in without needing the password.
+
+### 4.3 Examining the Database Schema
+Before launching complex attacks like UNION injections, attackers must enumerate the database version and schema.
+- **Database Version:** Determining the DB engine (Oracle, MySQL, PostgreSQL) is crucial because SQL dialects differ. E.g., `SELECT * FROM v$version` (Oracle) or `SELECT @@version` (MySQL/MSSQL).
+- **Table and Column Enumeration:** Attackers query metadata tables to extract the list of tables and columns to find sensitive data.
+  - Query: `SELECT table_name FROM information_schema.tables` (works on MySQL, MSSQL, PostgreSQL).
+
+## 5. Types of SQL Injection (SQLi)
+
+SQL Injection can be broadly classified into three major categories based on the method used to extract data from the database.
+
+### 5.1 In-band SQLi (Classic SQLi)
+In-band SQL Injection is the most common and easy-to-exploit category. It occurs when an attacker uses the same communication channel (the immediate HTTP response) to both launch the attack and gather the results.
+
+#### 5.1.1 Error-based SQLi
+Relies on intentionally forcing the database to generate an error message that contains information about the structure of the database or the data itself.
+- **Usage:** An attacker might use mathematical errors (like divide-by-zero) or type conversion errors to force the database to reveal data in the error string. For example, trying to convert a string containing the admin's password into an integer will throw an error displaying that exact string.
+- **Mitigation Note:** While detailed SQL errors are very useful during development for debugging, they should always be disabled on a live production site to prevent this attack.
+
+#### 5.1.2 Union-based SQLi
+Leverages the `UNION` SQL operator to combine the results of the original `SELECT` statement with the results of a maliciously injected `SELECT` statement into a single HTTP response that is rendered on the page.
+- **Requirements:** The injected query must have the exact same number of columns and compatible data types as the original query. Attackers typically use `ORDER BY` clauses to determine the column count before attempting the `UNION`.
+- **Example Payload:** `' UNION SELECT username, password FROM users--`
+
+### 5.2 Inferential SQLi (Blind SQLi)
+Unlike in-band SQLi, inferential SQLi takes much longer to exploit because no actual database data is transferred via the web application response. The attacker cannot see the direct result of the attack in-band, hence it is "blind." The attacker reconstructs the database structure character by character by asking the database true/false questions and observing the application's behavior.
+
+#### 5.2.1 Boolean-based (Content-based) Blind SQLi
+Relies on sending an SQL query that forces the application to return a different result (e.g., a "User exists" message vs. a "User not found" message) depending on whether the injected query evaluates to TRUE or FALSE.
+- **Mechanism:** The attacker extracts data systematically. For example, using the `SUBSTRING()` function: `AND SUBSTRING((SELECT password FROM users WHERE username='admin'), 1, 1) = 'A'`. If the page loads normally, the first letter is 'A'. This requires hundreds of requests per word.
+
+#### 5.2.2 Time-based Blind SQLi
+When the application returns the exact same content regardless of whether the query is true or false (thwarting boolean attacks), attackers use time-based techniques. It relies on forcing the database to wait for a specified amount of time (in seconds) before responding if a condition is met.
+- **Mechanism:** The response time indicates to the attacker whether the result of the query is TRUE or FALSE. If the condition is true, the database pauses (e.g., `IF (condition) SLEEP(10)`); if false, it responds immediately.
+
+### 5.3 Double Query Injection
+A more advanced form of Error-based injection. It involves executing a subquery that purposefully triggers a specific type of error (like a duplicate key error in an aggregate function) to extract data. It is often used when standard error messages are suppressed but certain aggregate errors still bubble up to the interface.
+
+### 5.4 Out-of-band SQLi (OAST)
+Out-of-band SQL Injection is uncommon because it depends on specific, often restricted, features being enabled on the database server. It occurs when an attacker is unable to use the same channel to launch the attack and gather results, and inferential techniques are too unstable or slow.
+- **Mechanism:** Relies on the database server’s ability to make external DNS or HTTP requests to deliver data to a server controlled by the attacker.
+- **Examples:** Using Microsoft SQL Server’s `xp_dirtree` command to trigger an SMB/DNS request, or Oracle Database’s `UTL_HTTP` package to send sensitive data via HTTP GET requests to the attacker's server.
+
+## 6. Second-Order SQL Injection
+First-order SQL injection occurs when user input is immediately processed and incorporated into a vulnerable SQL query in the same HTTP request. 
+
+**Second-Order (Stored) SQL Injection:**
+- **Mechanism:** The application takes malicious user input from an HTTP request and safely stores it in the database (e.g., the developer used proper parameterized queries for the initial `INSERT` statement). No vulnerability arises at the point where the data is stored.
+- **Exploitation:** Later, when handling a completely different HTTP request, the application retrieves the stored data and incorporates it into a different SQL query in an unsafe way (e.g., using string concatenation for an internal `SELECT` or `UPDATE`), because the developer wrongly assumes that data already in the database is inherently safe and trusted.
+- **Example:** An attacker registers an account with the username `admin'--`. The application safely stores this string. Later, when the attacker logs in, a backend job runs `UPDATE profile SET last_login=now() WHERE username='admin'--'`, effectively updating the real administrator's profile instead of the attacker's, because the comment string dropped the rest of the query.
+
+## 7. XPath Injection
+Similar in concept to SQL Injection, XPath Injection attacks occur when a website uses user-supplied information to construct an XPath query for XML data without proper sanitization.
+- **Querying XML:** XPath is a descriptive query language used to locate nodes and pieces of information within an XML document structure.
+- **Exploitation:** By sending intentionally malformed strings (like `' or '1'='1`), an attacker can break out of the intended query logic to map out how the XML data is structured or access XML nodes they shouldn't see.
+- **Impact:** If the XML data is being used as a backend for authentication (such as an XML-based user credentials file instead of a database), an XPath injection could allow an attacker to easily elevate their privileges and bypass the login entirely.
+
+## 8. SQLMap
+
+Sqlmap is one of the most popular, open-source, and powerful SQL injection automation tools written in Python. It automates the tedious process of detecting and exploiting SQL injection flaws and taking over database servers.
+
+### 8.1 Key Features of SQLMap
+- Fully supports a massive variety of database engines including MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, and Sybase.
+- Automates the extraction of database names, tables, columns, and can dump entire tables.
+- Includes features for password hash recognition and dictionary cracking.
+- Can leverage vulnerabilities to read and write files on the remote file system, and even spawn an interactive OS shell if privileges allow.
+
+### 8.2 SQLMap Workflow & Commands
+
+```bash showLineNumbers
+# Step 1: Check if the URL parameter is vulnerable to SQL injection
+# Sqlmap sends various payloads to the '?id=' parameter and analyzes the HTTP responses.
+python sqlmap.py -u "http://www.site.com/section.php?id=51"
+
+# Step 2: Discover Databases
+# If confirmed vulnerable, map out the names of the databases on the remote system.
+python sqlmap.py -u "http://www.site.com/section.php?id=51" --dbs
+
+# Step 3: Find tables in a particular database
+# Assuming we found a database named 'safecosmetics', we enumerate its tables.
+python sqlmap.py -u "http://www.site.com/section.php?id=51" -D safecosmetics --tables
+
+# Step 4: Get columns of a specific table
+# Assuming we found a 'users' table, we enumerate its columns (e.g., username, password, email).
+python sqlmap.py -u "http://www.site.com/section.php?id=51" -D safecosmetics -T users --columns
+
+# Step 5: Dump the data from the table
+# Extract and download the actual records from the 'users' table.
+python sqlmap.py -u "http://www.site.com/section.php?id=51" -D safecosmetics -T users --dump
+```
+
+## 9. Mitigation Strategies for SQLi
+
+Mitigating SQL injection requires a defense-in-depth approach spanning the entire Software Development Life Cycle (SDLC), ensuring that security is not just an afterthought.
+
+### 9.1 Secure Coding & SDLC Practices
+- **Train and maintain awareness:** Everyone involved in building the application (developers, QA staff, DevOps, and SysAdmins) must be aware of the risks associated with SQLi. Suitable security training is the first line of defense.
+- **Cultivate Secure Programming:** Developing security-minded education, threat modeling during planning, automated security testing, and strict code review practices are essential SDLC components.
+
+### 9.2 Technical Defenses
+- **Don’t trust any user input:** Treat all user input as fundamentally untrusted. Any input that is concatenated into an SQL query introduces a risk. Treat input from authenticated administrators and internal APIs with the exact same skepticism as public input.
+- **Use whitelists, not blacklists:** Do not attempt to filter user input based on blacklists (e.g., stripping out `'` or `SELECT`). A clever attacker will almost always find a way to circumvent a blacklist (using hex encoding, case variations, etc.). If possible, verify and filter user input using strict whitelists (e.g., ensuring a user ID only contains integers).
+- **Employ verified mechanisms (Parameterized Queries):** Do not try to build custom SQLi protection from scratch. Use parameterized queries (Prepared Statements) or Stored Procedures. These mechanisms ensure that the database treats user input strictly as data, not as executable code, completely neutralizing the injection. Object-Relational Mapping (ORM) frameworks also provide built-in protection if used correctly.
+- **Adopt the latest technologies:** Older web development technologies (like outdated PHP `mysql_` extensions) don’t have robust SQLi protection. Migrate to modern environments (like PDO) that support secure features out of the box.
+- **Scan regularly:** SQL Injections may be introduced accidentally by developers or through vulnerable external libraries and modules. Regularly scan web applications using automated Dynamic Application Security Testing (DAST) vulnerability scanners.
+
+### 9.3 Input Validation & Sanitization
+- **Client-Side Validation:** Input validation performed in the browser (using JavaScript or HTML5 attributes) should only be considered a convenience for the end user, improving their experience (e.g., instant feedback on a bad email format). It provides zero security, as attackers bypass the browser and send HTTP requests directly.
+- **Server-Side Validation:** Absolute necessity. The backend server must re-validate that user-supplied data satisfies the application’s strict criteria (type, length, format) before processing it.
+- **Sanitization:** Refers to the process of actively modifying user input to satisfy criteria (e.g., escaping single quotes with slashes). While helpful, parameterization is vastly superior to manual sanitization, which is prone to edge-case failures.
+
+## 10. Authentication Vulnerabilities
+
+Authentication is the fundamental security process of verifying the identity of a user, device, or subsystem before granting access to an application.
+
+### 10.1 Common Authentication Methods
+- **Passwords:** The most prevalent method. Users provide a secret string. Highly vulnerable to brute-force, dictionary attacks, and credential stuffing if not protected by rate limiting and strong hashing algorithms.
+- **Token-based authentication:** Using a physical device (like a hardware ID card or YubiKey) or a digital token (like an OTP generated by a smartphone app or a JSON Web Token).
+- **Biometric authentication:** Relies on unique biological characteristics, such as fingerprint scans, facial recognition, and voice identification.
+
+### 10.2 Authentication Bypass Vulnerabilities
+An authentication bypass vulnerability is a critical structural weak point in the user authentication process. A cybercriminal exploiting such a weakness circumvents the authentication entirely to gain access without needing valid credentials.
+
+**Impacts of Authentication Bypass:**
+Once attackers bypass the initial login barrier, they can:
+- Escalate privileges to gain system administrator access.
+- Move laterally to additional restricted pages.
+- View, copy, delete, alter, or overwrite highly sensitive corporate or user data.
+- Download harmful malicious firmware or change core system settings.
+- Gain full control of the application and access to the underlying infrastructure.
+
+### 10.3 Methods of Bypassing Authentication
+Attackers exploit overlooked cracks and errors in the development, design, or deployment of an application's authentication mechanism. Common methods include:
+
+1. **Direct Page Request (Forced Browsing):** Circumventing the login page by guessing and directly navigating to an internal, authenticated page (e.g., navigating directly to `http://www.site.com/users/Administrator` without logging in). If the application fails to verify the session state on every single page, the bypass succeeds.
+2. **Parameter Modification:** Tampering with HTTP requests so that the application falsely assumes the attacker has been authenticated. Attackers modify URL parameters, hidden form fields, or cookies (e.g., changing a URL from `?asp?authenticated=no` to `?asp?authenticated=yes`).
+3. **Session ID Prediction:** Determining session IDs through predictable generation patterns. If an application uses values inside cookies that increase linearly (e.g., session `1001`, then `1002`) or uses weak encoding (like base64 encoding the username), an attacker can easily forge a valid session ID for another user and hijack their session.
+4. **SQL Injection (HTML Form Authentication):** As detailed earlier, manipulating the username or password input fields using SQL syntax to alter the backend database authentication query logic, forcing it to return a successful login state.
+
+### 10.4 Mitigating Authentication Bypass
+To mitigate the threat of authentication bypass, employ the following best practices:
+- **Keep up-to-date:** Regularly apply security updates to systems, applications, underlying software, and networks.
+- **Encrypt Session Data:** Encrypt all session IDs and cookies to prevent tampering, and flag them as `Secure` (HTTPS only) and `HttpOnly` (preventing JavaScript access).
+- **Robust Policies:** Ensure that authentication policies are robust and leak-proof. Verify the user's session state on every single restricted page load, not just at the login portal.
+- **Server-Side Security:** Avoid exposure of the authentication protocol in client-side browser scripts. Always validate user input securely on the server side.
+- **Avoid External Interpreters:** Avoid the use of external SQL interpreters or unsafe dynamic queries for authentication checks; always rely on parameterized queries or dedicated authentication frameworks.
+- **Antivirus/WAF:** Utilize Web Application Firewalls (WAF) and endpoint protection to detect and block malicious tampering attempts in real-time.

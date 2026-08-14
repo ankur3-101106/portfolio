@@ -4,5 +4,193 @@ sidebar_position: 3
 
 # Unit - 3
 :::info[TITLE]
-## Client Side Exploitation
+## Information Gathering with Metasploit
 :::
+
+## 1. What is Enumeration?
+
+Enumeration is the systematic process of establishing an **active connection** to the target host to discover potential attack vectors in the computer system. Unlike passive reconnaissance where the attacker relies on public records, enumeration involves direct communication with the target system to extract specific data structures.
+
+Information gained at this phase is crucial because it provides the exact parameters (such as valid usernames or unprotected shared drives) needed for the exploitation phase. It is often considered a critical turning point in a cyber attack; a few pieces of accurately enumerated information can help an attacker directly compromise the target.
+
+### 1.1 Information Gathered in This Phase
+During enumeration, attackers actively query the system to extract:
+- **Usernames and Group names:** Essential for launching targeted Brute Force and Dictionary attacks.
+- **Hostnames:** Helps map out the internal naming conventions of the organization.
+- **Network shares and services:** Identifying open SMB shares or NFS drives that might contain sensitive files or backups.
+- **IP tables and routing tables:** Reveals the internal network topology and potential pivot points.
+- **Service settings and Audit configurations:** Determines what security logging is enabled (so the attacker knows what to evade).
+- **Application details and banners:** Grabbing software versions to match against known CVEs.
+- **SNMP and DNS Details:** Extracting bulk network infrastructure data and internal IP mappings.
+
+---
+
+## 2. Sniffing and Its Types
+
+**Sniffing** is the process of capturing and analyzing packets of data as they traverse a network. Data can be captured on either a wired Ethernet network or a wireless Wi-Fi network. 
+
+The most common method of sniffing involves using a **packet analyzer** (like Wireshark or Tcpdump), which is a software program that forces the network interface card (NIC) into **Promiscuous Mode**, allowing it to capture and decode all passing network traffic, regardless of the destination MAC address.
+
+> [!TIP]
+> **Wireless Sniffing:** Wireless sniffing is especially difficult to detect because it can be done from a distance. The attacker simply places their wireless card into "Monitor Mode" to passively capture radio frequencies without ever physically or logically connecting to the network.
+
+### 2.1 Password Sniffing
+Password sniffing is a specific type of network attack where the attacker filters the intercepted data packets to locate authentication credentials. 
+- **Mechanism:** The attacker uses automated scripts to parse captured packets for protocols that transmit in plaintext, such as HTTP, FTP, Telnet, and POP3. 
+- **Impact:** It is one of the most common and devastating attacks on unencrypted home and business networks, allowing attackers to hijack email, social media, and internal corporate accounts.
+
+### 2.2 Active Sniffing vs. Passive Sniffing
+
+| Feature | Active Sniffing | Passive Sniffing |
+|---|---|---|
+| **Environment** | Switched Networks (Modern networks) | Hubbed Networks (Legacy networks) |
+| **Mechanism** | The attacker must actively send packets to bypass the switch's isolation mechanisms. Techniques include **ARP Spoofing/Poisoning**, **MAC Flooding**, or **DHCP Spoofing** to force the switch to broadcast traffic to the attacker. | The attacker simply listens to the traffic naturally broadcasting across the medium (like a hub or open Wi-Fi). No packets are sent by the attacker. |
+| **Detectability** | **Easier to detect** because it generates anomalous network traffic (e.g., ARP storms or massive CAM table updates). | **Extremely difficult to detect** because the attacker acts strictly as a silent observer. |
+
+### 2.3 Common Types of Sniffing
+1. **Web Password Sniffing:** Capturing HTTP POST requests containing login form data.
+2. **LAN Sniffing:** Intercepting internal traffic on a local subnet to capture internal server communications.
+3. **Protocol Sniffing:** Focusing exclusively on specific protocols (e.g., isolating only DNS or SMB traffic).
+4. **ARP Sniffing (ARP Poisoning):** Forging ARP responses to map the attacker's MAC address to the IP of the default gateway, enabling a Man-in-the-Middle (MitM) attack.
+5. **TCP Session Stealing:** Capturing the TCP sequence numbers of an authenticated user to hijack their active session.
+
+---
+
+## 3. Shodan: The IoT Search Engine
+
+**Shodan** is a specialized search engine (often referred to as the "Google for hackers") that indexes physical devices connected to the Internet rather than websites. 
+
+While Google crawls HTTP for web content, Shodan's special scanners constantly traverse the entire IPv4 space, selecting random public IP addresses, scanning chosen ports, grabbing the service banners, and entering the structural results into a searchable database.
+
+### 3.1 Advantages and Capabilities of Shodan
+- **Device Discovery:** Search a subnet or domain to map out every internet-facing device (e.g., Routers, SCADA systems, Webcams, Traffic Lights).
+- **Vulnerability Hunting:** Find specific systems that match queries for known vulnerabilities (e.g., searching for outdated Apache versions or specific default SSH keys).
+- **Default Credentials:** Easily identify devices that return banners indicating they have not been configured securely.
+- **Geographic Tracking:** Locate where specific vulnerable hardware is deployed worldwide.
+
+---
+
+## 4. Nmap Scanning In-Depth
+
+**Nmap (Network Mapper)**, created by Gordon Lyon (pseudonym *Fyodor*), is the industry-standard open-source Linux command-line tool used to scan IP addresses and ports. It detects live hosts, installed applications, and their exact versions.
+
+Nmap provides a massive array of features for probing networks, including host discovery, service enumeration, operating system detection, and automated vulnerability scanning using the **Nmap Scripting Engine (NSE)**.
+
+### 4.1 The Six Port States Recognized by Nmap
+To accurately map a network, Nmap categorizes ports into states based on how the target responds to specific TCP/UDP probes:
+
+1. **TCP Connect Scan (`-sT`):** 
+   - Completes the full 3-way TCP handshake (SYN -> SYN/ACK -> ACK).
+   - *Pros:* Reliable and doesn't require root privileges.
+   - *Cons:* Extremely loud. The target server's application logs will record the connection.
+2. **TCP SYN Scan (`-sS`):** 
+   - Known as a "Half-Open" or "Stealth" scan. It sends a SYN, waits for the SYN/ACK, and then immediately tears down the connection with an RST (Reset) packet before the handshake finishes.
+   - *Pros:* Often bypasses basic application logging because the connection is never fully established.
+3. **UDP Scan (`-sU`):** 
+   - Sends UDP packets to target ports. If an ICMP "Port Unreachable" error is returned, the port is closed. If no response, it is considered open/filtered.
+   - *Cons:* Very slow and unreliable due to UDP's connectionless nature.
+4. **TCP NULL Scan (`-sN`):** 
+   - Sends a TCP packet with absolutely no flags set. 
+5. **TCP FIN Scan (`-sF`):** 
+   - Sends a TCP packet with only the FIN flag set.
+6. **TCP XMAS Scan (`-sX`):** 
+   - Sends a packet with the FIN, PSH, and URG flags set (lighting the packet up "like a Christmas tree").
+   - *Note on Stealth Scans (NULL, FIN, XMAS):* These are designed to manipulate the TCP RFC standards to bypass older, stateless firewalls. A closed port will reply with an RST, while an open port will drop the malformed packet.
+
+---
+
+## 5. SMB Scanning and Enumeration
+
+**SMB (Server Message Block)** is a client-server communication protocol operating over port 139 and 445. It is extensively used in Windows environments for sharing access to files, printers, serial ports, and network communications.
+
+SMB enumeration is a multipart process in which attackers exploit the protocol to extract deep system information. A common flaw abused here is the **Null Session**, where the server allows an unauthenticated connection to the `IPC$` (Inter-Process Communication) share.
+
+### 5.1 SMB Enumeration Stages
+1. **Hostname Enumeration:** Identifying the exact NetBIOS machine name on the network.
+2. **List Shares:** Discovering available shared folders and hidden administrative shares (like `C$`).
+3. **Checking Null Session:** Actively attempting to bind to the `IPC$` share without providing a username or password.
+4. **List Users:** If the null session succeeds, the attacker can extract the entire list of user accounts and groups registered on the Windows machine.
+5. **Vulnerability Scanning:** Probing the SMB service for known critical flaws (such as the MS17-010 EternalBlue vulnerability).
+6. **Overall Scanning:** Documenting the complete attack surface for further exploitation tools like `psexec`.
+
+---
+
+## 6. FTP Enumeration
+
+The **FTP (File Transfer Protocol)** operates on port 21 and enables users to query and retrieve files from a remote server. 
+
+During enumeration, attackers look for **Anonymous FTP** access, a misconfiguration where the server allows anyone to log in using the username `anonymous` and a blank password. This can lead to the exposure of sensitive configuration files or backups.
+
+### 6.1 Supported File Transfer Protocols
+- **FTP:** Standard File Transfer Protocol. Data and credentials are sent in **plaintext**, making it highly vulnerable to packet sniffing.
+- **FTPS:** FTP over Secure Sockets Layer (SSL). It encrypts the control and data channels.
+- **SFTP:** Secure Shell (SSH) File Transfer Protocol. A completely different protocol that tunnels file transfers through an encrypted SSH connection (Port 22).
+
+---
+
+## 7. SMTP Enumeration
+
+**SMTP (Simple Mail Transfer Protocol)** operates on port 25 and provides the communication guidelines that allow web applications and servers to route emails across the internet.
+
+**SMTP Enumeration** is a highly effective technique used by attackers to verify which user accounts exist on a target system. Because mail servers need to know if a recipient is valid before accepting mail, they often leak this information.
+
+### 7.1 Key SMTP Enumeration Commands
+- **`VRFY`**: Used to verify if a specific user exists on the server. If the user exists, the server responds with a 250 OK code and the user's full name.
+- **`EXPN`**: Asks the server for the membership of a mailing list. It displays the actual email addresses hidden behind an alias.
+- **`RCPT TO`**: Identifies the recipient of the message. Attackers can automate this command; if the server replies with an error (e.g., 550 User Unknown), the attacker knows the user does not exist.
+
+### 7.2 Testing for SMTP Enumeration
+There are three primary ways to enumerate SMTP users:
+
+**1. Using Telnet (Manual Interaction):**
+```bash
+$ telnet <domain_name_or_ip> 25
+VRFY admin
+250 admin@example.com
+```
+
+**2. Using Nmap (Automated Scripting):**
+```bash
+$ sudo nmap -p 25 --script=smtp-enum-users <target_Domain_or_IP>
+```
+
+**3. Using Metasploit Framework (MSF):**
+```bash
+msf > use auxiliary/scanner/smtp/smtp_enum
+msf auxiliary(smtp_enum) > set RHOSTS <IP_address>
+msf auxiliary(smtp_enum) > set USER_FILE /usr/share/wordlists/usernames.txt
+msf auxiliary(smtp_enum) > run
+```
+
+---
+
+## 8. SNMP Enumeration
+
+**SNMP (Simple Network Management Protocol)** is an application layer protocol that runs on **UDP ports 161/162**. It is used to maintain and manage IP network routers, hubs, switches, and servers. 
+
+Information in SNMP is held in a **MIB (Management Information Base)** and categorized by **OIDs (Object Identifiers)**. During enumeration, attackers attempt to guess the **Community String** (essentially a password). The default string for read-access is often `public`, and for write-access is `private`. If guessed, the attacker can extract routing tables, ARP caches, open ports, and running processes.
+
+### 8.1 SNMP Enumeration Tools
+- **OpUtils:** A comprehensive toolset that assists network engineers in monitoring, diagnosing, and troubleshooting IT resources via SNMP.
+- **Engineer’s Toolset:** Uses ICMP and SNMP to perform network discovery. It scans IP ranges in real-time and automatically maps discovered network devices.
+
+### 8.2 Protective Measures against SNMP Enumeration
+To secure internal networks against SNMP data leakage, administrators must implement the following defenses:
+- **Disable Agents:** Remove or disable SNMP agents on hosts if they are not actively required for network management.
+- **Firewall Rules:** All perimeter network access devices should block UDP port 161 from the external internet.
+- **Access Control:** Restrict SNMP access strictly to the IP addresses of trusted management servers.
+- **Upgrade to SNMPv3:** SNMPv1 and v2c transmit community strings in plaintext. **SNMPv3** is significantly more secure as it provides cryptographic authentication and payload encryption.
+- **Windows Group Policy:** Add the security option *"Additional restrictions for anonymous connections"* to restrict null enumeration.
+- **Filter Pipes:** Restrict Null session pipes, null session shares, and utilize strict IPsec filtering.
+
+---
+
+## 9. Brute Force Attacks
+
+A **Brute Force Attack** is a cryptographic hack and enumeration method that uses repetitive trial and error to crack passwords, login credentials, and encryption keys. 
+
+- **How it Works:** The hacker uses automated scripts to try thousands of different username and password combinations in rapid succession until the system grants access. 
+- **Variations:** 
+  - *Dictionary Attack:* Tries words from a pre-compiled list of common passwords (like `rockyou.txt`).
+  - *Credential Stuffing:* Tests combinations of emails and passwords that were leaked in previous public data breaches.
+- **Characteristics:** The name comes from the attacker using "excessively forceful" and exhaustive attempts to gain access. Despite being one of the oldest cyberattack methods, brute forcing remains a highly reliable tactic for gaining unauthorized access to organizational systems and networks lacking rate-limiting or Multi-Factor Authentication (MFA).

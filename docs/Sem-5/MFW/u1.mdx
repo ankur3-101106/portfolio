@@ -641,13 +641,27 @@ flowchart LR
 Understanding protocol headers and cryptographic key exchanges is vital for using web proxies.
 
 #### 5.3.1 HTTP Request Methods
+- **GET:** Requests a representation of the specified resource. Should only retrieve data.
+- **HEAD:** Asks for a response identical to a GET request, but without the response body.
+- **POST:** Submits an entity to the specified resource, often causing a change in state or side effects on the server.
+- **PUT:** Replaces all current representations of the target resource with the request payload.
 - **OPTIONS:** Returns the allowed HTTP methods and communication headers supported by the target resource.
 - **TRACE:** Initiates an echo back of the received request, allowing clients to see what intermediate proxies modified.
 - **CONNECT:** Establishes a tunnel to the target server (often used to negotiate SSL/TLS through proxies).
 - **DELETE:** Deletes the specified resource on the server.
 - **PATCH:** Applies partial modifications to a resource (unlike `PUT`, which replaces the entire resource).
 
+#### 5.3.1.1 HTTP Response Status Codes
+HTTP response status codes indicate whether a specific HTTP request has been successfully completed. Responses are grouped in five classes:
+- **Informational responses (100–199)**
+- **Successful responses (200–299)**
+- **Redirection messages (300–399)**
+- **Client error responses (400–499)**
+- **Server error responses (500–599)**
+
 #### 5.3.2 HTTP Header Fields
+- **General-header:** Have general applicability for both request and response messages.
+- **Client Request-header:** Have applicability only for request messages.
 - **Server Response Headers:** Sent by the server to provide metadata (e.g., `Server`, `WWW-Authenticate`, `Set-Cookie`).
 - **Entity Headers:** Define metadata about the entity body (e.g., `Content-Type`, `Content-Length`, `Last-Modified`).
 
@@ -656,13 +670,18 @@ Understanding protocol headers and cryptographic key exchanges is vital for usin
 - **HTTPS (Secure):** Uses SSL/TLS to encrypt communication.
 - **Cryptographic Key Exchange:** During the TLS handshake, the client and server verify identity using asymmetric cryptography (public and private keys). They negotiate and derive a symmetric **session key** used to encrypt all application traffic, protecting it from interception.
 
+#### 5.3.3.1 Same-Origin Policy
+The same-origin policy is a web browser security mechanism that aims to prevent websites from attacking each other. It permits scripts contained in a first web page to access data in a second webpage, but only if both web pages have the same origin (URI scheme, domain, and port number). Without this, a malicious website could read your emails or private messages from other sites you are logged into.
+
 #### 5.3.4 Cookies & Session Management
 HTTP is stateless. Session tracking keeps users authenticated across requests:
 - **Cookie:** A small key-value file sent by the server and stored locally by the user's browser.
 - **Session:** Server-side data store tracking user actions, mapped to a unique session token.
+- **Session Cookie:** Used to store information temporarily and are deleted when the user closes their browser.
 - **Persistent Cookie:** Saved on the client disk to retain login status or preferences after the browser closes.
 - **Secure Cookie Flag:** Instructs the browser to only transmit the cookie over encrypted HTTPS channels.
 - **HttpOnly Cookie Flag:** Prevents client-side scripts (JavaScript) from accessing the cookie, mitigating XSS session theft.
+- **Third-Party Cookie:** Set by a domain other than the one the user is visiting, often used by advertisers and analytics providers.
 
 
 ## 6. Burp Suite
@@ -689,6 +708,7 @@ flowchart LR
 
 
 ### 6.2 Burp Suite Components
+- **Spider:** A web spider/crawler used to map the target web application to get a list of endpoints.
 - **Proxy:** Intercepts and modifies HTTP requests and responses in real-time. Sitting between the browser and server, it is the core of Burp Suite's workflow.
 - **Target:** Builds a site map, outlines application structure, manages test scope, and displays discovered endpoints.
 - **Repeater:** Manually alters and replays single HTTP requests, displaying responses side-by-side to verify flaws.
@@ -700,6 +720,8 @@ flowchart LR
 - **Decoder:** Encodes/decodes data into formats like URL, Base64, Hex, HTML, and Binary to analyze values or write payloads.
 - **Comparer:** Performs a word-by-word or byte-by-byte visual diff between two requests or responses.
 - **Sequencer:** Analyzes the entropy and statistical randomness of session tokens to determine guessability.
+- **Extender:** Supports external components (BApps) to be integrated into the tools suite to enhance its capabilities.
+- **Scanner:** Automatically scans the website for many common vulnerabilities (not available in the community edition).
 
 ```mermaid
 flowchart LR

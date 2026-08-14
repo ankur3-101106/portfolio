@@ -372,8 +372,13 @@ mindmap
 
 ## 7. Metasploit Modules (Components)
 
-Modules are the functional components of Metasploit. On a standard Linux installation, the default modules are stored under:
-`/usr/share/metasploit-framework/modules/`
+Modules are the functional components of Metasploit.
+
+On standard Debian-based Linux installations, the default modules are stored under:
+`/usr/share/metasploit-framework/modules/`.
+
+On standard Arch-based Linux installations, the default modules are stored under:
+`/opt/metasploit/modules/`
 
 ### 7.1 Exploits
 An exploit is a module that contains code designed to take advantage of a specific system vulnerability (such as a buffer overflow, SQL injection, or zero-day flaw) to bypass security controls and establish execution access on the target system.
@@ -385,7 +390,7 @@ An exploit is a module that contains code designed to take advantage of a specif
 A payload is the actual code executed on the target system after the exploit successfully gains entry.
 
 ```mermaid
-graph LR
+graph TD
   V[Vulnerability: System weakness]
   E[Exploit: The entry tool / Hammer]
   P[Payload: Action / Stolen goods in bag]

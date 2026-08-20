@@ -40,7 +40,22 @@ HTTP defines a set of request methods to indicate the desired action to be perfo
 - **TRACE:** Performs an application-layer loop-back test along the path to the target resource (useful for network debugging).
 - **PATCH:** Applies partial modifications to a resource (unlike `PUT`, which requires replacing the entire entity).
 
-#### HTTP Request Structure (Example)
+#### HTTP Request Structure
+The general structure of an HTTP request consists of three main parts:
+1. **Request Line:** Contains the HTTP method, the request target (URL or path), and the HTTP version (e.g., `GET /index.html HTTP/1.1`).
+2. **Headers:** Key-value pairs providing additional metadata about the request (e.g., `Host`, `User-Agent`).
+3. **Body (Optional):** Data sent to the server (used mainly by POST, PUT, and PATCH methods; GET, HEAD, DELETE typically do not have a body).
+
+**Example 1: GET Request (No Body)**
+```http showLineNumbers
+GET /api/v1/users HTTP/1.1
+Host: targetapp.com
+User-Agent: Mozilla/5.0
+Accept: application/json
+Connection: close
+```
+
+**Example 2: POST Request (With Body)**
 ```http showLineNumbers
 POST /api/v1/users HTTP/1.1
 Host: targetapp.com
@@ -60,7 +75,13 @@ Cookie: SESSIONID=abc123xyz
 ### 1.3 HTTP Responses & Status Codes
 An HTTP response is sent by the server to provide the client with the requested resource, confirm the execution of an action, or report errors.
 
-#### HTTP Response Structure (Example)
+#### HTTP Response Structure
+An HTTP response typically consists of three parts:
+1. **Status Line:** Contains the HTTP version, a numeric status code, and a text reason phrase (e.g., `HTTP/1.1 200 OK`).
+2. **Headers:** Metadata provided by the server about the response.
+3. **Body (Optional):** The actual content returned to the client (e.g., HTML, JSON, image data).
+
+**Example Response:**
 ```http showLineNumbers
 HTTP/1.1 200 OK
 Date: Sun, 28 Aug 2017 08:56:53 GMT
@@ -76,6 +97,21 @@ X-Pad: avoid browser bug
 <html><body><h1>It works!</h1></body></html>
 ```
 
+**Explanation of Response Fields:**
+- `HTTP/1.1`: The HTTP version being used.
+- `200`: The status code indicating the request was successful.
+- `OK`: The status message corresponding to the status code.
+- `Date`: The date and time the response was generated.
+- `Server`: Information about the server software handling the request.
+- `Last-Modified`: The date and time the requested resource was last modified.
+- `ETag`: A unique identifier for a specific version of a resource, used for caching.
+- `Accept-Ranges`: Indicates that the server supports partial requests (range requests).
+- `Content-Length`: The size of the response body in bytes.
+- `Connection`: Indicates whether the network connection stays open after the current transaction (`close` or `keep-alive`).
+- `Content-Type`: The media type of the response body (e.g., `text/html`, `application/json`).
+- `X-Pad`: A custom/non-standard header (indicated by the `X-` prefix), often used for specific workarounds.
+- `<html>...</html>`: The actual response payload/body.
+
 #### HTTP Status Code Classes
 HTTP response status codes indicate the outcome of the request. They are grouped into five distinct classes:
 
@@ -86,6 +122,22 @@ HTTP response status codes indicate the outcome of the request. They are grouped
 | **300 – 399** | **Redirection** | Further action must be taken to complete the request. |
 | **400 – 499** | **Client Error** | Request contains bad syntax or cannot be fulfilled. |
 | **500 – 599** | **Server Error** | Server failed to fulfill an apparently valid request. |
+
+#### Common HTTP Status Codes
+- **200 OK:** The request was successful, and the response body contains the requested data.
+- **201 Created:** The request was successful, and a new resource was created (often used after POST/PUT).
+- **204 No Content:** The request was successful, but there is no body to return (often used after DELETE).
+- **301 Moved Permanently:** The resource has been permanently moved to a new URL.
+- **302 Found:** The resource has been temporarily moved to a different URL.
+- **304 Not Modified:** The client's cached version is still valid; no need to re-download the resource.
+- **400 Bad Request:** The server could not understand the request due to invalid syntax.
+- **401 Unauthorized:** Authentication is required and has failed or has not yet been provided.
+- **403 Forbidden:** The client does not have access rights to the content, regardless of authentication.
+- **404 Not Found:** The server cannot find the requested resource.
+- **405 Method Not Allowed:** The request method is known by the server but is not supported by the target resource.
+- **500 Internal Server Error:** A generic error message when the server encounters an unexpected condition.
+- **502 Bad Gateway:** The server, acting as a gateway or proxy, received an invalid response from the upstream server.
+- **503 Service Unavailable:** The server is not ready to handle the request (often down for maintenance or overloaded).
 
 ### 1.4 HTTP Header Fields
 HTTP headers carry metadata about the request/response messages or the payload body:
@@ -176,14 +228,16 @@ Cookies (sometimes referred to as "biscuits" in network security contexts) are s
 - **Session Cookies:** Stored temporarily in volatile memory. They are deleted automatically when the user closes their browser. Commonly used to track short-term session states (e.g., active shopping cart items).
 - **Persistent Cookies:** Stored on the client's local storage for a longer duration defined by their expiration date. They persist even after closing the browser to keep users logged in or track analytics.
 - **Third-Party Cookies:** Set by domains other than the one the user is directly visiting (e.g., external advertising trackers). Modern browsers frequently block third-party cookies by default to protect user privacy.
+- **Secure Cookies:** Cookies that are transmitted only over secure HTTPS connections, protecting them from eavesdropping. They are created by setting the `Secure` flag.
+- **HttpOnly Cookies:** Cookies that cannot be accessed by client-side scripts (like JavaScript via `document.cookie`). They are created by setting the `HttpOnly` flag and help prevent Cross-Site Scripting (XSS) attacks from stealing session data.
 
 #### Critical Security Flags for Cookies
 - **Secure Flag:** Instructs the browser to only transmit the cookie over secure HTTPS connections, protecting it from eavesdropping over plaintext channels.
 - **HttpOnly Flag:** Restricts client-side scripts (like JavaScript) from accessing the cookie via `document.cookie`. This mitigates the risk of session theft via Cross-Site Scripting (XSS) attacks.
-- **SameSite Flag:** Controls whether cookies are sent with cross-site requests, providing protection against CSRF (Cross-Site Request Forgery):
-  - `Strict`: The cookie is never sent in cross-site requests.
-  - `Lax`: The cookie is sent only when the user is navigating to the origin site (e.g., clicking a link).
-  - `None`: The cookie is sent in all cross-site requests (requires the `Secure` flag).
+- **SameSite Flag:** A critical defense against Cross-Site Request Forgery (CSRF) attacks. It controls whether the browser should send the cookie with cross-site requests. It has three possible values:
+  - `Strict`: The cookie is only sent if the request originates from the same site that set the cookie. If a user clicks a link from an external site to your site, the cookie will *not* be sent. This provides maximum security but can impact user experience (e.g., users might appear logged out when arriving from external links).
+  - `Lax` (Default in modern browsers): The cookie is not sent on cross-site POST requests (like submitting a form from an external site) but *is* sent when the user is navigating to the origin site (like clicking a normal `<a>` link). It strikes a balance between security and user experience.
+  - `None`: The cookie is sent in all contexts, including cross-site requests (e.g., when embedding an iframe or making a cross-site API call). To use this setting, the cookie *must* also have the `Secure` flag set, or the browser will reject it.
 
 ### 4.2 Sessions
 A **Session** is a temporary, interactive state representing an information exchange between two communicating devices or a user and a server.

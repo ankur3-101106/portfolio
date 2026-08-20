@@ -395,3 +395,9 @@ summary {
   letter-spacing: 0.03em;
   margin-bottom: auto;
 }
+
+@media (max-width: 996px) {
+  .navbar__items.navbar__items--right .clock-navbar-item {
+    display: flex !important;
+  }
+}

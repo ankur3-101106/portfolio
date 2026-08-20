@@ -140,6 +140,12 @@ const config = {
           position: 'right',
         },
         {
+          type: 'custom-clock',
+          href: 'https://time.is',
+          position: 'right',
+          className: 'clock-navbar-item',
+        },
+        {
           type: 'search',
           position: 'right',
         },

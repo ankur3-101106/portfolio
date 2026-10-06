@@ -3,6 +3,15 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+const SITE_URL = 'https://ankur3-101106.github.io';
+const REPO_URL = 'https://github.com/ankur3-101106/portfolio';
+const PROFILE_URL = 'https://github.com/ankur3-101106';
+
+const mathPlugins = {
+  remarkPlugins: [remarkMath],
+  rehypePlugins: [rehypeKatex],
+};
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Ankur's Page",
@@ -13,7 +22,7 @@ const config = {
     v4: true,
   },
 
-  url: 'https://ankur3-101106.github.io',
+  url: SITE_URL,
   baseUrl: '/',
 
   organizationName: 'ankur3-101106',
@@ -33,18 +42,14 @@ const config = {
     mermaid: true,
   },
 
-  // ✅ KaTeX CSS (required)
+  // ✅ KaTeX & Combined Google Fonts (Single HTTP request)
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
       type: 'text/css',
     },
     {
-      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-      rel: 'stylesheet',
-    },
-    {
-      href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap',
       rel: 'stylesheet',
     },
   ],
@@ -55,12 +60,8 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-
-          editUrl: 'https://github.com/ankur3-101106/portfolio/tree/main/',
-
-          // ✅ KaTeX
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatex],
+          editUrl: `${REPO_URL}/tree/main/`,
+          ...mathPlugins,
         },
 
         blog: {
@@ -69,12 +70,8 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl: 'https://github.com/ankur3-101106/portfolio/tree/main/',
-
-          // ✅ KaTeX
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatex],
-
+          editUrl: `${REPO_URL}/tree/main/`,
+          ...mathPlugins,
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -86,6 +83,7 @@ const config = {
       }),
     ],
   ],
+
   plugins: [
     [
       require.resolve('@easyops-cn/docusaurus-search-local'),
@@ -96,8 +94,40 @@ const config = {
       },
     ],
   ],
+
   themeConfig: {
-    image: 'img/docusaurus-social-card.jpg',
+    metadata: [
+      {
+        name: 'keywords',
+        content:
+          'cybersecurity, linux, networking, ethical hacking, programming, tutorials',
+      },
+      {
+        name: 'author',
+        content: 'Ankur Macwan',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:title',
+        content: "Ankur's Page",
+      },
+      {
+        property: 'og:description',
+        content: 'Cybersecurity, Linux, Networking, and Programming Tutorials',
+      },
+      {
+        property: 'og:image',
+        content: `${SITE_URL}/img/seo-banner.png`,
+      },
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    ],
+    image: 'img/seo-banner.png',
 
     // ✅ FIXED ColorMode (prevents crash)
     colorMode: {
@@ -112,7 +142,7 @@ const config = {
       maxHeadingLevel: 4,
     },
 
-    // ✅ Mermaid theme (safe)
+    // ✅ Mermaid theme
     mermaid: {
       theme: {
         light: 'neutral',
@@ -133,9 +163,8 @@ const config = {
           position: 'left',
           label: 'Notes',
         },
-        // { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/ankur3-101106/',
+          href: PROFILE_URL,
           label: 'GitHub',
           position: 'right',
         },
@@ -157,22 +186,29 @@ const config = {
       links: [
         {
           title: 'Docs',
-          items: [{ label: 'Notes', to: '/docs/intro' }],
+          items: [
+            { label: 'Introduction', to: '/docs/intro' },
+            { label: 'Notes', to: '/docs/intro' },
+          ],
         },
         {
-          title: 'Socials',
+          title: 'Connect',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'LinkedIn',
+              href: 'https://linkedin.com/in/ankur101106',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'GitHub',
+              href: PROFILE_URL,
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'X (Twitter)',
+              href: 'https://x.com/ankur3_101106',
+            },
+            {
+              label: 'Email',
+              href: 'mailto:ankurdcs101106@gmail.com',
             },
           ],
         },
@@ -181,8 +217,8 @@ const config = {
           items: [
             { label: 'Blog', to: '/blog' },
             {
-              label: 'GitHub',
-              href: 'https://github.com/ankur3-101106',
+              label: 'Repository',
+              href: REPO_URL,
             },
           ],
         },
@@ -200,7 +236,35 @@ const config = {
           block: { start: 'highlight-start', end: 'highlight-end' },
         },
       ],
-      additionalLanguages: ['python', 'java', 'csharp', 'cpp', 'bash', 'powershell', 'rust', 'go', 'ruby', 'php', 'kotlin', 'swift', 'scala', 'haskell', 'lua', 'dart', 'typescript', 'json', 'yaml', 'markdown', 'graphql', 'docker', 'makefile', 'nginx', 'apacheconf', 'ini', 'diff'],
+      additionalLanguages: [
+        'python',
+        'java',
+        'csharp',
+        'cpp',
+        'bash',
+        'powershell',
+        'rust',
+        'go',
+        'ruby',
+        'php',
+        'kotlin',
+        'swift',
+        'scala',
+        'haskell',
+        'lua',
+        'dart',
+        'typescript',
+        'json',
+        'yaml',
+        'markdown',
+        'graphql',
+        'docker',
+        'makefile',
+        'nginx',
+        'apacheconf',
+        'ini',
+        'diff',
+      ],
     },
   },
 };

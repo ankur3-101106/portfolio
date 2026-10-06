@@ -52,7 +52,7 @@ session: "2026-27"
 - **Dex2jar Mechanism**: Translates Android Dalvik Executable (`.dex`) files into standard Java `.class` archive files (`.jar`), enabling standard Java decompilers (JD-GUI, CFR) to inspect program logic.
 
 ```mermaid
-flowchart LR
+flowchart TD
     APK[Target.apk] -->|Unzip / Extract| DEX[classes.dex]
     DEX -->|dex2jar| JAR[classes-dex2jar.jar]
     JAR -->|JD-GUI / Decompiler| JavaSource[Readable Java Code]
@@ -162,7 +162,7 @@ flowchart TD
   - iOS binaries are compiled natively into Mach-O ARM assembly and require disassemblers/decompilers (Ghidra, IDA Pro, Hopper) or automated frameworks (MobSF).
 
 ```mermaid
-flowchart LR
+flowchart TD
     IPA[.ipa Archive] -->|Unzip| Payload[Payload/ directory]
     Payload --> AppBundle[AppName.app Bundle]
     AppBundle --> Plist[Info.plist Configuration]
@@ -214,7 +214,7 @@ flowchart LR
   - For comprehensive testing, the certificate must either be installed into the **System Certificate Store** (`/system/etc/security/cacerts/`) on a rooted device, or the APK must be patched using objection/frida.
 
 ```mermaid
-flowchart LR
+flowchart TD
     App[Mobile App Client] -->|HTTPS via Proxy| Burp[Burp Suite Proxy :8080]
     Burp -->|Re-encrypted HTTPS| Server[Target Web Server]
     Burp -.->|Decrypts & Inspects| Analyst[Security Analyst]
@@ -323,7 +323,7 @@ flowchart TD
   - Invoking exported components directly (`am start`, `am broadcast`).
 
 ```mermaid
-flowchart LR
+flowchart TD
     DevMachine[Host Machine: ADB Client] <-->|TCP:5037| ADBServer[ADB Server Process]
     ADBServer <-->|Port 5555 / USB| ADBD[Android Emulator: adbd Daemon]
     ADBD <--> OS[Android Shell / File System]

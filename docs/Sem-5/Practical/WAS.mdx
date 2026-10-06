@@ -122,7 +122,7 @@ flowchart TD
   - **Out-of-Band SQLi**: Triggering external DNS or HTTP requests from the database server to exfiltrate data.
 
 ```mermaid
-flowchart LR
+flowchart TD
     UserInput["Input: ' OR 1=1 #"] --> Backend["PHP: SELECT * FROM users WHERE id = '$input'"]
     Backend --> ExecSQL["Executed: SELECT * FROM users WHERE id = '' OR 1=1 #'"]
     ExecSQL --> DB[(MySQL Database)]
@@ -327,7 +327,7 @@ flowchart TD
   - **HTTP Parameter Pollution (HPP)**: Splitting payloads across repeated parameters (`?id=1&id=UNION&id=SELECT`).
 
 ```mermaid
-flowchart LR
+flowchart TD
     Attacker[Attacker Payload] --> Obfuscate[Obfuscation: Encoding / Inline Comments]
     Obfuscate --> WAF{WAF Rule Engine}
     WAF -- Bypassed --> Backend[Backend Server / SQL Parser]
@@ -555,7 +555,7 @@ flowchart TD
 - **Directory / Path Traversal (Dot-Dot-Slash)**: An attacker uses the `../` directory traversal sequence to step out of the designated document root and access arbitrary files stored elsewhere on the filesystem (e.g., `/etc/passwd`, application configurations, server private keys).
 
 ```mermaid
-flowchart LR
+flowchart TD
     Request["Request: GET /image?filename=../../../etc/passwd"] --> WebServer[Vulnerable Application Path Concatenation]
     WebServer --> Escapes[Steps out of /var/www/html/images/]
     Escapes --> OSFile[Reads /etc/passwd from Root Filesystem]

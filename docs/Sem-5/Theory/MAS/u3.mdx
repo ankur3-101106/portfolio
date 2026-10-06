@@ -114,7 +114,7 @@ Codesigning is a digital signature technology applied to a compiled application 
 ### 4.2 The Codesigning Process
 
 ```mermaid
-flowchart LR
+flowchart TD
     A[Generate CA Certificate] --> B[Hash the App Code]
     B --> C[Encrypt Hash with Private Key]
     C --> D[Distribute Signed Package]

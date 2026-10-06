@@ -98,7 +98,7 @@ flowchart LR
 ### 2.1 Dynamic Analysis Techniques
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph Target["Target Device / Emulator"]
         App["Target Mobile App"]
         FS["Encrypted / Local File System"]
@@ -280,7 +280,7 @@ run scanner.provider.traversal -a com.example.vulnerableapp
 The `AndroidManifest.xml` file is the foundational configuration and blueprint file required at the root of every Android application package (APK). It declares the application structure, security configuration, components, permissions, and minimum hardware/software requirements to the Android operating system.
 
 ```mermaid
-flowchart TD
+flowchart LR
     Root["<manifest> (package identifier, versionCode, versionName)"]
     
     Root --> Perms["<uses-permission> (Declared Device Permissions)"]
@@ -481,8 +481,8 @@ flowchart LR
         API["Backend API (Valid SSL Cert)"]
     end
     
-    App <-->|TLS Connection 1 (Signed by Burp CA)| Engine
-    Engine <-->|TLS Connection 2 (Valid Upstream TLS)| API
+    App <-->|"TLS Connection 1 (Signed by Burp CA)"| Engine
+    Engine <-->|"TLS Connection 2 (Valid Upstream TLS)"| API
 ```
 
 #### 5.3.1 The Man-In-The-Middle (MITM) Mechanism

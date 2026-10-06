@@ -472,7 +472,7 @@ flowchart TD
 ```mermaid
 flowchart TD
     Attacker[Craft Weaponized .docm via Metasploit] --> Deliver[Email Phishing to Victim]
-    Victim[Victim opens document & Enables Macro] --> MacroExec[AutoOpen() VBA Function Fires]
+    Victim[Victim opens document & Enables Macro] --> MacroExec["AutoOpen() VBA Function Fires"]
     MacroExec --> PowerShell[Spawns Obfuscated PowerShell Process]
     PowerShell --> Connect[Reverse TCP Connection to Metasploit Handler]
 ```
@@ -590,7 +590,7 @@ flowchart LR
 flowchart TD
     Scan[Nmap Reconnaissance: Port 21 vsftpd 2.3.4] --> SelectExploit[Select: exploit/unix/ftp/vsftpd_234_backdoor]
     SelectExploit --> SetTarget[set RHOSTS Target_IP]
-    SetTarget --> Trigger[Send :) trigger to vsftpd daemon]
+    SetTarget --> Trigger["Send :) trigger to vsftpd daemon"]
     Trigger --> BindShell[Port 6200 Backdoor Spawns Root Shell]
     BindShell --> RootAccess[Full System Compromise: uid=0 root]
 ```

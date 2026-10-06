@@ -254,7 +254,7 @@ sequenceDiagram
 ### 3.2 The Two Primary Attack Exploitation Points
 
 ```mermaid
-flowchart LR
+flowchart TD
     User["Mobile Client App"]
     AP["Rogue Wi-Fi / Carrier Net"]
     Server["Application Server / Gateway"]
@@ -473,7 +473,7 @@ flowchart LR
 Client-side injection vulnerabilities occur when an application accepts untrusted data that is subsequently interpreted, rendered, or executed as code within the client execution environment (e.g., a mobile browser, WebView, or local client template engine). This contrasts with server-side injection, which executes malicious commands within backend databases, servers, or operating systems.
 
 ```mermaid
-flowchart TD
+flowchart LR
     Attacker["Attacker Payload"] -->|Input Field / Deep Link / Push Notification| App["Mobile Client App"]
     App -->|Unsanitized Data| WebView["Embedded WebView / JS Engine"]
     

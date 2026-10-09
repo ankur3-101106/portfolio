@@ -67,25 +67,129 @@ Always start from ## heading.
 ##### 4.2.3.5 DNS
 ```
 
-# Format for Notes of the provided topic.
+# Format for Notes of the Provided Topic
 
 You need to read the provided PPT or PDF for notes on the topics covered.
 You need to output the notes in the below format.
 
-- **Properly MDX compatible format:**
+## Document Structure & Page Info Header
+
+Every note file must start with a standardized YAML frontmatter header followed immediately by the top-level unit heading and title callout banner.
+
+### Standard Unit Page Skeleton
+
+````markdown
+---
+title: Unit - 1
+sidebar_position: 1
+description: Concise, high-density 1-2 sentence summary of key topics covered in the unit for SEO and overview.
+keywords:
+  - keyword 1
+  - keyword 2
+  - keyword 3
+  - keyword 4
+  - keyword 5
+---
+
+# Unit - 1
+:::info[TITLE]
+## Introduction to VAPT
+:::
+
+## 1. First Major Section
+
+Content starts here...
+````
+
+### Practical / Laboratory Manual Header (If Applicable)
+
+For practical lab manuals, include the additional academic course metadata:
+
+````markdown
+---
+title: "DAA Laboratory"
+sidebar_position: 1
+description: Laboratory manual covering algorithm design paradigms, practical implementations, and complexity analysis.
+keywords:
+  - daa laboratory
+  - algorithm practicals
+  - dynamic programming lab
+courseCode: "303105219"
+semester: "5th Semester"
+department: "CSE"
+session: "2026-27"
+---
+````
+
+---
+
+## Detailed Formatting Guidelines
+
+- **Frontmatter (Metadata Header):**
+  - **`title`**: Page display title in the sidebar (e.g., `Unit - 1`, `Week - 1`, `Question Bank`, `DAA Laboratory`).
+  - **`sidebar_position`**: Integer number matching the unit or sequential order (e.g., `1`, `2`, `3`).
+  - **`description`**: A concise, informative 1-2 sentence overview of the document content optimized for search and SEO.
+  - **`keywords`**: A YAML array of 4-6 specific technical terms and core concepts covered in the notes.
+  - **Academic Metadata (Labs only)**: `courseCode`, `semester`, `department`, `session`.
+
+- **Page Info & Title Callout at the Top:**
+  - Start with Level 1 Heading: `# Unit - <Number>` (or `# Week - <Number>`, `# Question Bank`).
+  - Follow immediately with the `:::info[TITLE]` callout block containing the unit topic as an H2 heading:
+    ```markdown
+    :::info[TITLE]
+    ## <Unit Title / Topic Name>
+    :::
+    ```
+  - Begin body topics with Level 2 Heading: `## 1. <First Topic Name>` (matching the outline).
+
+- **Properly MDX Compatible Format:**
   - Ensure all JSX tag elements are properly closed.
   - Do not use HTML comments (e.g., `<!-- comment -->`). Use MDX comments like `{/* comment */}` or omit comments entirely.
   - Escape special characters: Do not use raw `{` or `}` in plain text (escape them as `\{` and `\}`). Escape or place in inline code blocks any raw `<` or `>` characters to avoid JSX parsing errors.
-- **You can provide Mermaid diagrams for visualizations:** Use standard Mermaid syntax blocks to visually explain structures, sequences, or flows.
-- **You can use React components for visualizations. Include imports and specify the library or package required for the component to function:**
-  - If a React component is used, place imports at the top of the MDX file.
+
+- **Mermaid Diagrams for Visualizations & Best Practices:**
+  - Use standard Mermaid syntax blocks (`flowchart TD`, `sequenceDiagram`, `graph TD`) to visually explain structures, sequences, or flows.
+  - **Always Quote Labels with Special Characters:** Node text, decision diamond labels, and edge annotations containing special characters (parentheses `()`, brackets `[]`, `<>`, colons `:`, question marks `?`, quotes, slashes, or arithmetic/logic symbols) **must** be enclosed in double quotes `""`.
+    - *Correct:* `B["Upper Layer Protocol (TCP/UDP)"]`, `Cond{"k > 0 and P[k+1] != P[q]?"}`, `A -->|"TLS Connection (CA Signed)"| B`
+    - *Incorrect:* `B[Upper Layer Protocol (TCP/UDP)]` (Causes parser failure)
+  - **Subgraph Syntax with Special Characters:** Subgraphs with custom titles must declare an alphanumeric identifier and place complex labels inside brackets with double quotes:
+    - *Correct:* `subgraph Sol1 ["Solution 1: <2, 4, 1, 3>"]`
+    - *Incorrect:* `subgraph Solution 1: "<2, 4, 1, 3>"`
+  - **Vertical Flowchart Orientation:** Prefer top-down orientation (`flowchart TD`) over horizontal (`flowchart LR`) for wide workflows and multi-step architectures to ensure accessibility and responsive display on mobile screens.
+
+- **Mathematical Formats:**
+  - Use LaTeX syntax for math notations and algorithmic time/space complexities:
+    - Inline expressions: Use single dollar signs (e.g., `$O(n \log n)$`, `$O(1)$`, `$4 \times 4$`).
+    - Multi-line / display equations: Use double dollar blocks (`$$ ... $$`).
+
+- **Admonitions & Callouts:**
+  - Use Docusaurus admonition containers (`:::info`, `:::tip`, `:::note`, `:::warning`, `:::danger`) for exam tips, critical notes, or architectural insights:
+    ```markdown
+    :::tip[EXAM TIP]
+    Key points to remember for exam questions.
+    :::
+    ```
+
+- **React Components for Visualizations:**
+  - If a React component is used, place imports at the top of the MDX file (after the frontmatter).
   - Clearly state in a note/comment if any external package (like `lucide-react`, `recharts`, etc.) needs to be installed.
-- **You can access online resources for additional information:** Use verified external information to fill in gaps, but prioritize grounding the notes in the provided PPT/PDF materials.
-- **Provide concise and clear explanations optimized for exam review:** Avoid conversational preambles/postambles. Use bullet points, tables, and bold key technical terms. Keep explanations high-density and direct; avoid writing long narrative paragraphs. Focus on definitions, core steps, pros/cons, and formula sheets suitable for quick study.
-- **Provide complete and accurate information, and do not miss out on any important details or information that is provided in the PPT or PDF:** Cover every topic and sub-topic from the outline without exceptions. However, state these details succinctly to keep the notes comprehensive yet brief. Do not hallucinate or make up facts. If a topic is in the outline but lacks detail in the sources, supplement it with accurate technical details or explicitly mention the source limitation.
-- **Provide code examples and explanations for the concepts covered (if required). Also, add the `showLineNumbers` argument in the code block to show line numbers:**
-  - Ensure code blocks specify the language and append `showLineNumbers` for the code block longer than 10 lines.
-  - Example:
+
+- **Concise, High-Density Explanations for Exam Review:**
+  - Avoid conversational preambles/postambles.
+  - Use bullet points, structured comparison tables, and **bold** key technical terms.
+  - Keep explanations high-density and direct; avoid writing long narrative paragraphs.
+  - Focus on definitions, core steps, architecture breakdowns, pros/cons, and formula sheets suitable for quick study.
+
+- **Accuracy and Source Completeness:**
+  - Cover every topic and sub-topic from the outline without exceptions.
+  - State details succinctly to keep notes comprehensive yet brief. Do not hallucinate or make up facts.
+  - If a topic is in the outline but lacks detail in the source materials, supplement it with accurate technical details or explicitly note the source limitation (e.g., `{/* Note: Specific details for Introduction were not provided in the presentation slides. */}`).
+  - You can access verified online resources for supplementary information, but prioritize grounding notes in the provided PPT/PDF materials.
+
+- **Code Blocks & Algorithmic Representations:**
+  - Specify the code language for every block.
+  - Add the `showLineNumbers` argument for code blocks longer than 10 lines:
     ```typescript showLineNumbers
     const example = "value";
     ```
+  - For algorithmic topics, prioritize clear pseudocode / algorithmic steps over language-specific boilerplates where appropriate.

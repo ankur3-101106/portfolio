@@ -1,207 +1,502 @@
 ---
 title: Unit - 4
 sidebar_position: 4
-description: Learn Meterpreter features including system command execution, remote file system manipulation, keystroke logging, and session interactions.
+description: Comprehensive guide to wireless network penetration testing, 802.11 attack surfaces, Evil Twin, Rogue APs, Karmetasploit, wireless MITM, and SMB relay attacks.
 keywords:
-  - meterpreter basics
-  - keystroke logging
-  - remote file manipulation
-  - meterpreter commands
-  - session interaction
+  - wireless penetration testing
+  - evil twin attack
+  - karmetasploit
+  - wireless mitm
+  - smb relay attack
 ---
 
 # Unit - 4
 :::info[TITLE]
-## Meterpreter
+## Wireless Network Penetration Testing
 :::
 
-## 1. What is Meterpreter?
+## 1. Wireless Security Fundamentals
 
-Meterpreter is the short form of **Meta-Interpreter**. It is an advanced, multi-faceted, dynamically extensible payload in the Metasploit Framework that fundamentally changed how post-exploitation is conducted. 
-
-Unlike traditional malware or reverse shells that write an executable file (`.exe`) to the victim's hard drive (which is highly susceptible to Anti-Virus detection), Meterpreter operates entirely through **in-memory DLL injection**.
-
-- **Features:** It features command history, tab completion, encrypted communication channels, file manipulation, and deep system access.
-- **Stealth:** Because Meterpreter resides *completely* in the RAM of the remote host, it leaves absolutely no traces on the physical hard drive. It utilizes encrypted communications, making network-level detection (IDS/IPS) and conventional endpoint forensic techniques exceptionally difficult.
-
-## 2. Technical Mechanics: How Meterpreter Works
-
-The setup phase of a Meterpreter session is a highly orchestrated series of events designed to bypass security controls. It relies heavily on a technique called **Reflective DLL Injection**.
-
-The exact operational flow is as follows:
-
-1. **Initial Stager Execution:** The target executes the initial, tiny payload (the *stager*, like `reverse_tcp`). Stagers are kept intentionally small so they can fit into constrained memory spaces during buffer overflow exploits.
-2. **Memory Allocation:** The stager allocates a chunk of read/write/execute (`RWX`) memory in the compromised process using system APIs like `VirtualAlloc`.
-3. **DLL Loading:** The stager reaches back to the attacker and downloads the massive Meterpreter DLL (the *stage*). 
-4. **Reflective Injection:** Traditional DLLs require the Windows OS to load them from a disk. Meterpreter bypasses this by using a *Reflective stub* embedded in the downloaded DLL. This stub acts as a custom OS loader, manually mapping the DLL into the allocated memory and executing it without the host OS knowing a DLL was ever loaded.
-5. **Core Initialization:** The Meterpreter core initializes and immediately establishes a **TLS/1.0** encrypted link over the socket to prevent network sniffing.
-6. **TLV Communication:** It sends a `GET` request. From this point forward, all communication between the attacker and victim uses the **TLV (Type-Length-Value)** protocol. This serialized protocol ensures data is transmitted cleanly regardless of architecture (x86 vs x64).
-7. **Extension Loading:** Meterpreter dynamically requests extensions (like `stdapi` for standard commands, or `priv` for privilege escalation) from the attacker. These extensions are securely transmitted over the network and injected into memory on the fly.
-
-## 3. Meterpreter Design Goals
-
-The core design philosophy of Meterpreter rests on three pillars:
-
-### 3.1 Stealthy
-- **No Disk I/O:** Writes absolutely nothing to the disk.
-- **Process Hiding:** No new processes are created. Meterpreter lives parasitically inside the exploited process (e.g., if you exploit `svchost.exe`, Meterpreter runs inside `svchost.exe`).
-- **Encryption:** All communications use TLS encryption.
-
-### 3.2 Powerful
-- **Channelized I/O:** Meterpreter utilizes a channelized communication system. This means it can open a command shell, run a port forward, and stream webcam footage simultaneously over a single network connection without interference.
-
-### 3.3 Extensible
-- **Dynamic Augmentation:** Features can be augmented at runtime. If you need a new feature, Metasploit simply sends a new compiled Ruby module over the network directly into the victim's RAM, without having to rebuild or restart the payload.
-
-## 4. Shell Types: Bind vs. Reverse TCP
-
-When executing payloads, you must choose how the network connection is established. 
-
-### 4.1 Bind TCP Shell
-A bind shell forces the target machine to open a specific port and *wait* for the attacker to connect.
-- **Technical Limitation:** Modern firewalls block unexpected inbound traffic by default. If the victim has a firewall enabled, the attacker's connection attempt to the bind port will be dropped.
+Wireless penetration testing is the authorized, structured evaluation of Wi-Fi networks (IEEE 802.11), access points, and connected client devices to identify security vulnerabilities and assess operational risks.
 
 ```mermaid
-flowchart LR
-    A[Attacker IP: 192.168.1.25] -- "Initiates Connection" --> V[Victim IP: 192.168.1.13\nListening on Port 4444]
+flowchart TD
+  Tester["Security Tester / Ethical Hacker"] --> WNet["Wireless Medium (Radio Frequency)"]
+  WNet --> AP["Wireless Access Point (AP)"]
+  AP --> Client["Connected Wireless Clients (STAs)"]
+  Client --> Internal["Enterprise Internal Network"]
 ```
 
-### 4.2 Reverse TCP Shell
-A `reverse_tcp` shell forces the victim machine to proactively connect back to the attacker's machine.
-- **Technical Advantage:** Firewalls typically allow outbound traffic (like HTTP/HTTPS on ports 80/443). By having the victim initiate an outbound connection to the attacker, Reverse TCP effortlessly bypasses inbound firewall restrictions.
+### 1.1 Core Objectives of Wireless Penetration Testing
+- **Identify Security Flaws:** Uncover configuration weaknesses, weak encryption suites, and outdated protocol implementations.
+- **Evaluate Authentication:** Test Pre-Shared Keys (PSK) and 802.1X/RADIUS enterprise authentication configurations.
+- **Detect Rogue Devices:** Locate unauthorized access points, rogue bridges, and misconfigured ad-hoc networks.
+- **Assess Client Behavior:** Evaluate client roaming behavior, probe request leakage, and auto-association vulnerabilities.
+- **Audit Network Segmentation:** Verify that guest Wi-Fi networks are properly isolated from sensitive corporate subnets.
+- **Validate Monitoring Controls:** Test Wireless Intrusion Detection and Prevention Systems (WIDS/WIPS).
+
+:::warning[AUTHORIZED LAB REQUIREMENT]
+Wireless penetration testing broadcasts over shared radio frequency bands. Assessments must be conducted strictly within authorized boundaries, Faraday cages, or isolated RF laboratory environments.
+:::
+
+### 1.2 Wired vs. Wireless Medium: Security Implications
+The fundamental security distinction between wired and wireless networks lies in the transmission medium:
+- **Wired Networks:** Physical transmission lines (Ethernet cables, fiber optics) enforce a defined physical perimeter. Attackers typically require physical access to a switch port or wall jack to intercept data.
+- **Wireless Networks:** Radio waves radiate openly in all directions across a shared broadcast medium. An attacker can observe 802.11 management frames, capture handshakes, and inject packets from outside the physical perimeter without connecting a single cable.
+
+## 2. Wireless Attack Surface & 802.11 Architecture
+
+The wireless attack surface spans physical radio hardware, access point firmware, client endpoints, and central authentication backends.
 
 ```mermaid
-flowchart LR
-    V[Victim IP: 192.168.1.13] -- "Connects Outbound" --> A[Attacker IP: 192.168.1.25\nListening on Port 4444]
+flowchart TD
+  WiFi["802.11 Wireless Attack Surface"]
+  WiFi --> AP["Access Point (AP): Firmware, WPS, default logins, web management"]
+  WiFi --> Client["Client Station (STA): Probe requests, auto-association, roaming logic"]
+  WiFi --> Auth["Authentication Engine: WEP, WPA-PSK, WPA2/WPA3, 802.1X, RADIUS"]
+  WiFi --> Seg["Segmentation: Guest vs. Corporate VLAN isolation, client isolation"]
 ```
 
-## 5. Privilege Escalation Techniques
+### 2.1 Core Wireless Architecture Components
+- **Access Point (AP):** Layer-2 bridge providing wireless connectivity between 802.11 radio clients and the wired network.
+- **Station / Client (STA):** Any computing device (laptop, smartphone, IoT sensor) equipped with an 802.11 wireless network interface card (WNIC).
+- **Wireless LAN Controller (WLC):** Enterprise appliance that centrally manages radio frequencies, roaming, and security policies across distributed APs.
+- **Authentication Server (RADIUS):** Centralized backend validating user credentials in 802.1X enterprise environments.
 
-Frequently, client-side exploits result in a session with limited standard user rights. To dump passwords or install rootkits, the attacker must escalate to **NT AUTHORITY\SYSTEM**.
+### 2.2 Wireless Security Models and Historical Evolution
 
-Metasploit automates this via the `getsystem` command. Under the hood, `getsystem` attempts three highly technical attacks sequentially:
-
-1. **Named Pipe Impersonation (In Memory):** Meterpreter creates a named pipe and tricks a legitimate SYSTEM service into connecting to it. When the SYSTEM service connects, Meterpreter calls the `ImpersonateNamedPipeClient()` API to steal the SYSTEM access token.
-2. **Named Pipe Impersonation (Dropper):** Similar to the first, but drops a temporary DLL to disk if the in-memory execution fails.
-3. **Token Duplication:** Meterpreter scans the system for processes running as SYSTEM (like `lsass.exe` or `winlogon.exe`), uses the `OpenProcessToken` API to copy their security token, and assigns that token to the Meterpreter thread.
-
-**Commands:** 
-```bash
-meterpreter > use priv
-meterpreter > getsystem
-...got system via technique 1 (Named Pipe Impersonation (In Memory/Admin)).
-meterpreter > getuid
-Server username: NT AUTHORITY\SYSTEM
+```mermaid
+flowchart TD
+  WEP["WEP (1997): Broken RC4 stream cipher, static 24-bit IV collision flaws"] --> WPA["WPA (2003): Temporary fix introducing TKIP and Per-Packet Key mixing"]
+  WPA --> WPA2["WPA2 (2004): Modern standard mandating robust AES-CCMP encryption"]
+  WPA2 --> WPA3["WPA3 (2018): Hardened standard introducing SAE, 192-bit crypto, and PMF"]
 ```
 
-## 6. Process Migration
+| Security Protocol | Cipher Algorithm | Key Management | Primary Architectural Weakness |
+|---|---|---|---|
+| **Open Network** | None (Cleartext) | None | Zero confidentiality; all traffic vulnerable to packet sniffing |
+| **WEP** | RC4 (Stream Cipher) | Static 40/104-bit key | Small 24-bit IV; vulnerable to statistical key recovery in minutes |
+| **WPA** | TKIP / RC4 | 4-Way Handshake / PSK | Vulnerable to message integrity checks (MIC) and Beck-Tews attacks |
+| **WPA2** | AES-CCMP | 4-Way Handshake / PSK | Vulnerable to offline dictionary attacks if 4-way handshake or PMKID is captured |
+| **WPA3** | AES-GCMP / CNSA | SAE (Dragonfly Handshake) | Resists offline dictionary attacks; requires Protected Management Frames (PMF) |
+| **802.1X Enterprise**| Dynamic AES keys | Centralized RADIUS / EAP | Certificate validation bypasses on misconfigured client supplicants |
 
-Because Meterpreter lives inside the exploited process, if the user closes that program, the Meterpreter session instantly dies. 
+## 3. Metasploit and Wireless Networks
 
-**Migration** solves this by injecting the Meterpreter payload into a stable, long-running system process (like `explorer.exe` or `svchost.exe`).
+The Metasploit Framework is primarily designed for service exploitation, payload delivery, and post-exploitation. It works alongside external wireless tools to execute targeted wireless attacks.
 
-```bash
-meterpreter > ps
-  PID   Name           User
-  ---   ----           ----
-  1340  explorer.exe   WIN-USER\Admin
-  4012  bad_pdf.exe    WIN-USER\Admin
-
-meterpreter > migrate 1340
-[*] Migrating from 4012 to 1340...
-[*] Migration completed successfully.
-```
-*Technical Note:* Migration involves allocating memory in the target process (`explorer.exe`), creating a new remote thread, and moving the active Meterpreter execution context over, all without crashing either process.
-
-## 7. Meterpreter Core Commands
-
-1. **`?` or `help`**
-   - Shows a list of commands with brief descriptions.
-2. **`background`**
-   - Places the current session into the background and brings you back to the Metasploit console without terminating the session.
-3. **`irb`**
-   - Starts the Interactive Ruby Shell, allowing the use of the Ruby scripting language to directly interact with the compromised system.
-4. **`exit` or `quit`**
-   - Returns to the Meterpreter console and formally closes the active session.
-5. **`migrate`**
-   - Moves the active Meterpreter session to a different process ID (PID).
-6. **`run`**
-   - Executes a Meterpreter script. If no path is specified, it searches the `scripts/meterpreter/` directory.
-
-## 8. Meterpreter File System Commands
-
-1. **`cat`**
-   - Displays the contents of a single file. *(Will throw an error if trying to read an empty file).*
-   - ```meterpreter > cat passwords.txt```
-2. **`cd`**
-   - Changes the current directory on the remote system.
-3. **`download`**
-   - Retrieves a file from the target into the local working directory. Use the `-r` switch to recursively download an entire directory.
-   - `meterpreter > download users.txt`
-4. **`edit`**
-   - Edits a file using the default text editor. It downloads a copy to a temp directory, and uploads the new file when editing is complete.
-5. **`getlwd`** / **`lpwd`**
-   - Shows the current working directory on the *local* machine (the attacker's machine).
-6. **`lcd`**
-   - Changes the *local* directory.
-7. **`ls`**
-   - Lists files in the current remote directory in a format similar to the GNU `ls` program.
-8. **`mkdir`**
-   - Makes a new directory on the target system.
-9. **`pwd`**
-   - Shows the current working directory on the *remote* machine.
-10. **`rmdir`**
-    - Removes an empty directory. Will throw an error if the directory is not empty.
-11. **`upload`**
-    - Sends a file to the target system. Use `-r` to recursively upload directories.
-
-## 9. Meterpreter Networking Commands
-
-1. **`ipconfig` / `ifconfig`**
-   - Displays network interface information on the compromised system (IP addresses, subnets, MAC addresses).
-2. **`portfwd`**
-   - Sets up port forwarding on the compromised system to pivot traffic deeper into the network.
-3. **`route`**
-   - Displays or modifies the system's routing table.
-
-## 10. Meterpreter System Commands
-
-1. **`clearev`**: Clears the Application, System, and Security event logs (Anti-forensics).
-2. **`execute`**: Executes a command on the remote system (e.g., `execute -f cmd.exe -c -H`).
-3. **`getpid`**: Shows the current process identifier.
-4. **`getuid`**: Shows the user that Meterpreter is currently running as.
-5. **`kill`**: Terminates a process by PID.
-6. **`pkill`**: Terminates processes by name.
-7. **`ps`**: Lists running processes.
-8. **`reboot`**: Reboots the remote computer.
-9. **`shell`**: Drops into a standard system command shell (e.g., `cmd.exe` or `/bin/bash`).
-10. **`shutdown`**: Shuts down the remote computer.
-11. **`sysinfo`**: Gets information about the remote system, such as OS, architecture, and language.
-
-## 11. Hash Dumping & Cracking
-
-### 11.1 Dumping the Hashes (SAM Database)
-Hash dumping refers to the process of extracting password hashes from a system or a computer's operating system. 
-- In Windows, local user passwords are not stored in plain text. They are hashed using the NTLM algorithm and stored in the **SAM (Security Account Manager)** database located in the registry (`HKLM\SAM`).
-- To extract these hashes, an attacker must have SYSTEM privileges. Once escalated, Meterpreter can extract them dynamically from memory or the registry using the `hashdump` command.
-
-```bash
-meterpreter > hashdump
-Administrator:500:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
-Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
-```
-*(The format is: `Username : UID : LM Hash : NTLM Hash : Comment : Home Dir`)*
-
-### 11.2 John the Ripper
-Once the hashes are dumped, they must be cracked to reveal the plaintext password. **John the Ripper** is a popular open-source password-cracking software used by security professionals to identify weak passwords.
-
-- **How it works:** It hashes millions of words from a dictionary file (like `rockyou.txt`) and compares the output to the stolen NTLM hashes. If the hashes match, the password is cracked.
-
-**Example Cracking Command:**
-```bash
-$ john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
-Loaded 1 password hash (NT [MD4 128/128 AVX 4x3])
-password123      (Administrator)
+```mermaid
+flowchart TD
+  Recon["External Wireless Tools (Aircrack-ng, Kismet)"] -->|"1. Capture Handshakes, Deauth, Monitor RF"| Assess["Wireless Security Assessment"]
+  Assess -->|"2. Exploit Web Portals & Rogue Redirection"| MSF["Metasploit Framework"]
+  MSF -->|"3. Auxiliary Testing, Fake Services, Handlers"| Exploit["Controlled Client-Side Exploitation"]
+  Exploit -->|"4. Interactive Session Management"| Session["Active Meterpreter Session"]
 ```
 
-> **Exam Point:** Remember that Meterpreter operates purely in memory to evade detection, uses Reverse TCP to bypass inbound firewalls, and requires SYSTEM level privileges (often obtained via `getsystem` token duplication) to perform advanced post-exploitation tasks like `hashdump` or `clearev`.
+### 3.1 The Hybrid Tooling Model
+Metasploit does not directly manage low-level 802.11 radio states, monitor mode transitions, or packet injection. Instead, wireless penetration testing uses a two-tier approach:
+1. **Tier 1 (Wireless-Specific Tools):** Tools like `aircrack-ng`, `airbase-ng`, `kismet`, and `wifite` handle raw frame capture, monitor mode, deauthentication, and 802.11 beacon/probe management.
+2. **Tier 2 (Metasploit Framework):** Once clients associate with a rogue AP or traffic is redirected, Metasploit takes over to provide fake network services (DNS, DHCP, HTTP), capture credentials, and deliver browser exploits.
+
+### 3.2 Metasploit Wireless Capabilities
+- **Auxiliary Fuzzers & Scanners:** Testing wireless management daemons and administrative web consoles.
+- **Credential Sniffing Servers:** Running mock authentication services (`auxiliary/server/capture/smb`, `auxiliary/server/capture/http_ntlm`).
+- **Fake Update Delivery:** Exploiting cleartext HTTP traffic to serve backdoored software updates.
+- **Automated Exploitation Frameworks:** Integrating with scripts like Karmetasploit to exploit connecting client browsers.
+
+## 4. Wireless Reconnaissance & Addressing
+
+Wireless reconnaissance maps radio environments, identifies deployed encryption suites, and uncovers connected client devices.
+
+```mermaid
+flowchart TD
+  RF["Radio Frequency Environment"] --> Probe["Wireless Interface in Monitor Mode"]
+  Probe --> Net["Capture Beacon & Probe Frames"]
+  Net --> E1["Identify SSIDs & Hidden Networks"]
+  Net --> E2["Map BSSIDs (Physical MACs) to Hardware Vendors"]
+  Net --> E3["Identify Operating Channels & Frequency Bands (2.4/5 GHz)"]
+  Net --> E4["Analyze Security Configurations (Open, WPA2, 802.1X)"]
+  Net --> E5["Map Active Client Stations (STAs) via Data Frames"]
+```
+
+### 4.1 SSID vs. BSSID
+
+#### 4.1.1 Network Identification Terminology
+- **SSID (Service Set Identifier):** The human-readable network name broadcast to users (e.g., `Corporate-Guest`, `Campus-WiFi`). An SSID can span multiple physical access points in an Extended Service Set (ESSID).
+- **BSSID (Basic Service Set Identifier):** The unique 48-bit MAC address of a specific physical access point radio interface.
+- **Client Station (STA):** The MAC address identifying an individual connected client endpoint.
+
+#### 4.1.2 The ESSID Relationship
+In enterprise networks, a single SSID is often broadcast across dozens of access points, each using a unique BSSID:
+
+$$\text{Single SSID (e.g., "Corporate-WiFi")} \implies \begin{cases} \text{BSSID 1: } \text{00:11:22:33:44:01} & (\text{Conference Room}) \\ \text{BSSID 2: } \text{00:11:22:33:44:02} & (\text{Executive Floor}) \\ \text{BSSID 3: } \text{00:11:22:33:44:03} & (\text{Cafeteria}) \end{cases}$$
+
+### 4.2 Wireless Channels and Frequency Bands
+
+802.11 networks operate across defined radio frequency channels to minimize mutual interference:
+
+```mermaid
+flowchart TD
+  Bands["802.11 Frequency Bands"]
+  Bands --> B24["2.4 GHz Band: 14 Channels (1 to 14)"]
+  Bands --> B50["5 GHz Band: 24+ Non-overlapping Channels"]
+  Bands --> B60["6 GHz Band (Wi-Fi 6E/7): Ultra-wide 160/320 MHz Channels"]
+
+  B24 --> NonOverlap["Standard Non-Overlapping Channels: 1, 6, 11 (20 MHz spacing)"]
+```
+
+- **Channel Overlap in 2.4 GHz:** Channels are spaced 5 MHz apart but require 20 MHz of bandwidth. Only channels **1, 6, and 11** do not overlap.
+- **Reconnaissance Objective:** Identifying channel assignments helps security testers spot overlapping coverage, co-channel interference, and unauthorized rogue access points operating on non-standard channels.
+
+## 5. Wireless Authentication & Association
+
+Clients follow a defined handshake and association process when joining an 802.11 network.
+
+```mermaid
+flowchart TD
+  C["Client Station (STA)"] -->|"1. Probe Request (Broadcast or Directed)"| AP["Access Point (AP)"]
+  AP -->|"2. Probe Response (Network Capabilities & Rates)"| C
+  C -->|"3. 802.11 Authentication Request (Open System)"| AP
+  AP -->|"4. 802.11 Authentication Response (Success)"| C
+  C -->|"5. 802.11 Association Request"| AP
+  AP -->|"6. 802.11 Association Response (AID Assigned)"| C
+  C <-->|"7. WPA2 4-Way Handshake (EAPOL Keys)"| AP
+  C -->|"8. DHCP Request (Obtain IP & Gateway)"| DHCP["DHCP Server"]
+```
+
+### 5.1 Personal vs. Enterprise Authentication Models
+
+```mermaid
+flowchart TD
+  subgraph PersonalModel ["WPA-Personal / PSK"]
+    STA1["Client"] <-->|"4-Way Handshake with Shared Secret"| AP1["Access Point (Stores Pre-Shared Key)"]
+  end
+
+  subgraph EnterpriseModel ["WPA-Enterprise / 802.1X"]
+    STA2["Client (Supplicant)"] <-->|"EAPoL over Radio"| AP2["Access Point (Authenticator)"]
+    AP2 <-->|"RADIUS Protocol (UDP 1812)"| Rad["RADIUS Server (Authentication Server)"]
+  end
+```
+
+- **WPA-Personal (PSK):** Every user shares the same static passphrase. If an attacker captures the 4-way handshake, they can launch offline dictionary attacks to crack the passphrase.
+- **WPA-Enterprise (802.1X):** Each user authenticates with individual domain credentials or client certificates via a RADIUS server. Even if an attacker intercepts one user's session, other users' communications remain protected.
+
+## 6. Evil Twin Attacks
+
+An Evil Twin is a rogue access point that mimics a legitimate wireless network by advertising the same SSID, tricking clients into connecting to the attacker's hardware.
+
+```mermaid
+flowchart TD
+  subgraph LegitimateEnv ["Authorized Enterprise Network"]
+    LegitAP["Legitimate Access Point\nSSID: 'Corporate-WiFi'\nBSSID: 00:11:22:33:44:55\nSignal: -70 dBm"]
+  end
+
+  subgraph RogueEnv ["Attacker Hardware"]
+    EvilAP["Evil Twin Access Point\nSSID: 'Corporate-WiFi'\nBSSID: AA:BB:CC:DD:EE:FF\nSignal: -35 dBm (Amplified)"]
+  end
+
+  Victim["Victim Client Station (STA)"]
+  Victim -.->|"Disconnects from Weaker Signal"| LegitAP
+  Victim ===>|"Auto-Associates with Stronger Signal"| EvilAP
+  EvilAP --> Mitm["Attacker Intercepts Credentials & Traffic"]
+```
+
+### 6.1 Why Clients Connect to Evil Twins
+Wireless client roaming algorithms make association decisions automatically based on:
+1. **SSID Matching:** The beacon frame matches an SSID stored in the client's Preferred Network List (PNL).
+2. **Signal Strength (RSSI):** 802.11 clients naturally roam to the access point advertising the highest signal strength.
+3. **Deauthentication Frames:** Attackers can transmit spoofed 802.11 deauthentication frames from the legitimate BSSID to disconnect the victim, forcing them to reconnect to the stronger Evil Twin.
+
+:::tip[CORE WIRELESS FLAW]
+**Matching an SSID name does not prove that an access point is legitimate.** Standard 802.11 beacon frames are unauthenticated, allowing any radio to broadcast arbitrary network names.
+:::
+
+### 6.2 Evil Twin Attack Chain
+
+```mermaid
+flowchart TD
+  S1["1. Wireless Reconnaissance: Identify target SSID, channel, and legitimate BSSID"] --> S2["2. Rogue AP Setup: Configure radio to broadcast identical SSID on a clean channel"]
+  S2 --> S3["3. Deauthentication Attack: Inject spoofed deauth frames to disconnect victims from legitimate AP"]
+  S3 --> S4["4. Client Re-association: Victim client auto-associates with the attacker's stronger Evil Twin"]
+  S4 --> S5["5. Network Provisioning: Rogue DHCP assigns IP, default gateway, and rogue DNS"]
+  S5 --> S6["6. Traffic & Credential Interception: Captive portal phishing, cleartext harvesting, MITM"]
+```
+
+### 6.3 Detecting Evil Twin Attacks
+
+Security operations and wireless network administrators spot Evil Twins by monitoring:
+- **Duplicate SSIDs:** Multiple access points broadcasting the same SSID with mismatched BSSID vendor prefixes.
+- **Channel Mismatches:** Network names appearing on radio channels not configured on corporate controllers.
+- **Anomalous Signal Strength:** Unexpectedly strong signals originating from parking lots or public lobbies.
+- **Encryption Inconsistencies:** An enterprise network configured for WPA2-Enterprise suddenly appearing as open or PSK.
+- **WIDS Alerts:** Detection of high-volume deauthentication frame bursts.
+
+## 7. Rogue Access Points
+
+A Rogue Access Point is any unauthorized wireless device connected to an enterprise network without administrative approval.
+
+```mermaid
+flowchart TD
+  subgraph EnterpriseWiredLAN ["Corporate Wired Subnet (Protected)"]
+    Switch["Core Enterprise Switch"]
+    Server["Internal Database Server"]
+    Firewall["Corporate Perimeter Firewall"]
+  end
+
+  subgraph RogueAPPlacement ["Unauthorized Device"]
+    Rogue["Rogue AP (Plugged into Cubicle Wall Jack)"]
+  end
+
+  Attacker["Attacker in Parking Lot"] -.->|"Bypasses Perimeter Firewall"| Rogue
+  Rogue === Switch
+  Switch === Server
+  Switch === Firewall
+```
+
+### 7.1 Rogue AP vs. Evil Twin Comparison
+
+| Feature | Rogue Access Point | Evil Twin |
+|---|---|---|
+| **Definition** | Any unauthorized AP connected to the internal network | A specialized rogue AP specifically impersonating a legitimate SSID |
+| **Network Name (SSID)** | Often uses default or arbitrary SSIDs (e.g., `NETGEAR`, `Linksys`) | Copies the exact SSID of a legitimate, authorized target network |
+| **Primary Intent** | Accidental convenience (employee) or unauthorized bypass | Malicious credential theft, traffic interception, and MITM attacks |
+| **Physical Location** | Usually plugged directly into an internal corporate Ethernet port | Can operate completely standalone as a battery-powered radio |
+| **Primary Risk** | Bridges the secure internal LAN directly to the air | Tricks clients into connecting to an attacker-controlled system |
+
+### 7.2 Defending Against Rogue APs & Evil Twins
+- **Wireless Intrusion Prevention Systems (WIPS):** Continuously scans for unauthorized radios and sends automated deauthentication frames to contain rogue devices.
+- **802.1X Port Security:** Enforces 802.1X authentication on all physical Ethernet switch ports, blocking unauthorized access points plugged into cubicle wall jacks.
+- **EAP-TLS Mutual Authentication:** Requires both the client and server to validate cryptographic certificates, preventing clients from connecting to unauthenticated Evil Twins.
+- **Managed Client Profiles:** Restricting employee devices from automatically connecting to open or unapproved networks.
+
+## 8. Karmetasploit & Karma Attacks
+
+Karmetasploit combines wireless access point emulation with the Metasploit Framework to automate client-side attacks.
+
+```mermaid
+flowchart TD
+  Client["Roaming Client Device"] -->|"1. Active Probe Request: 'Where is Starbucks-WiFi?'"| Air["Wireless Radio Airspace"]
+  Air --> Karma["Karma / Karmetasploit Engine"]
+  Karma -->|"2. Spoofed Probe Response: 'Yes, I am Starbucks-WiFi!'\n(Dynamically responds to ANY requested SSID)"| Client
+  Client -->|"3. Auto-associates with Rogue Access Point"| Karma
+  Karma --> Svc["Internal Metasploit Daemons: Rogue DNS, DHCP, Web, SMB"]
+  Svc --> Pwn["Serves Exploits, Harvests Credentials, Steals NTLM Hashes"]
+```
+
+### 8.1 The Karma Attack Concept
+When client devices leave their home or office, their operating systems continuously search for previously remembered networks stored in their **Preferred Network List (PNL)**:
+- The client broadcasts 802.11 Probe Request frames asking for specific networks (e.g., "Is `Home-Network` nearby?").
+- A Karma-enabled access point listens in promiscuous mode and immediately replies to *any* probe request with a matching Probe Response ("Yes, I am `Home-Network`").
+- The client's auto-connect feature accepts the response and establishes an immediate association.
+
+### 8.2 Karmetasploit Architecture and Workflow
+
+```mermaid
+flowchart TD
+  WNIC["Wireless Adapter (Monitor & Master Mode)"] --> AB["airbase-ng / hostapd (Rogue AP Daemon)"]
+  AB --> Tun["Virtual Network Tunnel Interface (at0)"]
+  Tun --> DHCPServer["DHCP Daemon (Assigns 10.0.0.x Addresses)"]
+  Tun --> MSF["Metasploit Framework Core"]
+
+  MSF --> DNS["auxiliary/server/fakedns: Resolves all hostnames to 10.0.0.1"]
+  MSF --> HTTP["auxiliary/server/capture/http_basic: Harvests web logins"]
+  MSF --> SMB["auxiliary/server/capture/smb: Intercepts NetNTLM handshakes"]
+  MSF --> POP["auxiliary/server/capture/pop3: Intercepts email credentials"]
+```
+
+#### 8.2.1 Operational Lifecycle
+1. **Lab Preparation:** Configure an injection-capable wireless adapter in monitor mode.
+2. **AP Emulation:** Launch `airbase-ng` with Karma options enabled to respond to all SSID probes.
+3. **Network Configuration:** Bring up the virtual network interface (`at0`) and start a DHCP daemon to assign IP addresses to connecting clients.
+4. **Metasploit Service Orchestration:** Load Metasploit resource scripts (`karmetasploit.rc`) to launch fake DNS, HTTP, SMB, and mail listeners.
+5. **Client Analysis:** Monitor connected clients as their applications generate background traffic against the simulated services.
+
+### 8.3 Detecting Karma-Style Attacks
+- **Unsolicited Probe Responses:** Monitoring for access points sending probe responses to SSIDs they were not originally configured to broadcast.
+- **Single BSSID Advertising Multiple SSIDs:** Flagging a single physical MAC address responding to probe requests for dozens of different network names simultaneously.
+- **Abnormal Gateway DNS Configuration:** Clients receiving DNS server addresses pointing directly to non-standard internal addresses that resolve all domains to a single IP.
+
+## 9. Wireless Man-in-the-Middle (MITM)
+
+Once a client associates with an Evil Twin or rogue access point, the attacker gains a Man-in-the-Middle (MITM) position over all communications.
+
+```mermaid
+flowchart TD
+  Client["Target Client Device"] -->|"Layer-2 Wi-Fi Association"| RogueAP["Rogue AP / Attacker Device"]
+  RogueAP -->|"Captures, Logs & Modifies Packets"| AttackerCore["Attacker Analysis Engine"]
+  AttackerCore -->|"NAT / IP Forwarding"| WAN["Upstream Internet Connection"]
+  WAN --> Upstream["Legitimate Web & Application Servers"]
+```
+
+### 9.1 The Attacker's Network Position
+By controlling the access point, the attacker serves as the client's default gateway and DNS server. This enables:
+- **Traffic Sniffing:** Inspecting all unencrypted communication passing through the wireless interface.
+- **DNS Redirection:** Spoofing DNS responses to route traffic intended for legitimate domains to local phishing servers.
+- **Packet Injection:** Injecting malicious payloads, tracking scripts, or backdoors into unencrypted HTTP downloads.
+- **Protocol Downgrade Attacks:** Attempting SSL-stripping to downgrade connections from HTTPS to plaintext HTTP where HSTS is not enforced.
+
+### 9.2 The Wireless MITM Attack Lifecycle
+
+```mermaid
+flowchart TD
+  P1["1. Radio Interception: Associate client via Evil Twin or Karma attack"] --> P2["2. Network Control: Provide rogue DHCP configuration (Default Gateway & DNS)"]
+  P2 --> P3["3. Traffic Forwarding: Enable IP forwarding to maintain valid internet access for the victim"]
+  P3 --> P4["4. Passive Observation: Log DNS queries, unencrypted form submissions, and API calls"]
+  P4 --> P5["5. Active Manipulation: Execute DNS spoofing, web page injection, and SMB credential harvesting"]
+```
+
+## 10. Traffic Interception & Encryption Analysis
+
+Controlling the wireless link exposes network traffic, but modern end-to-end encryption limits an attacker's visibility.
+
+### 10.1 What Can Wireless MITM Reveal?
+
+```mermaid
+flowchart TD
+  Intercept["Traffic Intercepted at Rogue AP"]
+  Intercept --> Unenc["Unencrypted Cleartext Traffic (HTTP, DNS, FTP)"]
+  Intercept --> Enc["Encrypted Traffic (HTTPS, SSH, VPN, TLS)"]
+
+  Unenc --> V1["Full URLs & GET/POST query parameters"]
+  Unenc --> V2["Cleartext passwords & unauthenticated cookies"]
+  Unenc --> V3["DNS queries revealing user browsing history"]
+
+  Enc --> P1["Source & Destination IP addresses"]
+  Enc --> P2["SNI (Server Name Indication) domain metadata"]
+  Enc --> P3["Traffic volume, packet sizes, and connection timing"]
+  Enc --> Protected["Application data and credentials remain fully protected"]
+```
+
+### 10.2 The Role of HTTPS in Wireless Security
+
+:::important[CRITICAL ENCRYPTION PRINCIPLE]
+**A rogue Wi-Fi network does not automatically compromise encrypted HTTPS traffic.** When a client connects to a web service over validated TLS, end-to-end encryption protects the session:
+- **Payload Confidentiality:** Application data, form fields, and passwords remain encrypted.
+- **Data Integrity:** Attackers cannot inject scripts or modify web page content without triggering TLS certificate warnings.
+- **Server Authentication:** Digital certificates signed by trusted Certificate Authorities (CAs) prevent the rogue AP from impersonating the server unless the client manually bypasses browser warnings.
+:::
+
+## 11. Credential Security & SMB Relay Attacks
+
+Connecting an enterprise client to a rogue network exposes operating system background services to credential capture and relay attacks.
+
+### 11.1 The SMB Relay Attack
+
+An SMB Relay attack intercepts a client's network authentication attempt and forwards it to a secondary target server, gaining access without cracking the underlying password.
+
+```mermaid
+flowchart TD
+  Victim["Victim Client Station (Auto-connecting via Rogue Wi-Fi)"] -->|"1. Initiates File Access / WPAD Query"| Attacker["Attacker (Rogue AP / Responder)"]
+  Attacker -->|"2. Intercepts NetNTLM Authentication Request"| Attacker
+  Attacker -->|"3. Forwards (Relays) Handshake"| TargetServer["Target Corporate SMB Server"]
+  TargetServer -->|"4. Returns NTLM Challenge"| Attacker
+  Attacker -->|"5. Forwards Challenge"| Victim
+  Victim -->|"6. Computes NetNTLM Response with Password Hash"| Attacker
+  Attacker -->|"7. Relays Valid Response"| TargetServer
+  TargetServer -->|"8. Authentication Accepted! Grants Admin Shell to Attacker"| Attacker
+```
+
+### 11.2 SMB Relay vs. Password Attacks
+
+| Dimension | SMB Relay Attack | Password Attack (Brute Force / Cracking) |
+|---|---|---|
+| **Core Operation** | Forwards live authentication handshakes in real-time | Attempts to guess or reverse-calculate the password hash |
+| **Password Knowledge**| Does **not** require discovering or cracking the password | Requires cracking the hash into cleartext to log in |
+| **Primary Dependency**| Inadequate SMB signing and vulnerable NTLM protocols | Weak password complexity and insufficient hash algorithms |
+| **Attack Target** | Targets the **authentication process** | Attacks **credential secrecy** |
+
+### 11.3 SMB Signing: The Primary Defensive Control
+
+SMB Signing protects message integrity and authenticity by calculating a cryptographic signature for every SMB packet using a session key derived during authentication.
+
+```mermaid
+flowchart TD
+  Client["Client System"] -->|"Calculates Cryptographic Signature Using Session Key"| SignedMsg["Signed SMB Messages"]
+  SignedMsg --> Server["Target SMB Server"]
+  Server -->|"Verifies Signature: Confirms Packet Has Not Been Relayed"| Accepted["Valid Request Processed"]
+```
+
+- When SMB Signing is **required**, an attacker cannot relay authentication packets to a secondary server because they lack the session key needed to sign subsequent commands.
+- If SMB Signing is disabled or optional, an attacker can relay the authentication handshake and execute arbitrary code on the target server.
+
+### 11.4 Mitigations Against SMB Relay
+- **Enforce SMB Signing:** Require SMB Signing across all domain workstations and servers via Group Policy:
+  - `Microsoft network client: Digitally sign communications (always) = Enabled`
+  - `Microsoft network server: Digitally sign communications (always) = Enabled`
+- **Disable LLMNR and NetBIOS:** Turn off legacy broadcast name resolution protocols that attackers use to trigger authentication attempts.
+- **Enable Extended Protection for Authentication (EPA):** Binds TLS channels to authentication handshakes to prevent relaying across protocols.
+- **Network Segmentation:** Use VLANs and host firewalls to block workstation-to-workstation SMB traffic on port 445.
+
+## 12. Comparative Analysis of Wireless Attack Vectors
+
+| Attack Vector | Primary Target | Core Operational Mechanism | Primary Defensive Countermeasure |
+|---|---|---|---|
+| **Evil Twin** | Client station | Impersonates legitimate APs by copying known SSIDs | 802.1X EAP-TLS, certificate validation, WIPS |
+| **Karma Attack** | Client station | Dynamically replies to any SSID probe requests from client PNLs | Disable auto-connect, use WPA3, disable open Wi-Fi |
+| **Rogue Access Point** | Wired enterprise LAN | Connects unauthorized APs to internal physical switch ports | 802.1X port security, rogue AP sweeps, switch port auditing |
+| **Wireless MITM** | Traffic stream | Intercepts Layer-2/Layer-3 traffic between client and gateway | End-to-end TLS/HTTPS, HSTS, always-on corporate VPNs |
+| **SMB Relay** | Authentication flow | Forwards live NetNTLM authentication handshakes to target servers | Mandatory SMB Signing, disable NTLM in favor of Kerberos |
+
+## 13. Comprehensive Case Studies
+
+### 13.1 Case Study 1: University Campus Evil Twin Attack
+
+#### 13.1.1 Incident Scenario
+A university campus operates an enterprise Wi-Fi network broadcasting `SSID: University-WiFi`. A network administrator notices an alert on the campus WIDS console indicating a second access point broadcasting `SSID: University-WiFi` with:
+- A completely different BSSID registered to a consumer hardware vendor.
+- A physical location mapped near the campus perimeter.
+- A basic WPA2-Personal (PSK) security configuration, whereas the legitimate network enforces WPA2-Enterprise (802.1X).
+
+#### 13.1.2 Investigative Analysis & Solutions
+
+##### Question 1: What is the likely attack?
+- This is an **Evil Twin attack**. The rogue device is imitating the legitimate `University-WiFi` SSID to deceive campus users into connecting.
+
+##### Question 2: Which evidence supports this conclusion?
+- **Identical SSID with Mismatched BSSID:** A consumer hardware MAC address broadcasting the enterprise network name.
+- **Security Downgrade:** The unauthorized AP uses WPA2-Personal, designed to prompt users for credentials or display a captive portal instead of the campus 802.1X/RADIUS server.
+- **Physical Anomaly:** Signal triangulation locates the source near the campus perimeter rather than installed ceiling APs.
+
+##### Question 3: What should the wireless administrator investigate?
+- Triangulate the physical location of the rogue radio using directional antennas or controller RSSI mapping.
+- Inspect 802.11 management frames for high-volume deauthentication frame bursts.
+- Check switch MAC address tables to confirm whether the device is plugged into an internal Ethernet port.
+
+##### Question 4: How could connecting clients detect the difference?
+- Properly configured client devices configured for 802.1X will alert users or refuse to connect because the rogue network does not present the university's trusted root CA certificate.
+- Users can observe unexpected captive portals or prompts requesting passwords instead of standard 802.1X credentials.
+
+##### Question 5: What controls prevent this attack?
+- Deploy 802.1X with mutual certificate validation (EAP-TLS).
+- Enable Wireless Intrusion Prevention Systems (WIPS) to transmit containment frames against the rogue BSSID.
+- Distribute managed device profiles that prevent auto-connecting to open or PSK-based networks.
+
+### 13.2 Case Study 2: Wireless MITM Traffic Interception
+
+#### 13.2.1 Incident Scenario
+An employee working remotely connects a corporate laptop to an unknown wireless network. Shortly after association:
+- The default gateway IP changes to an unexpected local subnet address.
+- DNS queries begin resolving to an unknown, non-corporate DNS server.
+- The user accesses several internal and external websites, producing unencrypted HTTP and encrypted HTTPS traffic.
+
+#### 13.2.2 Investigative Analysis & Solutions
+
+##### Question 1: What attack position exists?
+- The attacker has established a **Wireless Man-in-the-Middle (MITM)** position, controlling the client's Layer-2 and Layer-3 traffic as the default gateway and DNS provider.
+
+##### Question 2: Which traffic is potentially exposed?
+- **Exposed:** Cleartext HTTP requests, unencrypted form submissions, session cookies without the `Secure` flag, and cleartext DNS queries revealing browsing activity.
+- **Protected:** All traffic encrypted under properly validated HTTPS/TLS sessions.
+
+##### Question 3: Why does HTTPS traffic remain protected?
+- TLS provides end-to-end encryption between the browser and the target web server. Unless the attacker presents a certificate trusted by the client's root certificate store and the user ignores browser security warnings, the session payload remains encrypted and tamper-proof.
+
+##### Question 4: What digital evidence should be collected?
+- **Endpoint Event Logs:** DHCP configuration history and adapter IP assignments.
+- **Network Traffic (PCAP):** Packet captures verifying DNS responses, ARP tables, and rogue gateway IP addresses.
+- **Browser History & Cache:** Active browser sessions and any SSL/TLS certificate warnings prompted during the session.
+
+##### Question 5: What controls reduce this operational risk?
+- Mandate an **always-on corporate VPN** that encrypts all outbound traffic from the endpoint regardless of the underlying network.
+- Enforce **DNS-over-HTTPS (DoH)** or secure internal DNS resolvers.
+- Enforce **HTTP Strict Transport Security (HSTS)** to prevent protocol downgrade attacks.

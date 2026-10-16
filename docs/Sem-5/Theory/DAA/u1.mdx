@@ -10,6 +10,9 @@ keywords:
   - recurrence relations
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Unit - 1
 :::info[TITLE]
 ## Basics of Algorithms and Mathematics
@@ -73,7 +76,32 @@ keywords:
 - While "schoolbook" multiplication is simple, the Karatsuba algorithm is a fundamental algorithm taught to improve it. It splits the $n$-digit numbers into halves and uses mathematical tricks to perform only three multiplications instead of four.
 - **Time Complexity**: $O(n^{\log_2 3}) \approx O(n^{1.585})$, making it faster than schoolbook multiplication for large integers.
 
-#### 5.3.1 Algorithm Pseudocode
+#### 5.3.1 Algorithm
+
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Normally, multiplying two large numbers requires **4 separate multiplications** (like $(a+b)(c+d) = ac + ad + bc + bd$).
+Karatsuba discovered a shortcut: we only need **3 multiplications** instead of 4, because we can compute the middle cross-term $(ad + bc)$ by calculating $(a+b)(c+d) - ac - bd$!
+
+### 👣 4 Easy Steps to Remember
+1. **Split in Half**: Break both numbers into left and right halves:
+   - $X = a \cdot 10^m + b$ (high half $a$, low half $b$)
+   - $Y = c \cdot 10^m + d$ (high half $c$, low half $d$)
+2. **Do 3 Multiplications (Not 4!)**:
+   - $p_1 = a \times c$ (multiply the high halves)
+   - $p_2 = b \times d$ (multiply the low halves)
+   - $p_3 = (a + b) \times (c + d)$ (multiply the sum of halves)
+3. **Find the Middle Term**:
+   - $\text{Middle} = p_3 - p_1 - p_2$ (which cleverly equals $ad + bc$)
+4. **Assemble the Final Result**:
+   - $\text{Answer} = (p_1 \times 10^{2m}) + (\text{Middle} \times 10^m) + p_2$
+
+> **🧠 Memory Trick:** Split in half $\to$ multiply lefts ($p_1$), multiply rights ($p_2$), multiply cross-sum ($p_3$) $\to$ subtract $p_1$ and $p_2$ from $p_3$ for the middle!
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
 
 ```text showLineNumbers
 Algorithm Karatsuba(X, Y, n)
@@ -101,6 +129,9 @@ Algorithm Karatsuba(X, Y, n)
     return p1 * 10^(2 * m) + (p3 - p1 - p2) * 10^m + p2;
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## 6. Questions
 

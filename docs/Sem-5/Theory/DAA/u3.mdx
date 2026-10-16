@@ -10,6 +10,9 @@ keywords:
   - minimum spanning tree
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Unit - 3
 :::info[TITLE]
 ## Greedy Algorithms
@@ -81,6 +84,28 @@ xychart-beta
 
 ### 5.4 Algorithm
 
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Imagine connecting cities with roads at the lowest possible cost:
+You list every possible road sorted from **cheapest to most expensive**.
+You start building from the cheapest road. If a road would create a **redundant loop (cycle)** between cities that can already reach each other, you simply skip it!
+Once every city is connected without any loops, you're done!
+
+### 👣 3 Easy Steps to Remember
+1. **Sort All Edges**: List all edges in ascending order of their weights (cheapest first).
+2. **Pick the Cheapest Edge**:
+   - Check if the two endpoints $u$ and $v$ are already in the same connected group (`FindSet(u) == FindSet(v)`).
+   - **If different groups (No Cycle)**: Include this edge in the MST and merge their groups (`Union(u, v)`).
+   - **If same group (Forms a Cycle)**: Discard the edge!
+3. **Finish**: Stop when you have collected exactly $V - 1$ edges (connecting all $V$ vertices).
+
+> **🧠 Memory Trick:** **Sort edges $\to$ Pick cheapest $\to$ Skip cycles (Union-Find).** Edge-focused approach with $O(E \log E)$ time complexity.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
+
 ```text showLineNumbers
 Algorithm Kruskal(G, w)
 // Finds Minimum Spanning Tree (MST) using greedy approach
@@ -106,6 +131,9 @@ Algorithm Kruskal(G, w)
     return A;
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## 6. Prim’s Algorithm
 
@@ -134,6 +162,31 @@ xychart-beta
 ```
 
 ### 6.4 Algorithm
+
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Think of laying electrical cables outwards from your house:
+You start at any single house (the root).
+You look at all the neighboring houses directly reachable from your current wired network and ask: *"Which neighbor is the **cheapest** to connect?"*
+You lay cable to that cheapest neighbor. Now your wired network has two houses.
+Repeat: always pick the cheapest edge connecting an already-wired house to an un-wired house.
+The tree grows steadily outward like a creeping vine until all houses are powered!
+
+### 👣 3 Easy Steps to Remember
+1. **Plant the Seed**: Pick any start node $r$. Set its cost to $0$ (`key[r] = 0`) and all other nodes to $\infty$. Put all nodes in a priority queue.
+2. **Pick the Cheapest Unreached Node**:
+   - Pull the node $u$ with the lowest cost out of the queue (`ExtractMin`). It is now locked into the MST!
+3. **Update Its Neighbors**:
+   - Look at all neighbors $v$ of $u$ that are still waiting in the queue.
+   - If the road from $u$ to $v$ is cheaper than $v$'s current best known connection, update $v$'s cost and remember that $v$ connects through $u$ (`parent[v] = u`).
+   - Repeat until the queue is empty!
+
+> **🧠 Memory Trick:** **Start with 1 node $\to$ Always grow outward along the cheapest attached branch $\to$ All nodes covered!** Vertex-focused approach with $O(E \log V)$ time using a Min-Heap.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
 
 ```text showLineNumbers
 Algorithm Prim(G, w, r)
@@ -165,6 +218,9 @@ Algorithm Prim(G, w, r)
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## 7. Dijkstra’s Algorithm
 
 ### 7.1 Concept
@@ -192,6 +248,35 @@ xychart-beta
 ```
 
 ### 7.4 Algorithm
+
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Think of GPS navigation calculating the quickest route from your home to everywhere else:
+You start at home with distance **$0$**, while the distance to every other location is set to **$\infty$ (unexplored)**.
+At each step, you pick the unvisited location currently **closest** to home.
+From there, you check each road to its neighbors and ask: *"Can I get to neighbor $v$ faster by driving through here?"*
+If the shortcut is better, you update $v$'s shortest distance (this is called **edge relaxation**!).
+Repeat until every location has been visited.
+
+### 👣 3 Easy Steps to Remember
+1. **Initialize Distances**:
+   - Distance to source $s$ is $0$ (`dist[s] = 0`).
+   - Distance to all other nodes is $\infty$ (`dist[v] = infinity`).
+   - Add all vertices into a Min-Priority Queue.
+2. **Pick the Closest Node**:
+   - Extract the node $u$ with the minimum `dist[u]`. Its shortest path from source is now finalized!
+3. **Relax Neighbors**:
+   - For every neighbor $v$ of $u$:
+   - If taking the road through $u$ is shorter: `dist[u] + weight(u, v) < dist[v]`
+   - Update: `dist[v] = dist[u] + weight(u, v)` and set `parent[v] = u`.
+   - Repeat until the queue is empty!
+
+> **🧠 Memory Trick:** **Start at 0, others $\infty$ $\to$ Pick smallest $\to$ Relax neighbors: if `dist[u] + cost < dist[v]`, take the shortcut!** Works only for non-negative edge weights. Runs in $O((V+E) \log V)$ with a Min-Heap.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
 
 ```text showLineNumbers
 Algorithm Dijkstra(G, w, s)
@@ -227,6 +312,9 @@ Algorithm Dijkstra(G, w, s)
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## 8. Fractional Knapsack Problem
 
 ### 8.1 Concept
@@ -255,6 +343,28 @@ xychart-beta
 ```
 
 ### 8.4 Algorithm
+
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Imagine filling a backpack with spices or gold dust that can be divided into any amount:
+You want the maximum possible total value, but your bag can only carry $W$ kilograms.
+The smartest greedy strategy is simple: calculate the **price per kilogram** for each item!
+Always take the item with the highest price per kg first.
+When your bag is almost full and the next item is too heavy to fit completely, **chop it** and take just the fraction that fills the remaining space!
+
+### 👣 3 Easy Steps to Remember
+1. **Calculate Value-per-Weight**: For each item $i$, compute its ratio: $\text{ratio}_i = \text{profit}[i] / \text{weight}[i]$.
+2. **Sort Items**: Arrange all items in descending order of ratio (best value per kg at the top).
+3. **Fill the Knapsack**:
+   - For each item, if its entire weight fits into the remaining capacity: take all of it ($x[i] = 1.0$) and reduce remaining capacity.
+   - If it cannot fit completely: take the exact fraction that tops off the bag ($x[i] = \text{remainingCapacity} / \text{weight}[i]$) and stop!
+
+> **🧠 Memory Trick:** **Calculate Profit/Weight $\to$ Sort highest first $\to$ Take whole items $\to$ Slice the last item to fill the gap!** Runs in $O(n \log n)$ time due to sorting.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
 
 ```text showLineNumbers
 Algorithm FractionalKnapsack(W, n, p, w)
@@ -289,6 +399,9 @@ Algorithm FractionalKnapsack(W, n, p, w)
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## 9. Activity Selection Problem
 
 ### 9.1 Concept
@@ -316,6 +429,31 @@ xychart-beta
 
 ### 9.4 Algorithm
 
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Imagine you have one single conference hall and 10 speakers wanting to use it today:
+Each speaker gives you their start time and end time. You want to host the **maximum number of talks** without any overlaps.
+What is the golden rule?
+**Always pick the talk that finishes earliest!**
+Why? Because finishing early leaves the most free time remaining for future speakers throughout the rest of the day!
+
+### 👣 3 Easy Steps to Remember
+1. **Sort by Finish Time**: Arrange all activities in order of when they **finish** ($f_1 \le f_2 \le \dots \le f_n$).
+2. **Pick the Earliest Finisher**: Always schedule the very first activity ($A = \{1\}$). Set your clock pointer $k = 1$.
+3. **Filter Compatible Talks**:
+   - Walk through the remaining activities one by one ($m = 2 \dots n$).
+   - If activity $m$ starts *after or when* activity $k$ finishes ($s[m] \ge f[k]$):
+     - Book it! Add $m$ to your schedule ($A = A \cup \{m\}$).
+     - Update your clock: $k = m$.
+   - Otherwise, skip it because it clashes!
+
+> **🧠 Memory Trick:** **Sort by finish time $\to$ Take the first $\to$ Take next whenever `start >= last_finish`!** Greedy choice: whoever ends earliest wins! Runs in $O(n \log n)$ time.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
+
 ```text showLineNumbers
 Algorithm ActivitySelection(s, f, n)
 // Selects a maximum-size set of mutually compatible activities
@@ -337,6 +475,9 @@ Algorithm ActivitySelection(s, f, n)
     return A;
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## 10. Huffman Codes
 
@@ -370,6 +511,34 @@ xychart-beta
 
 ### 10.4 Algorithm
 
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Think of Morse code or ZIP file compression:
+In any English book, the letter **'E'** appears thousands of times, while **'Z'** is very rare.
+If we assign 'E' a super short code (like `0`) and 'Z' a longer code (like `11101`), the entire book becomes much smaller!
+Huffman coding creates the perfect variable-length code:
+It repeatedly merges the **two rarest characters together**, building a binary tree from the ground up until every character has a code!
+
+### 👣 3 Easy Steps to Remember
+1. **Count & Put into Min-Heap**: Count how often each character appears, and place all characters into a Min-Priority Queue.
+2. **Merge the Two Smallest Nodes**:
+   - While the queue has more than 1 node:
+   - Pop the **two nodes with the smallest frequencies** ($x$ and $y$).
+   - Create a parent node $z$ whose frequency is their sum ($x.\text{freq} + y.\text{freq}$).
+   - Set $x$ as the left child and $y$ as the right child.
+   - Put $z$ back into the queue!
+3. **Assign Binary Bits**:
+   - The final remaining node is the root of the tree.
+   - Trace from the root to every leaf: label left branches with `0` and right branches with `1`.
+   - The sequence of bits leading to each character is its compressed prefix code!
+
+> **🧠 Memory Trick:** **Take 2 lowest frequencies $\to$ Merge into parent $\to$ Push back into Min-Heap $\to$ Repeat until 1 tree $\to$ Left=0, Right=1.** Frequent letters get short codes! Runs in $O(n \log n)$ time.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
+
 ```text showLineNumbers
 Algorithm Huffman(C)
 // Generates optimal prefix codes (Huffman tree) for characters in set C
@@ -390,4 +559,7 @@ Algorithm Huffman(C)
     return ExtractMin(Q); // Returns root of Huffman tree
 }
 ```
+
+</TabItem>
+</Tabs>
 

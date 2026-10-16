@@ -10,6 +10,9 @@ keywords:
   - binary search
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Unit - 2
 :::info[TITLE]
 ## Divide & Conquer Algorithms
@@ -157,6 +160,29 @@ xychart-beta
 
 ### 9.4 Algorithm
 
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Think of looking up a word in a dictionary: you don't read page-by-page from the start. You open right in the **middle**!
+- If your word comes *after* the middle page, you throw away the left half and check the middle of the right half.
+- If your word comes *before*, you throw away the right half and check the left half.
+- You repeat this until you land on your word! Because the search space is cut in half every time, even searching 1,000,000 items takes at most **20 checks**!
+
+### 👣 4 Easy Steps to Remember
+1. **Set Boundaries**: Put two pointers at the ends — `low` at the start ($0$), `high` at the end ($n-1$).
+2. **Find the Middle**: Calculate midpoint index: $\text{mid} = \text{low} + (\text{high} - \text{low}) / 2$.
+3. **Check the Middle Element**:
+   - **Match!** If $A[\text{mid}] == x$, return $\text{mid}$ immediately.
+   - **Target is Bigger ($A[\text{mid}] < x$)**: The answer must be in the right half $\to$ move $\text{low} = \text{mid} + 1$.
+   - **Target is Smaller ($A[\text{mid}] > x$)**: The answer must be in the left half $\to$ move $\text{high} = \text{mid} - 1$.
+4. **Stop Condition**: Loop while $\text{low} \le \text{high}$. If $\text{low} > \text{high}$, the item does not exist $\to$ return $-1$.
+
+> **🧠 Memory Trick:** Array must be **sorted** $\to$ check middle $\to$ target bigger? go right (`low = mid + 1`) $\to$ target smaller? go left (`high = mid - 1`).
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
+
 ```text showLineNumbers
 Algorithm BinarySearch(A, low, high, x)
 // Searches for element x in a sorted array A[low..high]
@@ -177,6 +203,9 @@ Algorithm BinarySearch(A, low, high, x)
     return -1;                         // Element not found
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## 10. Merge Sort
 
@@ -207,6 +236,29 @@ xychart-beta
 ```
 
 ### 10.4 Algorithm
+
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Think of sorting a messy pile of numbered cards:
+Instead of sorting everything at once, you **chop the pile in half** again and again until you hold single cards (a single card is already sorted!).
+Then, you **zipper merge** pairs of sorted piles: compare their top cards, place the smaller one down first, and repeat. You keep merging upward until you have one perfectly sorted pile!
+
+### 👣 3 Easy Steps to Remember
+1. **Divide (Split in Half)**: If the subarray has more than 1 element ($\text{low} < \text{high}$), calculate $\text{mid} = \text{low} + (\text{high} - \text{low}) / 2$.
+2. **Conquer (Sort Each Half)**:
+   - Recursively sort the **left half**: `MergeSort(A, low, mid)`.
+   - Recursively sort the **right half**: `MergeSort(A, mid + 1, high)`.
+3. **Combine (Zipper Merge)**:
+   - Look at the front of both sorted halves.
+   - Take whichever number is smaller and place it into the main array.
+   - Once one half runs out, copy over any leftover numbers from the other half.
+
+> **🧠 Memory Trick:** **Split down to 1 $\to$ Zipper merge back up!** Compare the tops of both piles, take the smaller one, and advance. Always runs in $\Theta(n \log n)$ time.
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
 
 ```text showLineNumbers
 Algorithm MergeSort(A, low, high)
@@ -272,6 +324,9 @@ Algorithm Merge(A, low, mid, high)
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## 11. Quick Sort
 
 ### 11.1 Concept
@@ -307,6 +362,32 @@ xychart-beta
 
 ### 11.4 Algorithm
 
+<Tabs>
+<TabItem value="simple" label="Simple (Easy to Remember)" default>
+
+### 💡 The Big Idea in Plain English
+Think of organizing students by height:
+You pick one student to be the **pivot** (say, the last student in line).
+Then you instruct: *"Anyone shorter than the pivot, step to the left! Anyone taller, step to the right!"*
+Now, the pivot student is standing in their **exact, permanent sorted spot**!
+You then simply repeat the same process on the left group and the right group until everyone is sorted.
+
+### 👣 3 Easy Steps to Remember
+1. **Pick a Pivot**: Choose an element (standard choice: the last element `pivot = A[high]`).
+2. **Partition (The Traffic Cop)**:
+   - Walk through the array from left to right.
+   - Whenever an element is smaller than the pivot, swap it into the left section.
+   - Once finished, swap the pivot right between the smaller and larger numbers.
+   - The pivot index $pi$ is now locked in its final position!
+3. **Repeat on Both Sides**:
+   - Recursively sort the left side: `QuickSort(A, low, pi - 1)`.
+   - Recursively sort the right side: `QuickSort(A, pi + 1, high)`.
+
+> **🧠 Memory Trick:** **Pick pivot $\to$ Smaller to left, larger to right $\to$ Pivot locked $\to$ Repeat for both sides!** Average time: $\Theta(n \log n)$, worst-case: $O(n^2)$ (if already sorted).
+
+</TabItem>
+<TabItem value="code" label="Formal Algorithm (Code)">
+
 ```text showLineNumbers
 Algorithm QuickSort(A, low, high)
 // Sorts subarray A[low..high] using divide and conquer
@@ -340,6 +421,9 @@ Algorithm Partition(A, low, high)
     return (i + 1);
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## 12. Matrix Multiplication (Strassen's Algorithm)
 

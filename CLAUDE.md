@@ -24,7 +24,7 @@ The site has two independent surfaces:
 
 ### 1. Portfolio landing page (custom React app)
 
-`src/pages/index.js` composes section components from `src/components/` (Hero, About, Experience, Projects, Certifications, Contact) into a single animated page. Animation stack: GSAP + ScrollTrigger (registered in `index.js` and hooks), Lenis smooth scrolling driven by the GSAP ticker, plus Framer Motion, anime.js, and Three.js in individual components. Reusable GSAP patterns live as hooks in `src/hooks/` (useSmoothScroll, useScrollTrigger, useStaggerReveal, useTextScramble).
+`src/pages/index.js` composes section components from `src/components/` (Hero, About, Experience, Projects, Certifications, Contact) into a single animated page. Animation stack: GSAP + ScrollTrigger (registered in `index.js` and hooks), Lenis smooth scrolling driven by the GSAP ticker, anime.js, and canvas effects (Matrix rain). Reusable GSAP patterns live as hooks in `src/hooks/` (useSmoothScroll, useScrollTrigger, useStaggerReveal, useTextScramble).
 
 Styling is plain CSS files sitting next to each component (e.g. `Hero.css`) plus global Infima theme overrides in `src/css/custom.css`.
 

@@ -142,6 +142,12 @@ html[data-theme='light'] .navbar__inner {
   position: fixed !important;
   inset: 0;
   z-index: 9999 !important;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+html[data-theme='dark'] .navbar-sidebar {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(var(--blur-amount, 8px)) saturate(180%);
 }
 
 html:has(.navbar-sidebar--show) .navbar {
@@ -158,15 +164,6 @@ html:has(.navbar-sidebar--show) .navbar {
 
 html[data-theme='dark'] .theme-doc-sidebar-container {
   background: rgba(0, 0, 0, 0.85);
-}
-
-.navbar-sidebar {
-  background: rgba(255, 255, 255, 0.95);
-}
-
-html[data-theme='dark'] .navbar-sidebar {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(var(--blur-amount, 8px)) saturate(180%);
 }
 
 pre {
@@ -277,10 +274,6 @@ h1 {
 
 html[data-theme='dark'] h1 {
   background: linear-gradient(90deg, #ff4dff, #00ffff);
-}
-
-html[data-theme='dark'] h1 {
-  background: linear-gradient(90deg, #ff4dff, #00ffff);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -310,10 +303,6 @@ summary {
 
 .social-icons img {
   margin: 0 8px;
-  /* horizontal spacing */
-}
-
-.social-icons img {
   transition: transform 0.2s ease;
 }
 

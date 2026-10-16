@@ -31,7 +31,7 @@ It is far more than a static site: rich mathematical notation, diagrams, instant
 
 ## ✨ Features
 
-- **🎬 Motion-rich portfolio** — GSAP + ScrollTrigger choreography, Lenis buttery smooth scrolling, Framer Micro-interactions, Three.js visuals, and canvas effects (Matrix rain, particle grid)
+- **🎬 Motion-rich portfolio** — GSAP + ScrollTrigger choreography, Lenis buttery smooth scrolling, anime.js animations, and canvas effects (Matrix rain)
 - **🧮 Math notation** — Full KaTeX support (`$E = mc^2$`) wired into both docs and blog
 - **📊 Diagramming** — Mermaid flowcharts and sequence diagrams rendered natively
 - **🔍 Instant search** — Offline-capable local search (`docusaurus-search-local`) with highlighted terms on target pages
@@ -45,8 +45,7 @@ It is far more than a static site: rich mathematical notation, diagrams, instant
 | Layer | Technology |
 |---|---|
 | Framework | [Docusaurus 3](https://docusaurus.io/) · React 19 |
-| Animation | GSAP · Anime.js · Framer Motion · Lenis |
-| 3D | Three.js |
+| Animation | GSAP · Anime.js · Lenis |
 | Content | MDX · remark-math + rehype-katex · Mermaid |
 | Search | [@easyops-cn/docusaurus-search-local](https://github.com/easyops-cn/docusaurus-search-local) |
 | Hosting | GitHub Pages |

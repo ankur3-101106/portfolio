@@ -80,15 +80,14 @@ export default function SideDock() {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
 
-    const observer = new MutationObserver(() => {
-      const isLight = document.querySelector('.custom-navbar')?.classList.contains('light');
+    const updateTheme = () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
       setTheme(isLight ? 'light' : 'dark');
-    });
+    };
+    updateTheme();
 
-    const navEl = document.querySelector('.custom-navbar');
-    if (navEl) {
-      observer.observe(navEl, { attributes: true, attributeFilter: ['class'] });
-    }
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     return () => observer.disconnect();
   }, []);

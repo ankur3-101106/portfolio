@@ -407,7 +407,7 @@ flowchart TD
 - **Preserve Evidentiary Integrity:** Take screenshots, record hashes of test artifacts, and maintain chain of custody.
 - **Clean Up Artifacts:** Terminate injected threads, remove temporary accounts, restore modified registry keys, and delete test files upon completion.
 
-:::important[PROFESSIONAL OPSEC GOLDEN RULE]
+:::warning[PROFESSIONAL OPSEC GOLDEN RULE]
 A professional penetration test is **not a competition to leave zero evidence**. Its objective is to provide a comprehensive, transparent security assessment that helps the organization locate and remediate risk.
 :::
 
@@ -795,7 +795,7 @@ flowchart TD
 - **Meterpreter Client:** Runs within the Metasploit Framework on the tester's machine. It handles user command parsing, manages active sessions, and serializes requests.
 - **Meterpreter Server:** Executes entirely in the memory space of the target process. It listens for incoming commands, interacts with native operating system APIs, and transmits structured responses.
 
-:::important[CLIENT/SERVER TERMINOLOGY NOTE]
+:::tip[CLIENT/SERVER TERMINOLOGY NOTE]
 The terms *client* and *server* describe the software architecture of Meterpreter components, not the direction of the underlying network connection (which is often a reverse connection initiated by the target).
 :::
 
@@ -818,7 +818,7 @@ All communications between the Metasploit client and the Meterpreter server use 
 The Meterpreter server core is kept lightweight to maximize injection stability and stealth. Additional functionality loads dynamically at runtime as modular extensions:
 
 ```mermaid
-flowchart TD
+flowchart LR
   Core["Meterpreter In-Memory Core"]
   Ext1["stdapi (File, Network, Process Controls)"]
   Ext2["priv (Privilege Escalation & Hashes)"]
@@ -996,7 +996,7 @@ Opening port 3389 increases the system's attack surface, exposing the host to cr
 ### 11.6 RDP Attack Detection & Multi-Event SOC Correlation
 
 ```mermaid
-flowchart TD
+flowchart LR
   Step1["1. Registry Modification: fDenyTSConnections = 0"] --> Chain["Event Correlation Engine"]
   Step2["2. Firewall Rule Added: Port 3389 Inbound Allowed"] --> Chain
   Step3["3. User Added to Remote Desktop Users Group"] --> Chain
@@ -1063,7 +1063,7 @@ flowchart TD
 A single isolated event (such as an unknown outbound TCP connection or an updated registry key) often turns out to be benign administrative activity. However, correlating related events across multiple sources provides high confidence in detecting active compromises:
 
 ```mermaid
-flowchart TD
+flowchart LR
   A["Suspicious Host Process Spawning"]
   B["Unexpected Outbound Network Socket"]
   C["Registry Persistence / Configuration Change"]
@@ -1154,7 +1154,7 @@ A corporate Windows workstation triggers five sequential alerts on a security mo
 The complete Meterpreter post-exploitation lifecycle integrates communication channels, system access primitives, automation engines, remote access tools, and defensive monitoring layers:
 
 ```mermaid
-flowchart TD
+flowchart LR
   subgraph MP ["Meterpreter Core Architecture"]
     Core["Meterpreter Payload Core"]
   end

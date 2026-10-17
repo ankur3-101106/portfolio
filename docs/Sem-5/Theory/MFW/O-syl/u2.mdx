@@ -47,7 +47,7 @@ During an authorized penetration test or security audit, the primary goals of se
 Enterprise servers often host multiple concurrent services to support business functions:
 
 ```mermaid
-flowchart TD
+flowchart LR
   Server["Server Attack Surface"]
   Server --> S1["HTTP / HTTPS: Web Applications & APIs"]
   Server --> S2["FTP: File Transfer Daemons"]
@@ -59,7 +59,7 @@ flowchart TD
 
 #### 1.2.2 The Attack Surface Axiom
 
-:::important[CORE SECURITY AXIOM]
+:::tip[CORE SECURITY AXIOM]
 **Every exposed network service represents an expansion of the attack surface.** A system is only as secure as its most vulnerable listening service.
 :::
 
@@ -214,7 +214,7 @@ msf6 exploit(unix/ftp/vsftpd_234_backdoor) > run
 Linux servers are widely deployed across enterprise data centers, cloud infrastructure, and hosting environments, exposing various network daemons and administrative services.
 
 ```mermaid
-flowchart TD
+flowchart LR
   Attacker["Attacker Machine"] -->|"Network Traffic"| LServer["Target Linux Server"]
   LServer --> S1["Port 21: FTP (vsftpd, ProFTPD)"]
   LServer --> S2["Port 22: SSH (OpenSSH)"]
@@ -311,7 +311,7 @@ flowchart TD
 
 ### 5.1 The Principle of Privilege Separation
 
-:::important[CORE SECURITY PRINCIPLE]
+:::tip[CORE SECURITY PRINCIPLE]
 **Initial access $\neq$ Administrative control.** Network daemons (such as Apache, Nginx, or MySQL) should run under dedicated, low-privileged service accounts (`www-data`, `nobody`, `daemon`) to contain the impact of an exploit.
 :::
 
@@ -340,7 +340,7 @@ Once initial access is established, the authorized tester systematically audits 
 Windows systems are widely used in enterprise networks, running domain services, central databases, and administrative consoles.
 
 ```mermaid
-flowchart TD
+flowchart LR
   Attacker["Attacker System"] -->|"Exploit Traffic"| WinHost["Target Windows System"]
   WinHost --> W1["Port 445: Server Message Block (SMB)"]
   WinHost --> W2["Port 3389: Remote Desktop Protocol (RDP)"]
@@ -468,7 +468,7 @@ flowchart TD
 Different server daemons expose distinct operational mechanics and vulnerability classes.
 
 ```mermaid
-flowchart TD
+flowchart LR
   Svc["Common Server Services"]
   Svc --> F["FTP: Unencrypted File Transfer"]
   Svc --> S["SSH: Administrative Shell"]
@@ -524,7 +524,7 @@ Understanding payload mechanics and handler configurations is central to managin
 Payloads are classified based on how they deliver shellcode and manage network connections:
 
 ```mermaid
-flowchart TD
+flowchart LR
   Payloads["Payload Architecture"]
   Payloads --> Type["Delivery Mechanism"]
   Payloads --> Direction["Connection Direction"]
@@ -618,7 +618,7 @@ Exploitation attempts frequently fail due to environmental differences, defensiv
 ### 11.1 Primary Causes of Exploitation Failure
 
 ```mermaid
-flowchart TD
+flowchart LR
   Fail["Exploitation Failure Causes"]
   Fail --> C1["Wrong Target / Host Unreachable"]
   Fail --> C2["Mismatched Software Version"]
@@ -665,7 +665,7 @@ Visualizing attack paths helps security teams understand how vulnerabilities cha
 An **attack path** represents the sequential progression of steps an attacker takes from their starting point to their ultimate objective:
 
 ```mermaid
-flowchart LR
+flowchart TD
   R["Reconnaissance"] --> S["Service Scanning"]
   S --> V["Vulnerability Discovery"]
   V --> E["Exploit Delivery"]
@@ -726,7 +726,7 @@ Securing enterprise networks against server-side exploitation requires monitorin
 A successful server exploit produces an observable sequence of events:
 
 ```mermaid
-flowchart TD
+flowchart LR
   E1["1. Unusual Inbound Network Connection on Service Port"] --> Correlate["SIEM Correlation Engine"]
   E2["2. Suspicious Service Activity (Crashed Child Thread / Memory Anomaly)"] --> Correlate
   E3["3. Unexpected Process Spawning (e.g., httpd spawning /bin/sh)"] --> Correlate

@@ -49,7 +49,7 @@ The fundamental security distinction between wired and wireless networks lies in
 The wireless attack surface spans physical radio hardware, access point firmware, client endpoints, and central authentication backends.
 
 ```mermaid
-flowchart TD
+flowchart LR
   WiFi["802.11 Wireless Attack Surface"]
   WiFi --> AP["Access Point (AP): Firmware, WPS, default logins, web management"]
   WiFi --> Client["Client Station (STA): Probe requests, auto-association, roaming logic"]
@@ -153,7 +153,7 @@ flowchart TD
 Clients follow a defined handshake and association process when joining an 802.11 network.
 
 ```mermaid
-flowchart TD
+flowchart LR
   C["Client Station (STA)"] -->|"1. Probe Request (Broadcast or Directed)"| AP["Access Point (AP)"]
   AP -->|"2. Probe Response (Network Capabilities & Rates)"| C
   C -->|"3. 802.11 Authentication Request (Open System)"| AP
@@ -167,7 +167,7 @@ flowchart TD
 ### 5.1 Personal vs. Enterprise Authentication Models
 
 ```mermaid
-flowchart TD
+flowchart LR
   subgraph PersonalModel ["WPA-Personal / PSK"]
     STA1["Client"] <-->|"4-Way Handshake with Shared Secret"| AP1["Access Point (Stores Pre-Shared Key)"]
   end
@@ -352,7 +352,7 @@ Controlling the wireless link exposes network traffic, but modern end-to-end enc
 ### 10.1 What Can Wireless MITM Reveal?
 
 ```mermaid
-flowchart TD
+flowchart LR
   Intercept["Traffic Intercepted at Rogue AP"]
   Intercept --> Unenc["Unencrypted Cleartext Traffic (HTTP, DNS, FTP)"]
   Intercept --> Enc["Encrypted Traffic (HTTPS, SSH, VPN, TLS)"]
@@ -369,7 +369,7 @@ flowchart TD
 
 ### 10.2 The Role of HTTPS in Wireless Security
 
-:::important[CRITICAL ENCRYPTION PRINCIPLE]
+:::tip[CRITICAL ENCRYPTION PRINCIPLE]
 **A rogue Wi-Fi network does not automatically compromise encrypted HTTPS traffic.** When a client connects to a web service over validated TLS, end-to-end encryption protects the session:
 - **Payload Confidentiality:** Application data, form fields, and passwords remain encrypted.
 - **Data Integrity:** Attackers cannot inject scripts or modify web page content without triggering TLS certificate warnings.

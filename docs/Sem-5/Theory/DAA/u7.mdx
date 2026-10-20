@@ -938,7 +938,7 @@ Every optimization problem can be cast as a decision problem by introducing a nu
 | :--- | :---: | :---: | :---: | :---: | :--- |
 | **Naive** | $0$ | $O((n - m + 1)m)$ | $O(nm)$ | $O(1)$ | Simple implementation, no extra memory |
 | **Rabin-Karp** | $\Theta(m)$ | $O((n - m + 1)m)$ | $O(n + m)$ (avg) | $O(1)$ | Modular rolling hash, ideal for multi-pattern search |
-| **Finite Automata** | $O(m |\Sigma|)$ | $\Theta(n)$ | $\Theta(n + m |\Sigma|)$ | $O(m |\Sigma|)$ | Strictly linear matching, no text backtracking |
+| **Finite Automata** | $O(m \|\Sigma\|)$ | $\Theta(n)$ | $\Theta(n + m \|\Sigma\|)$ | $O(m \|\Sigma\|)$ | Strictly linear matching, no text backtracking |
 | **KMP** | $\Theta(m)$ | $\Theta(n)$ | $\Theta(n + m)$ | $\Theta(m)$ | Prefix function $\pi$, zero text backtracking |
 
 ### 12.2 Complexity Classes Reference Card

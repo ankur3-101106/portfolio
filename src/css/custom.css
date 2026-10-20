@@ -82,13 +82,13 @@ html[data-theme='dark'] {
   width: 95%;
   padding: 10px 30px;
 
-  backdrop-filter: blur(6px) saturate(160%) contrast(110%);
+  backdrop-filter: blur(2.75px) saturate(130%) contrast(110%);
 
   background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.04),
       rgba(255, 255, 255, 0.01));
 
-  border-radius: 24px;
+  border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.15);
 
   /* thickness illusion */

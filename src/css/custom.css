@@ -79,7 +79,7 @@ html[data-theme='dark'] {
   top: 6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 95%;
+  width: 98%;
   padding: 10px 30px;
 
   backdrop-filter: blur(2.75px) saturate(130%) contrast(110%);

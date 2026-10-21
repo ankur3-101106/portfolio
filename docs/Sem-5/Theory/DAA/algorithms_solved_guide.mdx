@@ -1,992 +1,2364 @@
 ---
-title: Master Solved Algorithms (U1 to U7)
+title: Master Solved Algorithms
 sidebar_position: 8
-description: Comprehensive, step-by-step solved examples for every single algorithm from Unit 1 to Unit 7 in Design and Analysis of Algorithms (DAA).
+description: Comprehensive step-by-step solved numerical walkthroughs with visual graphs and diagrams for every algorithm in DAA Units 1 through 7.
 keywords:
-  - daa solved examples
+  - daa solved algorithms
   - algorithm step by step
-  - daa exam preparation
-  - master theorem
-  - merge sort
-  - quick sort
-  - strassen algorithm
-  - kruskal
-  - prim
-  - dijkstra
-  - 0-1 knapsack
-  - floyd warshall
-  - matrix chain multiplication
-  - longest common subsequence
-  - bfs dfs topological sort
-  - n queens
-  - tsp branch and bound
-  - kmp algorithm
-  - rabin karp
+  - daa numerical examples
+  - dynamic programming solved
+  - greedy algorithms solved
+  - graph algorithms solved
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# DAA Master Solved Algorithms Guide (Unit 1 to Unit 7)
+# Master Solved Algorithms
 
-:::tip 🎯 Exam Master Strategy
-This document contains **concrete numerical examples solved step-by-step** for **every algorithm** across all 7 units of Design and Analysis of Algorithms. Each algorithm includes:
-1. **The Core Intuition** (plain English summary).
-2. **Concrete Input Problem**.
-3. **Step-by-Step Solved Trace & Table**.
-4. **Final Output and Complexity Summary**.
+:::info[TITLE]
+## Step-by-Step Solved Algorithms Guide (Unit 1 to Unit 7)
 :::
 
----
-
-## 📌 Syllabus Overview & Quick Jump
-
-- [Unit 1: Basics & Recurrences](#unit-1-basics-of-algorithms--mathematics)
-  - [1. Karatsuba Integer Multiplication](#1-karatsuba-integer-multiplication)
-  - [2. Master Theorem for Recurrences](#2-master-theorem-for-recurrences)
-  - [3. Substitution Method (Induction)](#3-substitution-method-induction)
-  - [4. Recursion Tree Method](#4-recursion-tree-method)
-- [Unit 2: Divide & Conquer](#unit-2-divide--conquer-algorithms)
-  - [5. Binary Search](#5-binary-search)
-  - [6. Merge Sort](#6-merge-sort)
-  - [7. Quick Sort (Lomuto Partition)](#7-quick-sort-lomuto-partition)
-  - [8. Strassen's Matrix Multiplication ($2 \times 2$)](#8-strassens-matrix-multiplication-2-times-2)
-  - [9. Modular Exponentiation ($a^n$)](#9-modular-exponentiation-an)
-- [Unit 3: Greedy Algorithms](#unit-3-greedy-algorithms)
-  - [10. Kruskal’s Algorithm (MST)](#10-kruskals-algorithm-mst)
-  - [11. Prim’s Algorithm (MST)](#11-prims-algorithm-mst)
-  - [12. Dijkstra’s Shortest Path](#12-dijkstras-single-source-shortest-path)
-  - [13. Fractional Knapsack Problem](#13-fractional-knapsack-problem)
-  - [14. Activity Selection Problem](#14-activity-selection-problem)
-  - [15. Huffman Coding](#15-huffman-coding)
-- [Unit 4: Dynamic Programming](#unit-4-dynamic-programming)
-  - [16. 0/1 Knapsack Problem (DP Tabulation)](#16-01-knapsack-problem-dp-tabulation)
-  - [17. Binomial Coefficient ($C(n, k)$)](#17-binomial-coefficient-cn-k)
-  - [18. Floyd-Warshall All-Pairs Shortest Path](#18-floyd-warshall-all-pairs-shortest-path)
-  - [19. Matrix Chain Multiplication (MCM)](#19-matrix-chain-multiplication-mcm)
-  - [20. Longest Common Subsequence (LCS)](#20-longest-common-subsequence-lcs)
-- [Unit 5: Exploring Graphs](#unit-5-exploring-graphs)
-  - [21. Breadth-First Search (BFS)](#21-breadth-first-search-bfs)
-  - [22. Depth-First Search (DFS) with Timestamps & Edge Types](#22-depth-first-search-dfs-with-timestamps--edge-types)
-  - [23. Topological Sorting (Kahn’s In-Degree & DFS)](#23-topological-sorting-kahns-in-degree--dfs)
-  - [24. Strongly Connected Components (Kosaraju)](#24-strongly-connected-components-kosaraju)
-  - [25. Articulation Points & Bridges](#25-articulation-points--bridges)
-- [Unit 6: Backtracking & Branch and Bound](#unit-6-backtracking--branch-and-bound)
-  - [26. 4-Queens Problem (Backtracking)](#26-4-queens-problem-backtracking)
-  - [27. 0/1 Knapsack using Backtracking](#27-01-knapsack-using-backtracking)
-  - [28. 0/1 Knapsack using Branch & Bound (LC-BB)](#28-01-knapsack-using-branch--bound-lc-bb)
-  - [29. Minimax Principle & Alpha-Beta Pruning](#29-minimax-principle--alpha-beta-pruning)
-  - [30. Travelling Salesperson Problem (TSP BB)](#30-travelling-salesperson-problem-tsp-bb)
-- [Unit 7: String Matching & NP-Completeness](#unit-7-string-matching--np-completeness)
-  - [31. Naive String Matching](#31-naive-string-matching)
-  - [32. Rabin-Karp Algorithm (Rolling Hash)](#32-rabin-karp-algorithm-rolling-hash)
-  - [33. String Matching with Finite Automata (FA)](#33-string-matching-with-finite-automata-fa)
-  - [34. Knuth-Morris-Pratt (KMP) Algorithm](#34-knuth-morris-pratt-kmp-algorithm)
-  - [35. NP-Completeness Reduction (3-SAT to Clique)](#35-np-completeness-reduction-3-sat-to-clique)
-
----
-
-# Unit 1: Basics of Algorithms & Mathematics
-
----
-
-### 1. Karatsuba Integer Multiplication
-
-#### 💡 Core Idea
-Standard multiplication takes 4 sub-multiplications. Karatsuba achieves it with **only 3 recursive multiplications** by computing the middle cross-term as $(a+b)(c+d) - ac - bd$.
-
-#### 🔢 Example Problem
-Multiply $X = 1234$ and $Y = 5678$.
-
-#### 👣 Step-by-Step Solution
-1. **Split the digits ($n = 4, m = 2$):**
-   - $X = a \cdot 10^2 + b \implies a = 12, b = 34$
-   - $Y = c \cdot 10^2 + d \implies c = 56, d = 78$
-
-2. **Compute 3 Multiplications:**
-   - $p_1 = a \times c = 12 \times 56 = 672$
-   - $p_2 = b \times d = 34 \times 78 = 2652$
-   - $p_3 = (a + b) \times (c + d) = (12 + 34) \times (56 + 78) = 46 \times 134 = 6164$
-
-3. **Compute the Middle Cross-Term ($ad + bc$):**
-   $$\text{Middle} = p_3 - p_1 - p_2 = 6164 - 672 - 2652 = 2840$$
-
-4. **Assemble the final product:**
-   $$\text{Result} = p_1 \cdot 10^{2m} + \text{Middle} \cdot 10^m + p_2$$
-   $$\text{Result} = 672 \times 10^4 + 2840 \times 10^2 + 2652$$
-   $$\text{Result} = 6,720,000 + 284,000 + 2,652 = \mathbf{7,006,652}$$
-
-- **Verification**: $1234 \times 5678 = 7,006,652$.
-- **Time Complexity**: $T(n) = 3T(n/2) + O(n) = \Theta(n^{\log_2 3}) \approx \mathbf{O(n^{1.585})}$.
-
----
-
-### 2. Master Theorem for Recurrences
-
-#### 💡 Core Idea
-For recurrences of form $T(n) = a T(n/b) + f(n)$ with $a \ge 1, b > 1$:
-Compare $f(n)$ with $n^{\log_b a}$.
-
-#### 🔢 3 Solved Cases
-
-| Case | Condition | Solved Recurrence Example | Solution |
-|---|---|---|---|
-| **Case 1** | $f(n) = O(n^c)$ where $c < \log_b a$ | $T(n) = 4T(n/2) + n$ <br/> $a=4, b=2, \log_2 4 = 2$, $f(n)=n^1 \implies 1 < 2$ | $T(n) = \mathbf{\Theta(n^2)}$ |
-| **Case 2** | $f(n) = \Theta(n^{\log_b a} \log^k n)$ | $T(n) = 2T(n/2) + n$ (Merge Sort) <br/> $a=2, b=2, \log_2 2 = 1, k=0$, $f(n)=\Theta(n^1)$ | $T(n) = \mathbf{\Theta(n \log n)}$ |
-| **Case 3** | $f(n) = \Omega(n^c)$ where $c > \log_b a$ | $T(n) = 2T(n/2) + n^2$ <br/> $a=2, b=2, \log_2 2 = 1$, $f(n)=n^2 \implies 2 > 1$ <br/> Regularity: $2(n/2)^2 = n^2/2 \le \frac{1}{2} n^2$ | $T(n) = \mathbf{\Theta(n^2)}$ |
-
----
-
-### 3. Substitution Method (Induction)
-
-#### 🔢 Example Problem
-Prove by mathematical induction that $T(n) = 2T(\lfloor n/2 \rfloor) + n$ has complexity $T(n) = O(n \log_2 n)$.
-
-#### 👣 Step-by-Step Proof
-1. **Inductive Hypothesis**: Assume $T(k) \le c k \log_2 k$ holds for all $k < n$, for some constant $c > 0$.
-2. **Inductive Step**:
-   $$T(n) = 2 T(n/2) + n \le 2 \left[ c \frac{n}{2} \log_2\left(\frac{n}{2}\right) \right] + n$$
-   $$= c n (\log_2 n - \log_2 2) + n = c n \log_2 n - c n + n$$
-   $$= c n \log_2 n - (c - 1)n$$
-3. For $T(n) \le c n \log_2 n$, we need:
-   $$-(c - 1)n \le 0 \implies c - 1 \ge 0 \implies c \ge 1$$
-4. Choose $c = 2$ and base case $n = 2$.
-   $$T(2) = 2T(1) + 2 = 2(1) + 2 = 4 \le 2(2 \log_2 2) = 4 \quad \text{(Holds)}$$
-   Therefore, $T(n) = \mathbf{O(n \log n)}$.
-
----
-
-### 4. Recursion Tree Method
-
-#### 🔢 Example Problem
-Solve $T(n) = 2T(n/2) + c n$ using the recursion tree.
-
-#### 👣 Step-by-Step Solution
-1. **Draw tree levels**:
-   - Level 0 (Root): 1 node of size $n \implies \text{Cost} = cn$
-   - Level 1: 2 nodes of size $n/2 \implies \text{Cost} = 2 \times c(n/2) = cn$
-   - Level 2: 4 nodes of size $n/4 \implies \text{Cost} = 4 \times c(n/4) = cn$
-   - Level $i$: $2^i$ nodes of size $n/2^i \implies \text{Cost} = 2^i \times c(n/2^i) = cn$
-2. **Find Tree Height**:
-   The problem size reaches $1$ when $n/2^h = 1 \implies h = \log_2 n$.
-3. **Sum over all levels**:
-   $$\text{Total Cost} = \sum_{i=0}^{\log_2 n} cn = cn (\log_2 n + 1) = \mathbf{\Theta(n \log n)}$$
-
----
-
-# Unit 2: Divide & Conquer Algorithms
-
----
-
-### 5. Binary Search
-
-#### 💡 Core Idea
-Divide the sorted search space in half at each step by comparing key with $A[mid]$.
-
-#### 🔢 Example Problem
-Array $A = [11, 22, 33, 44, 55, 66, 77, 88, 99]$, find $\text{Key} = 66$.
-
-#### 👣 Step-by-Step Trace
-
-| Iteration | `low` | `high` | `mid` = $\lfloor(low+high)/2\rfloor$ | $A[mid]$ | Comparison & Action |
-|---|---|---|---|---|---|
-| **1** | 0 | 8 | 4 | 55 | $66 > 55 \implies$ Search right: $low = mid + 1 = 5$ |
-| **2** | 5 | 8 | 6 | 66 | $66 == 66 \implies$ **Found at index 6!** |
-
-- **Total Comparisons**: 2
-- **Complexity**: Time: $\mathbf{O(\log n)}$, Space: $\mathbf{O(1)}$ iterative.
-
----
-
-### 6. Merge Sort
-
-#### 🔢 Example Problem
-Sort array $A = [38, 27, 43, 3, 9, 82, 10]$.
-
-#### 👣 Step-by-Step Solution
-1. **Divide**:
-   - Split $[38, 27, 43, 3]$ and $[9, 82, 10]$
-   - Subdivide until singletons: $[38], [27], [43], [3], [9], [82], [10]$
-2. **Conquer & Merge**:
-   - Merge $[38]$ & $[27] \to [27, 38]$
-   - Merge $[43]$ & $[3] \to [3, 43]$
-   - Merge $[27, 38]$ & $[3, 43] \to [3, 27, 38, 43]$
-   - Merge $[82]$ & $[10] \to [10, 82]$
-   - Merge $[9]$ & $[10, 82] \to [9, 10, 82]$
-3. **Final 2-Pointer Merge**:
-   - Left: $[3, 27, 38, 43]$, Right: $[9, 10, 82]$
-   - Compare $3 < 9 \implies [3]$
-   - Compare $27 > 9 \implies [3, 9]$
-   - Compare $27 > 10 \implies [3, 9, 10]$
-   - Compare $27 < 82 \implies [3, 9, 10, 27]$
-   - Compare $38 < 82 \implies [3, 9, 10, 27, 38]$
-   - Compare $43 < 82 \implies [3, 9, 10, 27, 38, 43]$
-   - Remainder from right $\implies \mathbf{[3, 9, 10, 27, 38, 43, 82]}$
-- **Complexity**: $T(n) = 2T(n/2) + O(n) = \mathbf{\Theta(n \log n)}$ (Best, Average, Worst). Space: $\mathbf{O(n)}$.
-
----
-
-### 7. Quick Sort (Lomuto Partition)
-
-#### 🔢 Example Problem
-Partition and sort $A = [28, 12, 45, 19, 53, 37]$ around pivot $P = 37$ (last element).
-
-#### 👣 Step-by-Step Partition Trace
-Initialize $i = low - 1 = -1$. Loop $j$ from $0$ to $4$:
-
-| $j$ | $A[j]$ | $A[j] \le 37$? | $i$ | Action Taken | Array State |
-|---|---|---|---|---|---|
-| **0** | 28 | Yes | 0 | Swap $A[0] \leftrightarrow A[0]$ | `[28, 12, 45, 19, 53, 37]` |
-| **1** | 12 | Yes | 1 | Swap $A[1] \leftrightarrow A[1]$ | `[28, 12, 45, 19, 53, 37]` |
-| **2** | 45 | No | 1 | No swap | `[28, 12, 45, 19, 53, 37]` |
-| **3** | 19 | Yes | 2 | Swap $A[2](45) \leftrightarrow A[3](19)$ | `[28, 12, 19, 45, 53, 37]` |
-| **4** | 53 | No | 2 | No swap | `[28, 12, 19, 45, 53, 37]` |
-
-- **Place Pivot**: Swap $A[i+1](45)$ with $A[high](37)$.
-- **Partitioned Array**: $[\mathbf{28, 12, 19}, \underline{\mathbf{37}}, \mathbf{53, 45}]$
-  - All elements left of $37$ are $\le 37$.
-  - All elements right of $37$ are $> 37$.
-- **Complexity**: Average: $\mathbf{O(n \log n)}$, Worst: $\mathbf{O(n^2)}$ (when unbalanced).
-
----
-
-### 8. Strassen's Matrix Multiplication ($2 \times 2$)
-
-#### 💡 Core Idea
-Reduces scalar multiplications from 8 to **7** using algebraic identity matrices $P_1 \dots P_7$.
-
-#### 🔢 Example Problem
-Multiply matrices $A$ and $B$:
-$$A = \begin{bmatrix} 1 & 3 \\ 7 & 5 \end{bmatrix}, \quad B = \begin{bmatrix} 6 & 8 \\ 4 & 2 \end{bmatrix}$$
-Here: $a_{11}=1, a_{12}=3, a_{21}=7, a_{22}=5$ and $b_{11}=6, b_{12}=8, b_{21}=4, b_{22}=2$.
-
-#### 👣 Step-by-Step Solution
-1. **Compute the 7 Products**:
-   - $P_1 = (a_{11} + a_{22})(b_{11} + b_{22}) = (1 + 5)(6 + 2) = 6 \times 8 = \mathbf{48}$
-   - $P_2 = (a_{21} + a_{22}) b_{11} = (7 + 5) \times 6 = 12 \times 6 = \mathbf{72}$
-   - $P_3 = a_{11} (b_{12} - b_{22}) = 1 \times (8 - 2) = 1 \times 6 = \mathbf{6}$
-   - $P_4 = a_{22} (b_{21} - b_{11}) = 5 \times (4 - 6) = 5 \times (-2) = \mathbf{-10}$
-   - $P_5 = (a_{11} + a_{12}) b_{22} = (1 + 3) \times 2 = 4 \times 2 = \mathbf{8}$
-   - $P_6 = (a_{21} - a_{11})(b_{11} + b_{12}) = (7 - 1)(6 + 8) = 6 \times 14 = \mathbf{84}$
-   - $P_7 = (a_{12} - a_{22})(b_{21} + b_{22}) = (3 - 5)(4 + 2) = (-2) \times 6 = \mathbf{-12}$
-
-2. **Combine into Final Matrix $C$**:
-   - $C_{11} = P_1 + P_4 - P_5 + P_7 = 48 + (-10) - 8 + (-12) = \mathbf{18}$
-   - $C_{12} = P_3 + P_5 = 6 + 8 = \mathbf{14}$
-   - $C_{21} = P_2 + P_4 = 72 + (-10) = \mathbf{62}$
-   - $C_{22} = P_1 - P_2 + P_3 + P_6 = 48 - 72 + 6 + 84 = \mathbf{66}$
-
-$$C = \begin{bmatrix} 18 & 14 \\ 62 & 66 \end{bmatrix}$$
-- **Verification**: $1\times 6 + 3\times 4 = 18$; $1\times 8 + 3\times 2 = 14$; $7\times 6 + 5\times 4 = 62$; $7\times 8 + 5\times 2 = 66$.
-- **Complexity**: $T(n) = 7T(n/2) + O(n^2) = \mathbf{O(n^{\log_2 7}) \approx O(n^{2.807})}$.
-
----
-
-### 9. Modular Exponentiation ($a^n$)
-
-#### 🔢 Example Problem
-Compute $3^{10} \pmod{1000}$ using repeated squaring divide-and-conquer.
-
-#### 👣 Step-by-Step Solution
-- $3^{10} = (3^5)^2$
-- $3^5 = 3 \times (3^2)^2$
-- $3^2 = 9$
-- $3^5 = 3 \times 9^2 = 3 \times 81 = 243$
-- $3^{10} = 243^2 = 59,049 \equiv \mathbf{49} \pmod{1000}$
-- **Multiplications needed**: 4 (instead of 9 sequential). Time complexity: $\mathbf{O(\log n)}$.
-
----
-
-# Unit 3: Greedy Algorithms
-
----
-
-### 10. Kruskal’s Algorithm (MST)
-
-#### 🔢 Example Problem
-Given Graph with vertices $\{A, B, C, D, E\}$ and weighted edges:
-$(A, B): 1$, $(B, C): 2$, $(B, D): 3$, $(A, C): 4$, $(C, D): 5$, $(D, E): 6$, $(C, E): 7$.
-
-#### 👣 Step-by-Step Solution
-1. **Sort Edges in Ascending Order**:
-   1. $(A, B): 1$
-   2. $(B, C): 2$
-   3. $(B, D): 3$
-   4. $(A, C): 4$
-   5. $(C, D): 5$
-   6. $(D, E): 6$
-   7. $(C, E): 7$
-
-2. **Select Edges using Disjoint Set Union (DSU)**:
-   - Pick $(A, B, 1)$: $\text{Find}(A) \ne \text{Find}(B) \implies$ **Accept**. Union $\{A, B\}$.
-   - Pick $(B, C, 2)$: $\text{Find}(B) \ne \text{Find}(C) \implies$ **Accept**. Union $\{A, B, C\}$.
-   - Pick $(B, D, 3)$: $\text{Find}(B) \ne \text{Find}(D) \implies$ **Accept**. Union $\{A, B, C, D\}$.
-   - Pick $(A, C, 4)$: $\text{Find}(A) == \text{Find}(C)$ (both in same set) $\implies$ **Reject (Cycle)**.
-   - Pick $(C, D, 5)$: $\text{Find}(C) == \text{Find}(D) \implies$ **Reject (Cycle)**.
-   - Pick $(D, E, 6)$: $\text{Find}(D) \ne \text{Find}(E) \implies$ **Accept**. Union $\{A, B, C, D, E\}$.
-
-- **MST Edges**: $\{(A, B), (B, C), (B, D), (D, E)\}$ ($|V|-1 = 4$ edges).
-- **Total MST Weight**: $1 + 2 + 3 + 6 = \mathbf{12}$.
-- **Complexity**: $\mathbf{O(E \log E)}$ or $\mathbf{O(E \log V)}$.
-
----
-
-### 11. Prim’s Algorithm (MST)
-
-#### 🔢 Example Problem
-Find MST for the same graph starting at vertex $A$.
-
-#### 👣 Step-by-Step Solution
-- **Initial State**: MST set $S = \{A\}$, Non-MST $V \setminus S = \{B, C, D, E\}$.
-- **Iteration 1**:
-  - Available crossing edges from $\{A\}$: $(A, B): 1, (A, C): 4$.
-  - Min edge $= (A, B, 1)$. Add $B$ to $S$. $S = \{A, B\}$. Total $= 1$.
-- **Iteration 2**:
-  - Available crossing edges from $\{A, B\}$: $(A, C): 4, (B, C): 2, (B, D): 3$.
-  - Min edge $= (B, C, 2)$. Add $C$ to $S$. $S = \{A, B, C\}$. Total $= 1 + 2 = 3$.
-- **Iteration 3**:
-  - Available crossing edges from $\{A, B, C\}$: $(B, D): 3, (C, D): 5, (C, E): 7$.
-  - Min edge $= (B, D, 3)$. Add $D$ to $S$. $S = \{A, B, C, D\}$. Total $= 3 + 3 = 6$.
-- **Iteration 4**:
-  - Available crossing edges from $\{A, B, C, D\}$: $(D, E): 6, (C, E): 7$.
-  - Min edge $= (D, E, 6)$. Add $E$ to $S$. $S = \{A, B, C, D, E\}$. Total $= 6 + 6 = \mathbf{12}$.
-- **Complexity**: $\mathbf{O(E \log V)}$ with min-heap.
-
----
-
-### 12. Dijkstra’s Single-Source Shortest Path
-
-#### 🔢 Example Problem
-Directed graph with vertices $\{S, A, B, C, D\}$ and edge weights:
-$(S, A, 10), (S, C, 5), (C, A, 3), (C, B, 9), (C, D, 2), (A, B, 1), (D, B, 4)$. Find shortest paths from $S$.
-
-#### 👣 Step-by-Step Table
-
-| Visited Vertex | $d[S]$ | $d[A]$ | $d[B]$ | $d[C]$ | $d[D]$ | Notes / Relaxations |
+:::tip[EXAM MASTER STRATEGY]
+This guide provides complete, step-by-step numerical solutions accompanied by visual graphs, state-space trees, and automata for every algorithm across all 7 units of Design and Analysis of Algorithms.
+Every step is broken down with one calculation per line to make revision easy and exam-ready.
+:::
+
+:::info[Unit - 1]
+## Basics of Algorithms and Mathematics
+:::
+
+### 1.1 Karatsuba Integer Multiplication
+
+#### 1.1.1 Concept
+- Standard grade-school multiplication takes $4$ sub-multiplications for $2$-digit halves.
+- Karatsuba's algorithm performs only **$3$ recursive multiplications**.
+- The cross-term $(ad + bc)$ is obtained via the algebraic identity:
+  $$\text{Middle} = (a + b)(c + d) - ac - bd$$
+
+#### 1.1.2 Problem Statement & Input
+- Multiply two $4$-digit integers:
+  - $X = 1234$
+  - $Y = 5678$
+- Number of digits: $n = 4$
+- Half-length: $m = \lceil n / 2 \rceil = 2$
+
+#### 1.1.3 Step-by-Step Solved Walkthrough
+
+##### Step 1: Split the Numbers into Halves
+- Number $X$:
+  - High half: $a = \lfloor 1234 / 10^2 \rfloor = 12$
+  - Low half: $b = 1234 \pmod{10^2} = 34$
+- Number $Y$:
+  - High half: $c = \lfloor 5678 / 10^2 \rfloor = 56$
+  - Low half: $d = 5678 \pmod{10^2} = 78$
+
+##### Step 2: Compute the Three Primary Products
+- Product 1 (High halves product):
+  $$p_1 = a \times c$$
+  $$p_1 = 12 \times 56$$
+  $$p_1 = 672$$
+
+- Product 2 (Low halves product):
+  $$p_2 = b \times d$$
+  $$p_2 = 34 \times 78$$
+  $$p_2 = 2652$$
+
+- Product 3 (Sum of halves product):
+  $$p_3 = (a + b) \times (c + d)$$
+  $$a + b = 12 + 34 = 46$$
+  $$c + d = 56 + 78 = 134$$
+  $$p_3 = 46 \times 134$$
+  $$p_3 = 6164$$
+
+##### Step 3: Compute the Middle Cross-Term
+- Cross-term formula:
+  $$\text{Middle} = p_3 - p_1 - p_2$$
+  $$\text{Middle} = 6164 - 672 - 2652$$
+  $$\text{Middle} = 6164 - 3324$$
+  $$\text{Middle} = 2840$$
+
+##### Step 4: Assemble the Final Product
+- Standard assembly formula:
+  $$\text{Result} = p_1 \cdot 10^{2m} + \text{Middle} \cdot 10^m + p_2$$
+- Substituting values:
+  $$\text{Term}_1 = 672 \times 10^4 = 6,720,000$$
+  $$\text{Term}_2 = 2840 \times 10^2 = 284,000$$
+  $$\text{Term}_3 = 2652$$
+- Summation:
+  $$\text{Result} = 6,720,000 + 284,000 + 2,652$$
+  $$\text{Result} = 7,006,652$$
+
+##### Step 5: Verification
+- Direct multiplication:
+  $$1234 \times 5678 = 7,006,652$$
+- The result matches exactly.
+
+#### 1.1.4 Complexity Analysis
+- Recurrence relation:
+  $$T(n) = 3T(n/2) + O(n)$$
+- By Master Theorem:
+  $$a = 3, \quad b = 2, \quad \log_2 3 \approx 1.585$$
+- Time Complexity: $\Theta(n^{\log_2 3}) \approx \mathbf{O(n^{1.585})}$
+- Space Complexity: $\mathbf{O(n)}$ due to recursive call stack.
+
+### 1.2 Master Theorem for Recurrence Relations
+
+#### 1.2.1 Standard Form
+- General recurrence:
+  $$T(n) = a T(n/b) + f(n)$$
+- Parameters:
+  - $a \ge 1$: Number of subproblems.
+  - $b > 1$: Subproblem reduction factor.
+  - $f(n)$: Cost of dividing and combining.
+- Critical exponent:
+  $$c_{\text{crit}} = \log_b a$$
+
+#### 1.2.2 Case 1 Example: $T(n) = 4T(n/2) + n$
+- Parameter extraction:
+  - $a = 4$
+  - $b = 2$
+  - $f(n) = n = n^1$
+- Calculate critical exponent:
+  $$\log_b a = \log_2 4 = 2$$
+- Compare powers:
+  - Power in $f(n)$ is $c = 1$.
+  - Critical power is $2$.
+  - Since $1 < 2$, we have $f(n) = O(n^{2 - \epsilon})$ for $\epsilon = 1$.
+- Conclusion:
+  $$T(n) = \Theta(n^{\log_b a}) = \mathbf{\Theta(n^2)}$$
+
+#### 1.2.3 Case 2 Example: $T(n) = 2T(n/2) + n$ (Merge Sort)
+- Parameter extraction:
+  - $a = 2$
+  - $b = 2$
+  - $f(n) = n = n^1$
+- Calculate critical exponent:
+  $$\log_b a = \log_2 2 = 1$$
+- Compare powers:
+  - Power in $f(n)$ is $c = 1$.
+  - Critical power is $1$.
+  - Since $f(n) = \Theta(n^{\log_b a}) = \Theta(n^1)$.
+- Conclusion:
+  $$T(n) = \Theta(n^{\log_b a} \log n) = \mathbf{\Theta(n \log n)}$$
+
+#### 1.2.4 Case 3 Example: $T(n) = 2T(n/2) + n^2$
+- Parameter extraction:
+  - $a = 2$
+  - $b = 2$
+  - $f(n) = n^2$
+- Calculate critical exponent:
+  $$\log_b a = \log_2 2 = 1$$
+- Compare powers:
+  - Power in $f(n)$ is $c = 2$.
+  - Critical power is $1$.
+  - Since $2 > 1$, we have $f(n) = \Omega(n^{1 + \epsilon})$ for $\epsilon = 1$.
+- Check Regularity Condition:
+  $$a f(n/b) \le k f(n) \quad \text{for } k < 1$$
+  $$2 (n/2)^2 \le k n^2$$
+  $$2 \times \frac{n^2}{4} \le k n^2$$
+  $$\frac{n^2}{2} \le k n^2$$
+  $$\frac{1}{2} \le k \quad (\text{Holds for } k = 1/2 < 1)$$
+- Conclusion:
+  $$T(n) = \Theta(f(n)) = \mathbf{\Theta(n^2)}$$
+
+### 1.3 Substitution Method (Mathematical Induction)
+
+#### 1.3.1 Problem Definition
+- Solve the recurrence:
+  $$T(n) = 2T(\lfloor n/2 \rfloor) + n$$
+- Base case:
+  $$T(1) = 1$$
+- Target:
+  - Prove that $T(n) = O(n \log_2 n)$.
+
+#### 1.3.2 Inductive Hypothesis
+- Assume that for all integers $k < n$:
+  $$T(k) \le c \cdot k \log_2 k$$
+- Constant $c > 0$ will be determined.
+
+#### 1.3.3 Inductive Step Proof
+- Start with the recurrence definition:
+  $$T(n) = 2T(n/2) + n$$
+- Substitute the hypothesis for $k = n/2$:
+  $$T(n) \le 2 \left[ c \left(\frac{n}{2}\right) \log_2\left(\frac{n}{2}\right) \right] + n$$
+- Simplify the constant factor:
+  $$T(n) \le c n \log_2\left(\frac{n}{2}\right) + n$$
+- Apply logarithm quotient rule $\log_2(n/2) = \log_2 n - \log_2 2$:
+  $$T(n) \le c n (\log_2 n - 1) + n$$
+- Expand the bracket:
+  $$T(n) \le c n \log_2 n - c n + n$$
+- Factor out $n$:
+  $$T(n) \le c n \log_2 n - (c - 1)n$$
+- For the bound $T(n) \le c n \log_2 n$ to hold, we need:
+  $$-(c - 1)n \le 0$$
+  $$c - 1 \ge 0$$
+  $$c \ge 1$$
+
+#### 1.3.4 Base Case Verification
+- Choose $n = 2$:
+  $$T(2) = 2T(1) + 2 = 2(1) + 2 = 4$$
+- Check against bound:
+  $$c \cdot 2 \log_2 2 = 2c$$
+- Requirement:
+  $$4 \le 2c \implies c \ge 2$$
+- Choosing $c = 2$ satisfies both the base case and the inductive step.
+- Conclusion:
+  $$T(n) = \mathbf{O(n \log n)}$$
+
+### 1.4 Recursion Tree Method
+
+#### 1.4.1 Recurrence Relation
+- Recurrence:
+  $$T(n) = 2T(n/2) + cn$$
+
+#### 1.4.2 Tree Level Costs
+- Level 0 (Root node):
+  - Number of nodes: $2^0 = 1$
+  - Size of subproblem: $n$
+  - Cost per node: $cn$
+  - Total level cost: $1 \times cn = cn$
+- Level 1:
+  - Number of nodes: $2^1 = 2$
+  - Size of subproblem: $n/2$
+  - Cost per node: $c(n/2)$
+  - Total level cost: $2 \times c(n/2) = cn$
+- Level 2:
+  - Number of nodes: $2^2 = 4$
+  - Size of subproblem: $n/4$
+  - Cost per node: $c(n/4)$
+  - Total level cost: $4 \times c(n/4) = cn$
+- Level $i$ (General level):
+  - Number of nodes: $2^i$
+  - Size of subproblem: $n / 2^i$
+  - Cost per node: $c(n / 2^i)$
+  - Total level cost: $2^i \times c(n / 2^i) = cn$
+
+#### 1.4.3 Visual Recursion Tree Diagram
+
+```mermaid
+flowchart TD
+    Root["cn (Level 0 Cost: cn)"] --> L1A["c(n/2)"]
+    Root --> L1B["c(n/2)"]
+    L1A --> L2A["c(n/4)"]
+    L1A --> L2B["c(n/4)"]
+    L1B --> L2C["c(n/4)"]
+    L1B --> L2D["c(n/4)"]
+    L2A -.-> Leaf1["c(1)"]
+    L2B -.-> Leaf2["c(1)"]
+    L2C -.-> Leaf3["c(1)"]
+    L2D -.-> Leaf4["c(1)"]
+```
+
+#### 1.4.4 Tree Height & Total Work Sum
+- Tree depth $h$:
+  $$\frac{n}{2^h} = 1 \implies 2^h = n \implies h = \log_2 n$$
+- Total number of levels:
+  $$\text{Levels} = h + 1 = \log_2 n + 1$$
+- Total cost across all levels:
+  $$\text{Total Cost} = \sum_{i=0}^{\log_2 n} cn$$
+  $$\text{Total Cost} = cn \times (\log_2 n + 1)$$
+  $$\text{Total Cost} = cn \log_2 n + cn$$
+- Asymptotic behavior:
+  $$T(n) = \mathbf{\Theta(n \log n)}$$
+
+:::info[Unit - 2]
+## Divide & Conquer Algorithms
+:::
+
+### 2.1 Binary Search
+
+#### 2.1.1 Concept
+- Works on sorted arrays by repeatedly comparing the target key with the middle element.
+- If key matches, index is returned.
+- If key is smaller, search space reduces to left half.
+- If key is greater, search space reduces to right half.
+
+#### 2.1.2 Numerical Problem
+- Sorted array:
+  $$A = [11, 22, 33, 44, 55, 66, 77, 88, 99]$$
+- Indices: $0$ to $8$
+- Target key: $\text{Key} = 66$
+
+#### 2.1.3 Iteration-by-Iteration Trace
+
+##### Iteration 1
+- Lower pointer: $\text{low} = 0$
+- Upper pointer: $\text{high} = 8$
+- Calculate mid:
+  $$\text{mid} = \left\lfloor \frac{0 + 8}{2} \right\rfloor = 4$$
+- Inspect element:
+  $$A[4] = 55$$
+- Compare:
+  $$66 > 55$$
+- Action:
+  - Target lies in the right half.
+  - Update: $\text{low} = \text{mid} + 1 = 4 + 1 = 5$
+
+##### Iteration 2
+- Lower pointer: $\text{low} = 5$
+- Upper pointer: $\text{high} = 8$
+- Calculate mid:
+  $$\text{mid} = \left\lfloor \frac{5 + 8}{2} \right\rfloor = \lfloor 6.5 \rfloor = 6$$
+- Inspect element:
+  $$A[6] = 66$$
+- Compare:
+  $$66 == 66$$
+- Action:
+  - Match found at index $6$.
+  - Search terminates.
+
+#### 2.1.4 Complexity
+- Comparisons made: $2$
+- Time Complexity:
+  - Best Case: $O(1)$
+  - Average Case: $O(\log n)$
+  - Worst Case: $\mathbf{O(\log n)}$
+- Space Complexity: $\mathbf{O(1)}$ (Iterative).
+
+### 2.2 Merge Sort
+
+#### 2.2.1 Concept
+- Follows the Divide, Conquer, and Combine paradigm:
+  - **Divide**: Split array into two halves at midpoint.
+  - **Conquer**: Recursively sort both subarrays.
+  - **Combine**: Merge the two sorted subarrays using two pointers.
+
+#### 2.2.2 Numerical Problem
+- Input array:
+  $$A = [38, 27, 43, 3, 9, 82, 10]$$
+- Size: $n = 7$
+
+#### 2.2.3 Divide Step Tree
+- Level 0:
+  $$[38, 27, 43, 3, 9, 82, 10]$$
+- Level 1:
+  - Left: $[38, 27, 43, 3]$
+  - Right: $[9, 82, 10]$
+- Level 2:
+  - From Left: $[38, 27]$ and $[43, 3]$
+  - From Right: $[9]$ and $[82, 10]$
+- Level 3 (Base Cases):
+  - $[38], [27], [43], [3], [9], [82], [10]$
+
+#### 2.2.4 Conquer & Merge Step
+
+##### Sub-Merge 1
+- Merge $[38]$ and $[27]$:
+  - Compare $38$ and $27 \implies 27 < 38$
+  - Result: $[27, 38]$
+
+##### Sub-Merge 2
+- Merge $[43]$ and $[3]$:
+  - Compare $43$ and $3 \implies 3 < 43$
+  - Result: $[3, 43]$
+
+##### Sub-Merge 3
+- Merge $[27, 38]$ and $[3, 43]$:
+  - Compare $27$ and $3 \implies$ Take $3$
+  - Compare $27$ and $43 \implies$ Take $27$
+  - Compare $38$ and $43 \implies$ Take $38$
+  - Remaining: Take $43$
+  - Result: $[3, 27, 38, 43]$
+
+##### Sub-Merge 4
+- Merge $[82]$ and $[10]$:
+  - Compare $82$ and $10 \implies$ Take $10$
+  - Result: $[10, 82]$
+
+##### Sub-Merge 5
+- Merge $[9]$ and $[10, 82]$:
+  - Compare $9$ and $10 \implies$ Take $9$
+  - Remaining: Take $[10, 82]$
+  - Result: $[9, 10, 82]$
+
+##### Final Merge Step
+- Left subarray: $[3, 27, 38, 43]$
+- Right subarray: $[9, 10, 82]$
+- Pointer comparison trace:
+  - Compare $3$ and $9 \implies$ Output $3$
+  - Compare $27$ and $9 \implies$ Output $9$
+  - Compare $27$ and $10 \implies$ Output $10$
+  - Compare $27$ and $82 \implies$ Output $27$
+  - Compare $38$ and $82 \implies$ Output $38$
+  - Compare $43$ and $82 \implies$ Output $43$
+  - Exhausted left subarray $\implies$ Append remaining $82$
+
+#### 2.2.5 Visual Merge Sort Tree Diagram
+
+```mermaid
+flowchart TD
+    subgraph Div ["Divide Phase"]
+        A0["[38, 27, 43, 3, 9, 82, 10]"] --> A1["[38, 27, 43, 3]"]
+        A0 --> A2["[9, 82, 10]"]
+        A1 --> B1["[38, 27]"]
+        A1 --> B2["[43, 3]"]
+        A2 --> B3["[9]"]
+        A2 --> B4["[82, 10]"]
+        B1 --> C1["[38]"]
+        B1 --> C2["[27]"]
+        B2 --> C3["[43]"]
+        B2 --> C4["[3]"]
+        B4 --> C5["[82]"]
+        B4 --> C6["[10]"]
+    end
+    subgraph Mer ["Combine & Merge Phase"]
+        C1 & C2 --> M1["[27, 38]"]
+        C3 & C4 --> M2["[3, 43]"]
+        C5 & C6 --> M4["[10, 82]"]
+        B3 & M4 --> M3["[9, 10, 82]"]
+        M1 & M2 --> M5["[3, 27, 38, 43]"]
+        M5 & M3 --> Final["[3, 9, 10, 27, 38, 43, 82]"]
+    end
+```
+
+#### 2.2.6 Final Sorted Output & Complexity
+- Sorted array:
+  $$\mathbf{[3, 9, 10, 27, 38, 43, 82]}$$
+- Time Complexity:
+  - Best Case: $\Theta(n \log n)$
+  - Average Case: $\Theta(n \log n)$
+  - Worst Case: $\mathbf{\Theta(n \log n)}$
+- Auxiliary Space: $\mathbf{O(n)}$.
+
+### 2.3 Quick Sort (Lomuto Partitioning)
+
+#### 2.3.1 Concept & Partition Logic
+- Chooses the last element as the pivot: $P = A[\text{high}]$.
+- Maintains index $i$ tracking elements smaller than or equal to $P$.
+- Traverses with index $j$: whenever $A[j] \le P$, increment $i$ and swap $A[i]$ with $A[j]$.
+- Finally places pivot at $i + 1$.
+
+#### 2.3.2 Numerical Problem
+- Input array:
+  $$A = [28, 12, 45, 19, 53, 37]$$
+- Indices: $0$ to $5$
+- Pivot: $P = A[5] = 37$
+
+#### 2.3.3 Step-by-Step Index Swap Trace
+- Initialize:
+  - $i = \text{low} - 1 = -1$
+
+##### Step $j = 0$
+- Value: $A[0] = 28$
+- Test: $28 \le 37$ (True)
+- Increment $i$: $i = 0$
+- Swap $A[0]$ with $A[0]$ (no movement):
+  - State: $[28, 12, 45, 19, 53, 37]$
+
+##### Step $j = 1$
+- Value: $A[1] = 12$
+- Test: $12 \le 37$ (True)
+- Increment $i$: $i = 1$
+- Swap $A[1]$ with $A[1]$:
+  - State: $[28, 12, 45, 19, 53, 37]$
+
+##### Step $j = 2$
+- Value: $A[2] = 45$
+- Test: $45 \le 37$ (False)
+- No swap, $i$ remains $1$.
+  - State: $[28, 12, 45, 19, 53, 37]$
+
+##### Step $j = 3$
+- Value: $A[3] = 19$
+- Test: $19 \le 37$ (True)
+- Increment $i$: $i = 2$
+- Swap $A[i]$ with $A[j] \implies$ Swap $A[2](45)$ with $A[3](19)$:
+  - State: $[28, 12, 19, 45, 53, 37]$
+
+##### Step $j = 4$
+- Value: $A[4] = 53$
+- Test: $53 \le 37$ (False)
+- No swap, $i$ remains $2$.
+  - State: $[28, 12, 19, 45, 53, 37]$
+
+##### Pivot Placement Step
+- End of loop reached.
+- Swap pivot $A[\text{high}](37)$ with $A[i + 1](A[3] = 45)$:
+  - Swap $A[5]$ with $A[3]$
+- Final partitioned array:
+  $$[\mathbf{28, 12, 19}, \underline{\mathbf{37}}, \mathbf{53, 45}]$$
+- Pivot index: $3$
+- Subarrays formed:
+  - Left: $[28, 12, 19]$
+  - Right: $[53, 45]$
+
+#### 2.3.4 Complexity
+- Time Complexity:
+  - Best Case: $O(n \log n)$
+  - Average Case: $O(n \log n)$
+  - Worst Case: $\mathbf{O(n^2)}$ (when array is already sorted or reverse sorted)
+- Space Complexity: $\mathbf{O(\log n)}$ recursion stack.
+
+### 2.4 Strassen's Matrix Multiplication ($2 \times 2$)
+
+#### 2.4.1 Concept & Matrix Blocks
+- Standard multiplication uses $8$ scalar multiplications.
+- Strassen uses $7$ products, saving computational overhead on large matrices.
+
+#### 2.4.2 Numerical Input Matrices
+- Matrix $A$:
+  $$A = \begin{bmatrix} 1 & 3 \\ 7 & 5 \end{bmatrix}$$
+  - $a_{11} = 1$
+  - $a_{12} = 3$
+  - $a_{21} = 7$
+  - $a_{22} = 5$
+
+- Matrix $B$:
+  $$B = \begin{bmatrix} 6 & 8 \\ 4 & 2 \end{bmatrix}$$
+  - $b_{11} = 6$
+  - $b_{12} = 8$
+  - $b_{21} = 4$
+  - $b_{22} = 2$
+
+#### 2.4.3 The 7 Auxiliary Products ($P_1$ to $P_7$)
+
+- Product $P_1$:
+  $$P_1 = (a_{11} + a_{22})(b_{11} + b_{22})$$
+  $$P_1 = (1 + 5)(6 + 2)$$
+  $$P_1 = 6 \times 8$$
+  $$P_1 = 48$$
+
+- Product $P_2$:
+  $$P_2 = (a_{21} + a_{22}) b_{11}$$
+  $$P_2 = (7 + 5) \times 6$$
+  $$P_2 = 12 \times 6$$
+  $$P_2 = 72$$
+
+- Product $P_3$:
+  $$P_3 = a_{11} (b_{12} - b_{22})$$
+  $$P_3 = 1 \times (8 - 2)$$
+  $$P_3 = 1 \times 6$$
+  $$P_3 = 6$$
+
+- Product $P_4$:
+  $$P_4 = a_{22} (b_{21} - b_{11})$$
+  $$P_4 = 5 \times (4 - 6)$$
+  $$P_4 = 5 \times (-2)$$
+  $$P_4 = -10$$
+
+- Product $P_5$:
+  $$P_5 = (a_{11} + a_{12}) b_{22}$$
+  $$P_5 = (1 + 3) \times 2$$
+  $$P_5 = 4 \times 2$$
+  $$P_5 = 8$$
+
+- Product $P_6$:
+  $$P_6 = (a_{21} - a_{11})(b_{11} + b_{12})$$
+  $$P_6 = (7 - 1)(6 + 8)$$
+  $$P_6 = 6 \times 14$$
+  $$P_6 = 84$$
+
+- Product $P_7$:
+  $$P_7 = (a_{12} - a_{22})(b_{21} + b_{22})$$
+  $$P_7 = (3 - 5)(4 + 2)$$
+  $$P_7 = (-2) \times 6$$
+  $$P_7 = -12$$
+
+#### 2.4.4 Result Matrix Assembly ($C_{11}, C_{12}, C_{21}, C_{22}$)
+
+- Entry $C_{11}$:
+  $$C_{11} = P_1 + P_4 - P_5 + P_7$$
+  $$C_{11} = 48 + (-10) - 8 + (-12)$$
+  $$C_{11} = 48 - 10 - 8 - 12$$
+  $$C_{11} = 18$$
+
+- Entry $C_{12}$:
+  $$C_{12} = P_3 + P_5$$
+  $$C_{12} = 6 + 8$$
+  $$C_{12} = 14$$
+
+- Entry $C_{21}$:
+  $$C_{21} = P_2 + P_4$$
+  $$C_{21} = 72 + (-10)$$
+  $$C_{21} = 62$$
+
+- Entry $C_{22}$:
+  $$C_{22} = P_1 - P_2 + P_3 + P_6$$
+  $$C_{22} = 48 - 72 + 6 + 84$$
+  $$C_{22} = -24 + 6 + 84$$
+  $$C_{22} = 66$$
+
+- Resultant Matrix $C$:
+  $$C = \begin{bmatrix} 18 & 14 \\ 62 & 66 \end{bmatrix}$$
+
+#### 2.4.5 Verification & Complexity
+- Standard multiplication check:
+  - $C_{11} = 1(6) + 3(4) = 6 + 12 = 18$
+  - $C_{12} = 1(8) + 3(2) = 8 + 6 = 14$
+  - $C_{21} = 7(6) + 5(4) = 42 + 20 = 62$
+  - $C_{22} = 7(8) + 5(2) = 56 + 10 = 66$
+- Time Complexity:
+  $$T(n) = 7T(n/2) + O(n^2)$$
+  $$T(n) = \Theta(n^{\log_2 7}) \approx \mathbf{O(n^{2.807})}$$
+  (Standard multiplication is $O(n^3)$).
+
+### 2.5 Divide and Conquer Modular Exponentiation
+
+#### 2.5.1 Recursive Exponentiation Rule
+- For base $a$ and exponent $n$:
+  - If $n == 0$: $a^0 = 1$
+  - If $n$ is even: $a^n = (a^{n/2})^2$
+  - If $n$ is odd: $a^n = a \times (a^{(n-1)/2})^2$
+
+#### 2.5.2 Numerical Problem
+- Compute:
+  $$3^{10} \pmod{1000}$$
+
+#### 2.5.3 Step-by-Step Computation
+- Step 1: Break down $3^{10}$ (even power):
+  $$3^{10} = (3^5)^2$$
+- Step 2: Break down $3^5$ (odd power):
+  $$3^5 = 3 \times (3^2)^2$$
+- Step 3: Compute $3^2$:
+  $$3^2 = 9$$
+- Step 4: Compute $(3^2)^2$:
+  $$9^2 = 81$$
+- Step 5: Compute $3^5$:
+  $$3^5 = 3 \times 81 = 243$$
+- Step 6: Compute $3^{10}$:
+  $$3^{10} = 243^2 = 59,049$$
+- Step 7: Apply modulo $1000$:
+  $$59,049 \pmod{1000} = \mathbf{49}$$
+
+#### 2.5.4 Complexity Comparison
+- Sequential multiplication multiplications: $9$ multiplications
+- Divide and conquer multiplications: $4$ multiplications
+- Time Complexity: $\mathbf{O(\log n)}$
+
+:::info[Unit - 3]
+## Greedy Algorithms
+:::
+
+### 3.1 Kruskal's Algorithm (Minimum Spanning Tree)
+
+#### 3.1.1 Graph Problem Input
+- Vertices: $V = \{A, B, C, D, E\}$
+- Total Vertices: $|V| = 5$
+- Target MST Edges: $|V| - 1 = 4$
+- Edges with weights:
+  - $(A, B): 1$
+  - $(B, C): 2$
+  - $(B, D): 3$
+  - $(A, C): 4$
+  - $(C, D): 5$
+  - $(D, E): 6$
+  - $(C, E): 7$
+
+#### 3.1.2 Visual Graph Representation
+
+```mermaid
+graph TD
+    A((A)) ---|"1"| B((B))
+    B((B)) ---|"2"| C((C))
+    B((B)) ---|"3"| D((D))
+    A((A)) ---|"4"| C((C))
+    C((C)) ---|"5"| D((D))
+    D((D)) ---|"6"| E((E))
+    C((C)) ---|"7"| E((E))
+```
+
+#### 3.1.3 Edge Sorting Step
+- Sorted list of edges in non-decreasing order:
+  1. $(A, B)$ with weight $1$
+  2. $(B, C)$ with weight $2$
+  3. $(B, D)$ with weight $3$
+  4. $(A, C)$ with weight $4$
+  5. $(C, D)$ with weight $5$
+  6. $(D, E)$ with weight $6$
+  7. $(C, E)$ with weight $7$
+
+#### 3.1.4 Edge-by-Edge Disjoint Set (DSU) Trace
+- Initialize disjoint sets:
+  $$\{A\}, \{B\}, \{C\}, \{D\}, \{E\}$$
+
+##### Consideration 1: Edge $(A, B)$ with weight $1$
+- Set of $A$: $\{A\}$
+- Set of $B$: $\{B\}$
+- Check: $\text{Find}(A) \ne \text{Find}(B)$
+- Decision: **Accept edge**
+- Union: $\{A, B\}$
+- MST Edges: $\{(A, B)\}$
+
+##### Consideration 2: Edge $(B, C)$ with weight $2$
+- Set of $B$: $\{A, B\}$
+- Set of $C$: $\{C\}$
+- Check: $\text{Find}(B) \ne \text{Find}(C)$
+- Decision: **Accept edge**
+- Union: $\{A, B, C\}$
+- MST Edges: $\{(A, B), (B, C)\}$
+
+##### Consideration 3: Edge $(B, D)$ with weight $3$
+- Set of $B$: $\{A, B, C\}$
+- Set of $D$: $\{D\}$
+- Check: $\text{Find}(B) \ne \text{Find}(D)$
+- Decision: **Accept edge**
+- Union: $\{A, B, C, D\}$
+- MST Edges: $\{(A, B), (B, C), (B, D)\}$
+
+##### Consideration 4: Edge $(A, C)$ with weight $4$
+- Set of $A$: $\{A, B, C, D\}$
+- Set of $C$: $\{A, B, C, D\}$
+- Check: $\text{Find}(A) == \text{Find}(C)$ (Both in same set)
+- Decision: **Reject edge (Creates cycle $A-B-C-A$)**
+
+##### Consideration 5: Edge $(C, D)$ with weight $5$
+- Set of $C$: $\{A, B, C, D\}$
+- Set of $D$: $\{A, B, C, D\}$
+- Check: $\text{Find}(C) == \text{Find}(D)$
+- Decision: **Reject edge (Creates cycle $B-C-D-B$)**
+
+##### Consideration 6: Edge $(D, E)$ with weight $6$
+- Set of $D$: $\{A, B, C, D\}$
+- Set of $E$: $\{E\}$
+- Check: $\text{Find}(D) \ne \text{Find}(E)$
+- Decision: **Accept edge**
+- Union: $\{A, B, C, D, E\}$
+- MST Edges: $\{(A, B), (B, C), (B, D), (D, E)\}$
+
+#### 3.1.5 Final MST Visual Graph & Weight
+- Total edges chosen: $4$ ($=|V| - 1$)
+- Final MST Tree Graph:
+
+```mermaid
+graph TD
+    A((A)) ===|"1 (Accepted)"| B((B))
+    B((B)) ===|"2 (Accepted)"| C((C))
+    B((B)) ===|"3 (Accepted)"| D((D))
+    D((D)) ===|"6 (Accepted)"| E((E))
+```
+
+- Total weight calculation:
+  $$\text{Total Cost} = 1 + 2 + 3 + 6 = \mathbf{12}$$
+- Time Complexity: $\mathbf{O(E \log E)}$ or $\mathbf{O(E \log V)}$
+
+### 3.2 Prim's Algorithm (Minimum Spanning Tree)
+
+#### 3.2.1 Graph Problem Input & Starting Vertex
+- Same graph: $V = \{A, B, C, D, E\}$
+- Starting root vertex: $A$
+- Target MST vertices: all $5$ vertices
+
+#### 3.2.2 Step-by-Step Cut Set Growth
+
+##### Iteration 0 (Initialization)
+- Spanning tree set: $S = \{A\}$
+- Unvisited set: $V \setminus S = \{B, C, D, E\}$
+- Initial cost: $0$
+
+##### Iteration 1
+- Crossing edges from $S = \{A\}$:
+  - $(A, B)$: weight $1$
+  - $(A, C)$: weight $4$
+- Minimum cut edge: $(A, B)$ with weight $1$
+- Add $B$ to $S$:
+  - $S = \{A, B\}$
+  - Current cost: $1$
+
+##### Iteration 2
+- Crossing edges from $S = \{A, B\}$:
+  - $(A, C)$: weight $4$
+  - $(B, C)$: weight $2$
+  - $(B, D)$: weight $3$
+- Minimum cut edge: $(B, C)$ with weight $2$
+- Add $C$ to $S$:
+  - $S = \{A, B, C\}$
+  - Current cost: $1 + 2 = 3$
+
+##### Iteration 3
+- Crossing edges from $S = \{A, B, C\}$:
+  - $(B, D)$: weight $3$
+  - $(C, D)$: weight $5$
+  - $(C, E)$: weight $7$
+- Minimum cut edge: $(B, D)$ with weight $3$
+- Add $D$ to $S$:
+  - $S = \{A, B, C, D\}$
+  - Current cost: $3 + 3 = 6$
+
+##### Iteration 4
+- Crossing edges from $S = \{A, B, C, D\}$:
+  - $(D, E)$: weight $6$
+  - $(C, E)$: weight $7$
+- Minimum cut edge: $(D, E)$ with weight $6$
+- Add $E$ to $S$:
+  - $S = \{A, B, C, D, E\}$
+  - Current cost: $6 + 6 = 12$
+
+#### 3.2.3 Final MST & Complexity
+- Selected tree edges:
+  $$\{(A, B), (B, C), (B, D), (D, E)\}$$
+- Total weight: $\mathbf{12}$
+- Time Complexity:
+  - With Adjacency Matrix: $O(V^2)$
+  - With Min-Heap & Adjacency List: $\mathbf{O(E \log V)}$
+
+### 3.3 Dijkstra's Single-Source Shortest Path
+
+#### 3.3.1 Directed Graph & Edge Weights
+- Vertices: $\{S, A, B, C, D\}$
+- Source: $S$
+- Edges:
+  - $(S, A) = 10$
+  - $(S, C) = 5$
+  - $(C, A) = 3$
+  - $(C, B) = 9$
+  - $(C, D) = 2$
+  - $(A, B) = 1$
+  - $(D, B) = 4$
+
+#### 3.3.2 Visual Input Graph
+
+```mermaid
+graph TD
+    S((S)) -->|"10"| A((A))
+    S((S)) -->|"5"| C((C))
+    C((C)) -->|"3"| A((A))
+    C((C)) -->|"9"| B((B))
+    C((C)) -->|"2"| D((D))
+    A((A)) -->|"1"| B((B))
+    D((D)) -->|"4"| B((B))
+```
+
+#### 3.3.3 Initialization
+- Distance array:
+  - $d[S] = 0$
+  - $d[A] = \infty$
+  - $d[B] = \infty$
+  - $d[C] = \infty$
+  - $d[D] = \infty$
+- Visited set: $U = \emptyset$
+
+#### 3.3.4 Step-by-Step Node Selection & Relaxation
+
+##### Step 1: Process Node $S$
+- Select minimum unvisited: $S$ with $d[S] = 0$
+- Mark $S$ as visited: $U = \{S\}$
+- Relax edge $(S, A)$:
+  $$d[A] = \min(\infty, 0 + 10) = 10$$
+- Relax edge $(S, C)$:
+  $$d[C] = \min(\infty, 0 + 5) = 5$$
+- Current distances:
+  $$d[S]=0, \quad d[A]=10, \quad d[B]=\infty, \quad d[C]=5, \quad d[D]=\infty$$
+
+##### Step 2: Process Node $C$
+- Select minimum unvisited: $C$ with $d[C] = 5$
+- Mark $C$ as visited: $U = \{S, C\}$
+- Relax edge $(C, A)$:
+  $$d[A] = \min(10, 5 + 3) = 8$$
+- Relax edge $(C, B)$:
+  $$d[B] = \min(\infty, 5 + 9) = 14$$
+- Relax edge $(C, D)$:
+  $$d[D] = \min(\infty, 5 + 2) = 7$$
+- Current distances:
+  $$d[S]=0, \quad d[A]=8, \quad d[B]=14, \quad d[C]=5, \quad d[D]=7$$
+
+##### Step 3: Process Node $D$
+- Select minimum unvisited: $D$ with $d[D] = 7$
+- Mark $D$ as visited: $U = \{S, C, D\}$
+- Relax edge $(D, B)$:
+  $$d[B] = \min(14, 7 + 4) = 11$$
+- Current distances:
+  $$d[S]=0, \quad d[A]=8, \quad d[B]=11, \quad d[C]=5, \quad d[D]=7$$
+
+##### Step 4: Process Node $A$
+- Select minimum unvisited: $A$ with $d[A] = 8$
+- Mark $A$ as visited: $U = \{S, C, D, A\}$
+- Relax edge $(A, B)$:
+  $$d[B] = \min(11, 8 + 1) = 9$$
+- Current distances:
+  $$d[S]=0, \quad d[A]=8, \quad d[B]=9, \quad d[C]=5, \quad d[D]=7$$
+
+##### Step 5: Process Node $B$
+- Select minimum unvisited: $B$ with $d[B] = 9$
+- Mark $B$ as visited: $U = \{S, C, D, A, B\}$
+- No outgoing edges from $B$.
+
+#### 3.3.5 Shortest Path Tree Visual Diagram
+
+```mermaid
+graph TD
+    S((S)) ==>|"cost: 5"| C((C))
+    C((C)) ==>|"cost: 5+2=7"| D((D))
+    C((C)) ==>|"cost: 5+3=8"| A((A))
+    A((A)) ==>|"cost: 8+1=9"| B((B))
+```
+
+- Shortest paths from $S$:
+  - To $S$: Cost $= 0$
+  - To $C$: Cost $= 5$, Path: $S \to C$
+  - To $D$: Cost $= 7$, Path: $S \to C \to D$
+  - To $A$: Cost $= 8$, Path: $S \to C \to A$
+  - To $B$: Cost $= 9$, Path: $S \to C \to A \to B$
+- Time Complexity: $\mathbf{O((V + E) \log V)}$
+
+### 3.4 Fractional Knapsack Problem
+
+#### 3.4.1 Problem Definition & Capacity
+- Knapsack capacity: $W = 50$
+- Item list:
+  - Item 1: Profit $P_1 = 60$, Weight $W_1 = 10$
+  - Item 2: Profit $P_2 = 100$, Weight $W_2 = 20$
+  - Item 3: Profit $P_3 = 120$, Weight $W_3 = 30$
+
+#### 3.4.2 Ratio Calculation ($P_i / W_i$)
+- Ratio for Item 1:
+  $$r_1 = \frac{60}{10} = 6.0$$
+- Ratio for Item 2:
+  $$r_2 = \frac{100}{20} = 5.0$$
+- Ratio for Item 3:
+  $$r_3 = \frac{120}{30} = 4.0$$
+
+#### 3.4.3 Sorted Ratio Order
+- Descending order:
+  - Item 1 ($r_1 = 6.0$)
+  - Item 2 ($r_2 = 5.0$)
+  - Item 3 ($r_3 = 4.0$)
+
+#### 3.4.4 Greedy Item Selection Walkthrough
+
+##### Take Item 1
+- Current capacity: $50$
+- Item 1 weight: $10 \le 50$
+- Action: Take full item ($x_1 = 1.0$)
+- Profit added: $60$
+- Remaining capacity:
+  $$50 - 10 = 40$$
+- Current total profit: $60$
+
+##### Take Item 2
+- Current capacity: $40$
+- Item 2 weight: $20 \le 40$
+- Action: Take full item ($x_2 = 1.0$)
+- Profit added: $100$
+- Remaining capacity:
+  $$40 - 20 = 20$$
+- Current total profit:
+  $$60 + 100 = 160$$
+
+##### Take Fraction of Item 3
+- Current capacity: $20$
+- Item 3 weight: $30 > 20$ (Cannot take completely)
+- Action: Take fractional part:
+  $$x_3 = \frac{\text{Remaining Capacity}}{\text{Item Weight}} = \frac{20}{30} = \frac{2}{3}$$
+- Profit added:
+  $$120 \times \left(\frac{2}{3}\right) = 80$$
+- Remaining capacity:
+  $$20 - 20 = 0$$
+
+#### 3.4.5 Final Solution Vector & Max Profit
+- Selection fractions:
+  $$x = \left(1, 1, \frac{2}{3}\right)$$
+- Total optimal profit:
+  $$60 + 100 + 80 = \mathbf{240}$$
+- Time Complexity: $\mathbf{O(n \log n)}$ (sorting dominant).
+
+### 3.5 Activity Selection Problem
+
+#### 3.5.1 Problem Data (Start & Finish Times)
+- Activities with $(s_i, f_i)$:
+  - $A_1$: Start $= 1$, Finish $= 3$
+  - $A_2$: Start $= 2$, Finish $= 5$
+  - $A_3$: Start $= 4$, Finish $= 7$
+  - $A_4$: Start $= 1$, Finish $= 8$
+  - $A_5$: Start $= 5$, Finish $= 9$
+  - $A_6$: Start $= 8$, Finish $= 10$
+
+#### 3.5.2 Sorting by Finish Time
+- Finish times are already sorted:
+  - $A_1(1, 3)$
+  - $A_2(2, 5)$
+  - $A_3(4, 7)$
+  - $A_4(1, 8)$
+  - $A_5(5, 9)$
+  - $A_6(8, 10)$
+
+#### 3.5.3 Compatibility Check Trace
+
+##### Consider Activity $A_1(1, 3)$
+- First activity is always selected.
+- Action: **Select $A_1$**
+- Selected set: $\{A_1\}$
+- Last finish time: $f_{\text{last}} = 3$
+
+##### Consider Activity $A_2(2, 5)$
+- Start time: $s_2 = 2$
+- Test: $s_2 < f_{\text{last}} \implies 2 < 3$ (Overlap)
+- Action: **Reject $A_2$**
+
+##### Consider Activity $A_3(4, 7)$
+- Start time: $s_3 = 4$
+- Test: $s_3 \ge f_{\text{last}} \implies 4 \ge 3$ (Compatible)
+- Action: **Select $A_3$**
+- Selected set: $\{A_1, A_3\}$
+- Last finish time: $f_{\text{last}} = 7$
+
+##### Consider Activity $A_4(1, 8)$
+- Start time: $s_4 = 1$
+- Test: $s_4 < f_{\text{last}} \implies 1 < 7$
+- Action: **Reject $A_4$**
+
+##### Consider Activity $A_5(5, 9)$
+- Start time: $s_5 = 5$
+- Test: $s_5 < f_{\text{last}} \implies 5 < 7$
+- Action: **Reject $A_5$**
+
+##### Consider Activity $A_6(8, 10)$
+- Start time: $s_6 = 8$
+- Test: $s_6 \ge f_{\text{last}} \implies 8 \ge 7$ (Compatible)
+- Action: **Select $A_6$**
+- Selected set: $\{A_1, A_3, A_6\}$
+- Last finish time: $f_{\text{last}} = 10$
+
+#### 3.5.4 Selected Activities & Complexity
+- Maximum set of mutually compatible activities:
+  $$\mathbf{\{A_1, A_3, A_6\}}$$
+- Total count: $3$
+- Time Complexity: $\mathbf{O(n \log n)}$ if unsorted; $\mathbf{O(n)}$ if sorted.
+
+### 3.6 Huffman Coding
+
+#### 3.6.1 Character Frequencies Input
+- Character set with frequencies:
+  - $f: 5$
+  - $e: 9$
+  - $c: 12$
+  - $b: 13$
+  - $d: 16$
+  - $a: 45$
+
+#### 3.6.2 Step-by-Step Min-Heap Tree Merge
+
+##### Merge 1
+- Two smallest frequencies: $f(5)$ and $e(9)$
+- Create parent node $N_1$:
+  $$\text{weight}(N_1) = 5 + 9 = 14$$
+- Remaining nodes: $c(12), b(13), N_1(14), d(16), a(45)$
+
+##### Merge 2
+- Two smallest frequencies: $c(12)$ and $b(13)$
+- Create parent node $N_2$:
+  $$\text{weight}(N_2) = 12 + 13 = 25$$
+- Remaining nodes: $N_1(14), d(16), N_2(25), a(45)$
+
+##### Merge 3
+- Two smallest frequencies: $N_1(14)$ and $d(16)$
+- Create parent node $N_3$:
+  $$\text{weight}(N_3) = 14 + 16 = 30$$
+- Remaining nodes: $N_2(25), N_3(30), a(45)$
+
+##### Merge 4
+- Two smallest frequencies: $N_2(25)$ and $N_3(30)$
+- Create parent node $N_4$:
+  $$\text{weight}(N_4) = 25 + 30 = 55$$
+- Remaining nodes: $a(45), N_4(55)$
+
+##### Merge 5
+- Two remaining nodes: $a(45)$ and $N_4(55)$
+- Create root node:
+  $$\text{weight}(\text{Root}) = 45 + 55 = 100$$
+
+#### 3.6.3 Visual Huffman Tree Diagram
+
+```mermaid
+flowchart TD
+    Root["Root: 100"] -->|"0"| CharA["'a' (45)"]
+    Root -->|"1"| N4["N4 (55)"]
+    N4 -->|"0"| N2["N2 (25)"]
+    N4 -->|"1"| N3["N3 (30)"]
+    N2 -->|"0"| CharC["'c' (12)"]
+    N2 -->|"1"| CharB["'b' (13)"]
+    N3 -->|"0"| N1["N1 (14)"]
+    N3 -->|"1"| CharD["'d' (16)"]
+    N1 -->|"0"| CharF["'f' (5)"]
+    N1 -->|"1"| CharE["'e' (9)"]
+```
+
+#### 3.6.4 Prefix Code Generation Table
+- Traverse left as $0$, right as $1$:
+  - Character $a$: Code $= \mathbf{0}$ (Length $1$)
+  - Character $c$: Path $\text{Root} \to 1 \to 0 \to 0 \implies \mathbf{100}$ (Length $3$)
+  - Character $b$: Path $\text{Root} \to 1 \to 0 \to 1 \implies \mathbf{101}$ (Length $3$)
+  - Character $d$: Path $\text{Root} \to 1 \to 1 \to 1 \implies \mathbf{111}$ (Length $3$)
+  - Character $f$: Path $\text{Root} \to 1 \to 1 \to 0 \to 0 \implies \mathbf{1100}$ (Length $4$)
+  - Character $e$: Path $\text{Root} \to 1 \to 1 \to 0 \to 1 \implies \mathbf{1101}$ (Length $4$)
+
+#### 3.6.5 Total Bit Length Calculation & Ratio
+- Bits required per character:
+  - $a: 45 \times 1 = 45$
+  - $c: 12 \times 3 = 36$
+  - $b: 13 \times 3 = 39$
+  - $d: 16 \times 3 = 48$
+  - $f: 5 \times 4 = 20$
+  - $e: 9 \times 4 = 36$
+- Total encoded message size:
+  $$\text{Total Bits} = 45 + 36 + 39 + 48 + 20 + 36 = \mathbf{224\text{ bits}}$$
+- Fixed-length comparison ($3$ bits per char for $6$ chars):
+  $$100 \times 3 = 300\text{ bits}$$
+- Space saved:
+  $$\frac{300 - 224}{300} \times 100\% = 25.33\%$$
+- Time Complexity: $\mathbf{O(n \log n)}$
+
+:::info[Unit - 4]
+## Dynamic Programming
+:::
+
+### 4.1 0/1 Knapsack Problem (Tabulation)
+
+#### 4.1.1 Problem Parameters & Recurrence
+- Knapsack capacity: $W = 5$
+- Number of items: $n = 4$
+- Items:
+  - Item 1: $w_1 = 2, v_1 = 3$
+  - Item 2: $w_2 = 3, v_2 = 4$
+  - Item 3: $w_3 = 4, v_3 = 5$
+  - Item 4: $w_4 = 5, v_4 = 6$
+- Recurrence relation:
+  $$V[i][w] = \begin{cases} V[i-1][w] & \text{if } w_i > w \\ \max(V[i-1][w], v_i + V[i-1][w - w_i]) & \text{if } w_i \le w \end{cases}$$
+
+#### 4.1.2 DP Table Construction Walkthrough
+
+##### Row $i = 0$ (No Items)
+- For all capacities $w = 0$ to $5$:
+  $$V[0][w] = 0$$
+
+##### Row $i = 1$ (Item 1: $w_1 = 2, v_1 = 3$)
+- $w = 0$: $V[1][0] = 0$
+- $w = 1$: $w_1 > 1 \implies V[1][1] = V[0][1] = 0$
+- $w = 2$: $\max(V[0][2], 3 + V[0][0]) = \max(0, 3) = 3$
+- $w = 3$: $\max(V[0][3], 3 + V[0][1]) = \max(0, 3) = 3$
+- $w = 4$: $\max(V[0][4], 3 + V[0][2]) = \max(0, 3) = 3$
+- $w = 5$: $\max(V[0][5], 3 + V[0][3]) = \max(0, 3) = 3$
+
+##### Row $i = 2$ (Item 2: $w_2 = 3, v_2 = 4$)
+- $w = 0$: $V[2][0] = 0$
+- $w = 1$: $w_2 > 1 \implies V[2][1] = V[1][1] = 0$
+- $w = 2$: $w_2 > 2 \implies V[2][2] = V[1][2] = 3$
+- $w = 3$: $\max(V[1][3], 4 + V[1][0]) = \max(3, 4) = 4$
+- $w = 4$: $\max(V[1][4], 4 + V[1][1]) = \max(3, 4 + 0) = 4$
+- $w = 5$: $\max(V[1][5], 4 + V[1][2]) = \max(3, 4 + 3) = \mathbf{7}$
+
+##### Row $i = 3$ (Item 3: $w_3 = 4, v_3 = 5$)
+- $w = 0$: $V[3][0] = 0$
+- $w = 1$: $V[3][1] = 0$
+- $w = 2$: $V[3][2] = 3$
+- $w = 3$: $V[3][3] = 4$
+- $w = 4$: $\max(V[2][4], 5 + V[2][0]) = \max(4, 5) = 5$
+- $w = 5$: $\max(V[2][5], 5 + V[2][1]) = \max(7, 5 + 0) = \mathbf{7}$
+
+##### Row $i = 4$ (Item 4: $w_4 = 5, v_4 = 6$)
+- $w = 0$: $V[4][0] = 0$
+- $w = 1$: $V[4][1] = 0$
+- $w = 2$: $V[4][2] = 3$
+- $w = 3$: $V[4][3] = 4$
+- $w = 4$: $V[4][4] = 5$
+- $w = 5$: $\max(V[3][5], 6 + V[3][0]) = \max(7, 6 + 0) = \mathbf{7}$
+
+#### 4.1.3 Complete DP Matrix Table
+
+| $i \downarrow \setminus w \to$ | $w = 0$ | $w = 1$ | $w = 2$ | $w = 3$ | $w = 4$ | $w = 5$ |
 |---|---|---|---|---|---|---|
-| **Init** | **0** | $\infty$ | $\infty$ | $\infty$ | $\infty$ | Start at $S$ |
-| **Visit $S$** | 0 | 10 | $\infty$ | **5** | $\infty$ | Relax $(S,A):10, (S,C):5$. Min unvisited is $C$ ($5$) |
-| **Visit $C$** | 0 | $\min(10, 5+3)=8$ | $\min(\infty, 5+9)=14$ | 5 | **$\min(\infty, 5+2)=7$** | Min unvisited is $D$ ($7$) |
-| **Visit $D$** | 0 | **8** | $\min(14, 7+4)=11$ | 5 | 7 | Min unvisited is $A$ ($8$) |
-| **Visit $A$** | 0 | 8 | **$\min(11, 8+1)=9$** | 5 | 7 | Min unvisited is $B$ ($9$) |
-| **Visit $B$** | 0 | 8 | 9 | 5 | 7 | All vertices visited |
+| **$i = 0$** | 0 | 0 | 0 | 0 | 0 | 0 |
+| **$i = 1 (2, 3)$** | 0 | 0 | 3 | 3 | 3 | 3 |
+| **$i = 2 (3, 4)$** | 0 | 0 | 3 | 4 | 4 | **7** |
+| **$i = 3 (4, 5)$** | 0 | 0 | 3 | 4 | 5 | **7** |
+| **$i = 4 (5, 6)$** | 0 | 0 | 3 | 4 | 5 | **7** |
 
-- **Shortest Distances**:
-  - $S \to S = 0$
-  - $S \to C = 5$
-  - $S \to D = 7$ (path: $S \to C \to D$)
-  - $S \to A = 8$ (path: $S \to C \to A$)
-  - $S \to B = 9$ (path: $S \to C \to A \to B$)
-- **Complexity**: $\mathbf{O((V + E) \log V)}$; fails for negative weights.
+#### 4.1.4 Item Backtracking Trace
+- Check Item 4 at $(4, 5)$:
+  - $V[4][5] == V[3][5] \implies 7 == 7$
+  - Item 4 is **NOT selected**.
+- Check Item 3 at $(3, 5)$:
+  - $V[3][5] == V[2][5] \implies 7 == 7$
+  - Item 3 is **NOT selected**.
+- Check Item 2 at $(2, 5)$:
+  - $V[2][5] \ne V[1][5] \implies 7 \ne 3$
+  - Item 2 is **SELECTED** ($w_2 = 3, v_2 = 4$).
+  - Remaining capacity: $5 - 3 = 2$.
+- Check Item 1 at $(1, 2)$:
+  - $V[1][2] \ne V[0][2] \implies 3 \ne 0$
+  - Item 1 is **SELECTED** ($w_1 = 2, v_1 = 3$).
+  - Remaining capacity: $2 - 2 = 0$.
 
----
+#### 4.1.5 Optimal Subset & Complexity
+- Selected items: $\{\text{Item 1}, \text{Item 2}\}$
+- Total weight: $2 + 3 = 5$
+- Total max profit: $3 + 4 = \mathbf{7}$
+- Time Complexity: $\mathbf{O(n W)}$
+- Space Complexity: $\mathbf{O(n W)}$ (reducible to $O(W)$).
 
-### 13. Fractional Knapsack Problem
+### 4.2 Binomial Coefficient ($C(n, k)$)
 
-#### 🔢 Example Problem
-Capacity $W = 50$. Items:
-- Item 1: Profit $P_1 = 60$, Weight $W_1 = 10$
-- Item 2: Profit $P_2 = 100$, Weight $W_2 = 20$
-- Item 3: Profit $P_3 = 120$, Weight $W_3 = 30$
+#### 4.2.1 Recurrence & Base Cases
+- Pascal's identity:
+  $$C(n, k) = C(n-1, k-1) + C(n-1, k)$$
+- Base cases:
+  $$C(n, 0) = 1, \quad C(n, n) = 1$$
 
-#### 👣 Step-by-Step Solution
-1. **Compute Profit-to-Weight Ratio ($P_i / W_i$)**:
-   - $r_1 = 60 / 10 = \mathbf{6.0}$
-   - $r_2 = 100 / 20 = \mathbf{5.0}$
-   - $r_3 = 120 / 30 = \mathbf{4.0}$
-2. **Sort by Ratio**: Item 1 > Item 2 > Item 3.
-3. **Greedy Selection**:
-   - Take Item 1 completely ($10 \le 50$): Profit $= 60$, Remaining $W = 40$. Fraction $x_1 = 1$.
-   - Take Item 2 completely ($20 \le 40$): Profit $= 60 + 100 = 160$, Remaining $W = 20$. Fraction $x_2 = 1$.
-   - Item 3 has weight $30 > 20$. Take fraction $x_3 = 20 / 30 = \mathbf{2/3}$.
-     Profit added $= 120 \times (2/3) = 80$.
-- **Total Max Profit**: $60 + 100 + 80 = \mathbf{240}$.
-- **Complexity**: $\mathbf{O(n \log n)}$ (dominated by sorting).
+#### 4.2.2 Line-by-Line DP Table Calculation for $\binom{5}{3}$
+- Row $0$:
+  $$C(0, 0) = 1$$
+- Row $1$:
+  $$C(1, 0) = 1, \quad C(1, 1) = 1$$
+- Row $2$:
+  $$C(2, 0) = 1$$
+  $$C(2, 1) = C(1, 0) + C(1, 1) = 1 + 1 = 2$$
+  $$C(2, 2) = 1$$
+- Row $3$:
+  $$C(3, 0) = 1$$
+  $$C(3, 1) = C(2, 0) + C(2, 1) = 1 + 2 = 3$$
+  $$C(3, 2) = C(2, 1) + C(2, 2) = 2 + 1 = 3$$
+  $$C(3, 3) = 1$$
+- Row $4$:
+  $$C(4, 0) = 1$$
+  $$C(4, 1) = C(3, 0) + C(3, 1) = 1 + 3 = 4$$
+  $$C(4, 2) = C(3, 1) + C(3, 2) = 3 + 3 = 6$$
+  $$C(4, 3) = C(3, 2) + C(3, 3) = 3 + 1 = 4$$
+  $$C(4, 4) = 1$$
+- Row $5$:
+  $$C(5, 0) = 1$$
+  $$C(5, 1) = C(4, 0) + C(4, 1) = 1 + 4 = 5$$
+  $$C(5, 2) = C(4, 1) + C(4, 2) = 4 + 6 = 10$$
+  $$C(5, 3) = C(4, 2) + C(4, 3) = 6 + 4 = \mathbf{10}$$
 
----
+#### 4.2.3 Final Value & Space Optimization
+- Result:
+  $$\binom{5}{3} = \mathbf{10}$$
+- Time Complexity: $\mathbf{O(n k)}$
+- Space Complexity: $\mathbf{O(k)}$ using 1D array.
 
-### 14. Activity Selection Problem
+### 4.3 Floyd-Warshall All-Pairs Shortest Path
 
-#### 🔢 Example Problem
-Activities with Start ($s$) and Finish ($f$) times:
-$A_1(1, 3), A_2(2, 5), A_3(4, 7), A_4(1, 8), A_5(5, 9), A_6(8, 10)$.
+#### 4.3.1 Problem Graph & Initial Matrix $D^{(0)}$
+- Directed graph with $4$ vertices:
+  $$D^{(0)} = \begin{bmatrix} 0 & 3 & \infty & 7 \\ 8 & 0 & 2 & \infty \\ 5 & \infty & 0 & 1 \\ 2 & \infty & \infty & 0 \end{bmatrix}$$
 
-#### 👣 Step-by-Step Solution
-1. **Sort by finish time $f$**: Already sorted: $A_1(3), A_2(5), A_3(7), A_4(8), A_5(9), A_6(10)$.
-2. **Greedy Selection**:
-   - Pick $A_1(1, 3)$: $\text{last\_finish} = 3$.
-   - Consider $A_2(2, 5)$: Start $2 < 3 \implies$ **Reject (Overlap)**.
-   - Consider $A_3(4, 7)$: Start $4 \ge 3 \implies$ **Select $A_3$**. $\text{last\_finish} = 7$.
-   - Consider $A_4(1, 8)$: Start $1 < 7 \implies$ **Reject**.
-   - Consider $A_5(5, 9)$: Start $5 < 7 \implies$ **Reject**.
-   - Consider $A_6(8, 10)$: Start $8 \ge 7 \implies$ **Select $A_6$**. $\text{last\_finish} = 10$.
-- **Maximum Activities Selected**: $\mathbf{\{A_1, A_3, A_6\}}$ (Count = 3).
-- **Complexity**: $\mathbf{O(n \log n)}$ if unsorted, $\mathbf{O(n)}$ if sorted.
+#### 4.3.2 Visual Directed Graph
 
----
+```mermaid
+graph TD
+    N1((1)) -->|"3"| N2((2))
+    N1((1)) -->|"7"| N4((4))
+    N2((2)) -->|"8"| N1((1))
+    N2((2)) -->|"2"| N3((3))
+    N3((3)) -->|"5"| N1((1))
+    N3((3)) -->|"1"| N4((4))
+    N4((4)) -->|"2"| N1((1))
+```
 
-### 15. Huffman Coding
-
-#### 🔢 Example Problem
-Characters and Frequencies: `a: 45, b: 13, c: 12, d: 16, e: 9, f: 5`.
-
-#### 👣 Step-by-Step Tree Construction
-1. Combine two minimums $f(5)$ and $e(9) \to N_1(14)$.
-2. Minimums are $c(12)$ and $d(13) \to N_2(25)$.
-3. Minimums are $N_1(14)$ and $b(13)$? Wait: frequencies left: $b(13), N_1(14), d$ was 16? Wait, let's list correctly:
-   - Initial: $f:5, e:9, c:12, b:13, d:16, a:45$.
-   - Step 1: $f(5) + e(9) \to N_1(14)$. Remaining: $c(12), b(13), N_1(14), d(16), a(45)$.
-   - Step 2: $c(12) + b(13) \to N_2(25)$. Remaining: $N_1(14), d(16), N_2(25), a(45)$.
-   - Step 3: $N_1(14) + d(16) \to N_3(30)$. Remaining: $N_2(25), N_3(30), a(45)$.
-   - Step 4: $N_2(25) + N_3(30) \to N_4(55)$. Remaining: $a(45), N_4(55)$.
-   - Step 5: $a(45) + N_4(55) \to \text{Root}(100)$.
-
-#### Code Assignments (Left = 0, Right = 1)
-- $a$: `0` (Length 1)
-- $c$: root $\to 1 \to 0 \to 0 \implies$ `100` (Length 3)
-- $b$: root $\to 1 \to 0 \to 1 \implies$ `101` (Length 3)
-- $d$: root $\to 1 \to 1 \to 1 \implies$ `111` (Length 3)
-- $f$: root $\to 1 \to 1 \to 0 \to 0 \implies$ `1100` (Length 4)
-- $e$: root $\to 1 \to 1 \to 0 \to 1 \implies$ `1101` (Length 4)
-- **Total Encoded Bits**: $45(1) + 12(3) + 13(3) + 16(3) + 5(4) + 9(4) = \mathbf{224\text{ bits}}$ (vs 300 bits fixed).
-- **Complexity**: $\mathbf{O(n \log n)}$.
-
----
-
-# Unit 4: Dynamic Programming
-
----
-
-### 16. 0/1 Knapsack Problem (DP Tabulation)
-
-#### 🔢 Example Problem
-Capacity $W = 5$. Items $n = 4$:
-- Item 1: $w_1 = 2, v_1 = 3$
-- Item 2: $w_2 = 3, v_2 = 4$
-- Item 3: $w_3 = 4, v_3 = 5$
-- Item 4: $w_4 = 5, v_4 = 6$
-
-#### 👣 Recurrence
-$$V[i][w] = \begin{cases} V[i-1][w] & \text{if } w_i > w \\ \max(V[i-1][w], v_i + V[i-1][w - w_i]) & \text{if } w_i \le w \end{cases}$$
-
-#### 👣 Tabulation Matrix $V[i][w]$
-
-| Item $i$ | $(w_i, v_i)$ | $w=0$ | $w=1$ | $w=2$ | $w=3$ | $w=4$ | $w=5$ |
-|---|---|---|---|---|---|---|---|
-| **0** | None | 0 | 0 | 0 | 0 | 0 | 0 |
-| **1** | $(2, 3)$ | 0 | 0 | 3 | 3 | 3 | 3 |
-| **2** | $(3, 4)$ | 0 | 0 | 3 | 4 | 4 | **7** |
-| **3** | $(4, 5)$ | 0 | 0 | 3 | 4 | 5 | **7** |
-| **4** | $(5, 6)$ | 0 | 0 | 3 | 4 | 5 | **7** |
-
-#### Backtracking Selected Items
-- $V[4][5] == V[3][5] == 7 \implies$ Item 4 **not included**.
-- $V[3][5] == V[2][5] == 7 \implies$ Item 3 **not included**.
-- $V[2][5] = 7 \ne V[1][5] (3) \implies$ **Item 2 is INCLUDED** ($w_2=3, v_2=4$).
-  - Remaining weight $= 5 - 3 = 2$.
-- $V[1][2] = 3 \ne V[0][2] (0) \implies$ **Item 1 is INCLUDED** ($w_1=2, v_1=3$).
-  - Remaining weight $= 2 - 2 = 0$.
-- **Optimal Items**: $\{1, 2\}$, Weight $= 2+3=5$, Profit $= 3+4 = \mathbf{7}$.
-- **Complexity**: $\mathbf{O(n W)}$ time and space.
-
----
-
-### 17. Binomial Coefficient ($C(n, k)$)
-
-#### 🔢 Example Problem
-Compute $C(5, 3) = \binom{5}{3}$ using DP Pascal relation:
-$$C(n, k) = C(n-1, k-1) + C(n-1, k)$$
-
-#### 👣 Tabulation Matrix
-
-| $n \downarrow \setminus k \to$ | 0 | 1 | 2 | 3 |
-|---|---|---|---|---|
-| **0** | 1 | - | - | - |
-| **1** | 1 | 1 | - | - |
-| **2** | 1 | 2 | 1 | - |
-| **3** | 1 | 3 | 3 | 1 |
-| **4** | 1 | 4 | 6 | 4 |
-| **5** | 1 | 5 | 10 | **10** |
-
-$$C(5, 3) = C(4, 2) + C(4, 3) = 6 + 4 = \mathbf{10}$$
-- **Complexity**: Time: $\mathbf{O(n k)}$, Space: $\mathbf{O(k)}$ (1D array).
-
----
-
-### 18. Floyd-Warshall All-Pairs Shortest Path
-
-#### 🔢 Example Problem
-Given 4-node directed graph with initial adjacency cost matrix $D^{(0)}$:
-$$D^{(0)} = \begin{bmatrix} 0 & 3 & \infty & 7 \\ 8 & 0 & 2 & \infty \\ 5 & \infty & 0 & 1 \\ 2 & \infty & \infty & 0 \end{bmatrix}$$
-
-#### 👣 Recurrence
+#### 4.3.3 Recurrence Formula
 $$D^{(k)}[i][j] = \min\left(D^{(k-1)}[i][j], D^{(k-1)}[i][k] + D^{(k-1)}[k][j]\right)$$
 
-- **Pass 1 ($k = 1$, through vertex 1)**:
-  - Row 1 and Col 1 stay same.
-  - $D^{(1)}[2][4] = \min(\infty, D^{(0)}[2][1] + D^{(0)}[1][4]) = \min(\infty, 8 + 7) = \mathbf{15}$.
-  - $D^{(1)}[3][2] = \min(\infty, D^{(0)}[3][1] + D^{(0)}[1][2]) = \min(\infty, 5 + 3) = \mathbf{8}$.
-  - $D^{(1)}[4][2] = \min(\infty, 2 + 3) = \mathbf{5}$; $D^{(1)}[4][4] = \min(0, 2 + 7) = 0$.
+#### 4.3.4 Intermediate Matrices $D^{(1)}, D^{(2)}, D^{(3)}, D^{(4)}$
 
-- **Continuing through $k = 2, 3, 4$**:
-  The final distance matrix $D^{(4)}$:
+##### Pass $k = 1$ (Intermediate Node $1$)
+- Column $1$ and Row $1$ remain unchanged.
+- $D^{(1)}[2][4] = \min(\infty, D^{(0)}[2][1] + D^{(0)}[1][4]) = \min(\infty, 8 + 7) = 15$
+- $D^{(1)}[3][2] = \min(\infty, D^{(0)}[3][1] + D^{(0)}[1][2]) = \min(\infty, 5 + 3) = 8$
+- $D^{(1)}[4][2] = \min(\infty, D^{(0)}[4][1] + D^{(0)}[1][2]) = \min(\infty, 2 + 3) = 5$
+- $D^{(1)}[4][4] = \min(0, 2 + 7) = 0$
+- Matrix $D^{(1)}$:
+  $$D^{(1)} = \begin{bmatrix} 0 & 3 & \infty & 7 \\ 8 & 0 & 2 & 15 \\ 5 & 8 & 0 & 1 \\ 2 & 5 & \infty & 0 \end{bmatrix}$$
+
+##### Pass $k = 2$ (Intermediate Node $2$)
+- $D^{(2)}[1][3] = \min(\infty, D^{(1)}[1][2] + D^{(1)}[2][3]) = \min(\infty, 3 + 2) = 5$
+- $D^{(2)}[3][3] = \min(0, 8 + 2) = 0$
+- $D^{(2)}[4][3] = \min(\infty, D^{(1)}[4][2] + D^{(1)}[2][3]) = \min(\infty, 5 + 2) = 7$
+- Matrix $D^{(2)}$:
+  $$D^{(2)} = \begin{bmatrix} 0 & 3 & 5 & 7 \\ 8 & 0 & 2 & 15 \\ 5 & 8 & 0 & 1 \\ 2 & 5 & 7 & 0 \end{bmatrix}$$
+
+##### Pass $k = 3$ (Intermediate Node $3$)
+- $D^{(3)}[1][4] = \min(7, D^{(2)}[1][3] + D^{(2)}[3][4]) = \min(7, 5 + 1) = 6$
+- $D^{(3)}[2][4] = \min(15, D^{(2)}[2][3] + D^{(2)}[3][4]) = \min(15, 2 + 1) = 3$
+- $D^{(3)}[2][1] = \min(8, 2 + 5) = 7$
+- Matrix $D^{(3)}$:
+  $$D^{(3)} = \begin{bmatrix} 0 & 3 & 5 & 6 \\ 7 & 0 & 2 & 3 \\ 5 & 8 & 0 & 1 \\ 2 & 5 & 7 & 0 \end{bmatrix}$$
+
+##### Pass $k = 4$ (Intermediate Node $4$)
+- $D^{(4)}[2][1] = \min(7, D^{(3)}[2][4] + D^{(3)}[4][1]) = \min(7, 3 + 2) = 5$
+- $D^{(4)}[3][1] = \min(5, D^{(3)}[3][4] + D^{(3)}[4][1]) = \min(5, 1 + 2) = 3$
+- $D^{(4)}[3][2] = \min(8, D^{(3)}[3][4] + D^{(3)}[4][2]) = \min(8, 1 + 5) = 6$
+
+#### 4.3.5 Final All-Pairs Distance Matrix & Complexity
+- Final matrix $D^{(4)}$:
   $$D^{(4)} = \begin{bmatrix} 0 & 3 & 5 & 6 \\ 5 & 0 & 2 & 3 \\ 3 & 6 & 0 & 1 \\ 2 & 5 & 7 & 0 \end{bmatrix}$$
-- **Complexity**: Time: $\mathbf{\Theta(V^3)}$, Space: $\mathbf{\Theta(V^2)}$.
+- Time Complexity: $\mathbf{\Theta(V^3)}$
+- Space Complexity: $\mathbf{\Theta(V^2)}$
 
----
+### 4.4 Matrix Chain Multiplication (MCM)
 
-### 19. Matrix Chain Multiplication (MCM)
+#### 4.4.1 Matrix Chain Dimensions
+- Three matrices:
+  - $A_1$: dimension $10 \times 30$
+  - $A_2$: dimension $30 \times 5$
+  - $A_3$: dimension $5 \times 60$
+- Dimension array:
+  $$p = [10, 30, 5, 60], \quad n = 3$$
 
-#### 🔢 Example Problem
-Multiply 3 matrices $A_1(10 \times 30), A_2(30 \times 5), A_3(5 \times 60)$.
-Dimensions: $p = [10, 30, 5, 60]$, $n = 3$.
-
-#### 👣 Recurrence
+#### 4.4.2 MCM Recurrence Formula
 $$m[i, j] = \min_{i \le k < j} \{m[i, k] + m[k+1, j] + p_{i-1} p_k p_j\}$$
 
-#### 👣 Step-by-Step Calculation
-1. **Length $l = 1$**: $m[1, 1] = m[2, 2] = m[3, 3] = 0$.
-2. **Length $l = 2$**:
-   - $m[1, 2] = m[1, 1] + m[2, 2] + p_0 p_1 p_2 = 0 + 0 + 10 \times 30 \times 5 = \mathbf{1500}$, split $s[1, 2] = 1$.
-   - $m[2, 3] = m[2, 2] + m[3, 3] + p_1 p_2 p_3 = 0 + 0 + 30 \times 5 \times 60 = \mathbf{9000}$, split $s[2, 3] = 2$.
-3. **Length $l = 3$ ($m[1, 3]$)**:
-   - For $k = 1$: $m[1, 1] + m[2, 3] + p_0 p_1 p_3 = 0 + 9000 + 10 \times 30 \times 60 = 9000 + 18000 = 27,000$.
-   - For $k = 2$: $m[1, 2] + m[3, 3] + p_0 p_2 p_3 = 1500 + 0 + 10 \times 5 \times 60 = 1500 + 3000 = \mathbf{4500}$.
-   - Minimum is $\mathbf{4500}$ at $k = 2$. So $s[1, 3] = 2$.
+#### 4.4.3 Chain Length $l = 1$ (Base Cases)
+- Cost to multiply a single matrix:
+  $$m[1, 1] = 0$$
+  $$m[2, 2] = 0$$
+  $$m[3, 3] = 0$$
 
-- **Optimal Parenthesization**: Split at $k=2 \implies \mathbf{((A_1 A_2) A_3)}$.
-- **Min Multiplications**: $\mathbf{4500}$.
-- **Complexity**: Time: $\mathbf{O(n^3)}$, Space: $\mathbf{O(n^2)}$.
+#### 4.4.4 Chain Length $l = 2$ (Individual Calculations)
+- Multiplying $A_1 A_2$ ($i = 1, j = 2, k = 1$):
+  $$m[1, 2] = m[1, 1] + m[2, 2] + p_0 p_1 p_2$$
+  $$m[1, 2] = 0 + 0 + (10 \times 30 \times 5)$$
+  $$m[1, 2] = 1500$$
+  $$s[1, 2] = 1$$
 
----
+- Multiplying $A_2 A_3$ ($i = 2, j = 3, k = 2$):
+  $$m[2, 3] = m[2, 2] + m[3, 3] + p_1 p_2 p_3$$
+  $$m[2, 3] = 0 + 0 + (30 \times 5 \times 60)$$
+  $$m[2, 3] = 9000$$
+  $$s[2, 3] = 2$$
 
-### 20. Longest Common Subsequence (LCS)
+#### 4.4.5 Chain Length $l = 3$ (Split Minimization Trace)
+- Multiply entire chain: $m[1, 3]$ ($i = 1, j = 3$)
 
-#### 🔢 Example Problem
-Find LCS of $X = \text{"ABCBDAB"}$ and $Y = \text{"BDCABA"}$.
+- Option $k = 1$: Split as $(A_1)(A_2 A_3)$
+  $$\text{Cost}_1 = m[1, 1] + m[2, 3] + p_0 p_1 p_3$$
+  $$\text{Cost}_1 = 0 + 9000 + (10 \times 30 \times 60)$$
+  $$\text{Cost}_1 = 9000 + 18000$$
+  $$\text{Cost}_1 = 27,000$$
 
-#### 👣 Recurrence
-$$c[i, j] = \begin{cases} 0 & \text{if } i=0 \text{ or } j=0 \\ c[i-1, j-1] + 1 & \text{if } X[i] = Y[j] \\ \max(c[i-1, j], c[i, j-1]) & \text{if } X[i] \ne Y[j] \end{cases}$$
+- Option $k = 2$: Split as $(A_1 A_2)(A_3)$
+  $$\text{Cost}_2 = m[1, 2] + m[3, 3] + p_0 p_2 p_3$$
+  $$\text{Cost}_2 = 1500 + 0 + (10 \times 5 \times 60)$$
+  $$\text{Cost}_2 = 1500 + 3000$$
+  $$\text{Cost}_2 = 4500$$
 
-#### 👣 Tabulation Matrix $c[i, j]$
+- Minimum cost choice:
+  $$m[1, 3] = \min(27000, 4500) = \mathbf{4500}$$
+  $$s[1, 3] = 2$$
 
-| $X \downarrow \setminus Y \to$ | $\emptyset$ | B | D | C | A | B | A |
+#### 4.4.6 Optimal Parenthesization & Multiplications Count
+- Optimal parenthesization from split table:
+  $$\mathbf{((A_1 A_2) A_3)}$$
+- Minimum scalar multiplications required: $\mathbf{4500}$
+- Time Complexity: $\mathbf{\Theta(n^3)}$
+- Space Complexity: $\mathbf{\Theta(n^2)}$
+
+### 4.5 Longest Common Subsequence (LCS)
+
+#### 4.5.1 Input Sequences & Recurrence
+- Sequences:
+  - $X = \text{"ABCBDAB"}$ ($m = 7$)
+  - $Y = \text{"BDCABA"}$ ($n = 6$)
+- Recurrence:
+  $$c[i, j] = \begin{cases} 0 & \text{if } i=0 \text{ or } j=0 \\ c[i-1, j-1] + 1 & \text{if } X[i] == Y[j] \\ \max(c[i-1, j], c[i, j-1]) & \text{if } X[i] \ne Y[j] \end{cases}$$
+
+#### 4.5.2 DP Table Construction
+- Step-by-step matching logic:
+  - If $X[i] == Y[j]$: take diagonal value plus $1$.
+  - If $X[i] \ne Y[j]$: take maximum of top cell $c[i-1, j]$ and left cell $c[i, j-1]$.
+
+#### 4.5.3 Complete Cell Matrix
+
+| $X \downarrow \setminus Y \to$ | $\emptyset$ | $B$ | $D$ | $C$ | $A$ | $B$ | $A$ |
 |---|---|---|---|---|---|---|---|
 | $\emptyset$ | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **A** | 0 | 0 | 0 | 0 | 1 | 1 | 1 |
-| **B** | 0 | 1 | 1 | 1 | 1 | 2 | 2 |
-| **C** | 0 | 1 | 1 | 2 | 2 | 2 | 2 |
-| **B** | 0 | 1 | 1 | 2 | 2 | 3 | 3 |
-| **D** | 0 | 1 | 2 | 2 | 2 | 3 | 3 |
-| **A** | 0 | 1 | 2 | 2 | 3 | 3 | 4 |
-| **B** | 0 | 1 | 2 | 2 | 3 | 4 | **4** |
+| **$A$** | 0 | 0 | 0 | 0 | 1 | 1 | 1 |
+| **$B$** | 0 | 1 | 1 | 1 | 1 | 2 | 2 |
+| **$C$** | 0 | 1 | 1 | 2 | 2 | 2 | 2 |
+| **$B$** | 0 | 1 | 1 | 2 | 2 | 3 | 3 |
+| **$D$** | 0 | 1 | 2 | 2 | 2 | 3 | 3 |
+| **$A$** | 0 | 1 | 2 | 2 | 3 | 3 | 4 |
+| **$B$** | 0 | 1 | 2 | 2 | 3 | 4 | **4** |
 
-- **LCS Length**: $\mathbf{4}$
-- **Backtracked Subsequence**: $\mathbf{\text{"BCBA"}}$ (or $\text{"BDAB"}$).
-- **Complexity**: $\mathbf{O(m \cdot n)}$ time and space.
+#### 4.5.4 Backtracking the Common Subsequence
+- Start at $c[7, 6] = 4$:
+  - $X[7] = 'B', Y[6] = 'A' \implies$ Mismatch. Take max(top, left) $\implies$ move up to $(6, 6)$ with value $4$.
+  - $X[6] = 'A', Y[6] = 'A' \implies$ Match! Add **$'A'$** to LCS. Move diagonal to $(5, 5)$ with value $3$.
+  - $X[5] = 'D', Y[5] = 'B' \implies$ Mismatch. Move up to $(4, 5)$ with value $3$.
+  - Follow up to $(4, 5)$: $X[4] = 'B', Y[5] = 'B' \implies$ Match! Add **$'B'$** to LCS. Move diagonal to $(3, 4)$ with value $2$.
+  - Follow up to $(3, 3)$: $X[3] = 'C', Y[3] = 'C' \implies$ Match! Add **$'C'$** to LCS. Move diagonal to $(2, 2)$ with value $1$.
+  - Follow to $(2, 1)$: $X[2] = 'B', Y[1] = 'B' \implies$ Match! Add **$'B'$** to LCS. Move diagonal to $(1, 0)$ with value $0$.
 
----
+#### 4.5.5 Final LCS String & Length
+- Reverse the matched characters:
+  - Sequence: $'B' \to 'C' \to 'B' \to 'A'$
+  - LCS String: $\mathbf{\text{"BCBA"}}$ (or $\text{"BDAB"}$)
+- LCS Length: $\mathbf{4}$
+- Time Complexity: $\mathbf{\Theta(m \cdot n)}$
+- Space Complexity: $\mathbf{\Theta(m \cdot n)}$
 
-# Unit 5: Exploring Graphs
+:::info[Unit - 5]
+## Exploring Graphs
+:::
 
----
+### 5.1 Breadth-First Search (BFS)
 
-### 21. Breadth-First Search (BFS)
+#### 5.1.1 Graph Structure & Starting Vertex
+- Vertices: $V = \{1, 2, 3, 4, 5, 6\}$
+- Undirected edges:
+  $$(1, 2), (1, 3), (2, 4), (2, 5), (3, 5), (4, 6), (5, 6)$$
+- Starting source vertex: $1$
 
-#### 🔢 Example Problem
-Graph with vertices $V = \{1, 2, 3, 4, 5, 6\}$ and edges:
-$(1, 2), (1, 3), (2, 4), (2, 5), (3, 5), (4, 6), (5, 6)$. Source $= 1$.
+#### 5.1.2 Visual Graph & Level Frontiers
 
-#### 👣 Queue Execution Trace
-
-| Step | Current Dequeued Node | Queue State | Visited / Distance $d[]$ |
-|---|---|---|---|
-| **0** | - | `[1]` | $d[1]=0$ |
-| **1** | **1** | `[2, 3]` | $d[2]=1, d[3]=1$ |
-| **2** | **2** | `[3, 4, 5]` | $d[4]=2, d[5]=2$ |
-| **3** | **3** | `[4, 5]` | Node 5 already visited |
-| **4** | **4** | `[5, 6]` | $d[6]=3$ |
-| **5** | **5** | `[6]` | Neighbors 3, 6 already visited |
-| **6** | **6** | `[]` | Done |
-
-- **BFS Traversal Order**: $\mathbf{1 \to 2 \to 3 \to 4 \to 5 \to 6}$
-- **Complexity**: Time: $\mathbf{O(V + E)}$, Space: $\mathbf{O(V)}$ (Queue).
-
----
-
-### 22. Depth-First Search (DFS) with Timestamps & Edge Types
-
-#### 🔢 Example Problem
-Directed graph: $1 \to 2, 1 \to 3, 2 \to 4, 3 \to 4, 4 \to 1$.
-
-#### 👣 Timestamps ($d[u] / f[u]$)
-
-| Vertex | Discovery Time $d[u]$ | Finishing Time $f[u]$ |
-|---|---|---|
-| **1** | 1 | 8 |
-| **2** | 2 | 5 |
-| **4** | 3 | 4 |
-| **3** | 6 | 7 |
-
-#### 👣 Edge Classification
-- **Tree Edges**: $(1 \to 2), (2 \to 4), (1 \to 3)$ (leads to unvisited white node).
-- **Back Edge**: $(4 \to 1)$ (leads to ancestor $1$ in current recursion stack $\implies$ **Indicates a Cycle!**).
-- **Cross Edge**: $(3 \to 4)$ (leads to node $4$ which is already finished and not an ancestor).
-- **Complexity**: $\mathbf{O(V + E)}$.
-
----
-
-### 23. Topological Sorting (Kahn’s In-Degree & DFS)
-
-#### 🔢 Example Problem
-DAG with vertices $\{A, B, C, D, E\}$ and directed edges:
-$A \to B, A \to C, B \to D, C \to D, D \to E$.
-
-#### 👣 Method 1: Kahn's Algorithm (In-Degree Queue)
-1. **Compute Initial In-degrees**:
-   - $\text{in}(A) = 0, \text{in}(B) = 1, \text{in}(C) = 1, \text{in}(D) = 2, \text{in}(E) = 1$.
-2. **Execution**:
-   - Enqueue in-degree 0: Queue $= [A]$.
-   - Pop $A$, output $A$. Reduce neighbors: $\text{in}(B)=0, \text{in}(C)=0$. Queue $= [B, C]$.
-   - Pop $B$, output $B$. Reduce: $\text{in}(D) = 2 - 1 = 1$.
-   - Pop $C$, output $C$. Reduce: $\text{in}(D) = 1 - 1 = 0 \implies$ Enqueue $D$. Queue $= [D]$.
-   - Pop $D$, output $D$. Reduce: $\text{in}(E) = 1 - 1 = 0 \implies$ Enqueue $E$. Queue $= [E]$.
-   - Pop $E$, output $E$.
-- **Topological Order**: $\mathbf{A \to B \to C \to D \to E}$ (or $A \to C \to B \to D \to E$).
-
----
-
-### 24. Strongly Connected Components (Kosaraju)
-
-#### 🔢 Example Problem
-Directed graph $G$: $1 \to 2, 2 \to 3, 3 \to 1, 3 \to 4, 4 \to 5, 5 \to 4$.
-
-#### 👣 Step-by-Step Solution
-1. **DFS on $G$ & Push to Stack by finish time**:
-   - Stack after completion (top to bottom): $[1, 2, 3, 4, 5]$.
-2. **Transpose the Graph ($G^T$)**: Reverse all edges:
-   - $2 \to 1, 3 \to 2, 1 \to 3, 4 \to 3, 5 \to 4, 4 \to 5$.
-3. **DFS on $G^T$ in Stack Order**:
-   - Pop $1$: DFS visits $\{1, 3, 2\} \implies$ **Component 1: $\{1, 2, 3\}$**.
-   - Pop $4$: DFS visits $\{4, 5\} \implies$ **Component 2: $\{4, 5\}$**.
-- **SCCs**: $\mathbf{\{1, 2, 3\}}$ and $\mathbf{\{4, 5\}}$.
-- **Complexity**: $\mathbf{O(V + E)}$.
-
----
-
-### 25. Articulation Points & Bridges
-
-#### 🔢 Example Problem
-Graph: $1-2, 2-3, 1-3, 3-4, 4-5$.
-
-#### 👣 Step-by-Step Solution
-1. Compute discovery time `disc[]` and lowest reachable ancestor `low[]`:
-   - `disc`: $[1: 1, 2: 2, 3: 3, 4: 4, 5: 5]$
-   - `low`:
-     - $1-2-3-1$ is a cycle $\implies low[1]=1, low[2]=1, low[3]=1$.
-     - For $4$: edge $4-5$ has no cycle back $\implies low[4]=4, low[5]=5$.
-2. **Check Cut-Vertex Condition ($low[v] \ge disc[u]$)**:
-   - For node $3$ and child $4$: $low[4] = 4 \ge disc[3] = 3 \implies$ **Node 3 is an Articulation Point!**
-   - For node $4$ and child $5$: $low[5] = 5 \ge disc[4] = 4 \implies$ **Node 4 is an Articulation Point!**
-3. **Bridge Condition ($low[v] > disc[u]$)**:
-   - Edge $(3, 4)$: $low[4] = 4 > disc[3] = 3 \implies$ **Bridge!**
-   - Edge $(4, 5)$: $low[5] = 5 > disc[4] = 4 \implies$ **Bridge!**
-
----
-
-# Unit 6: Backtracking & Branch and Bound
-
----
-
-### 26. 4-Queens Problem (Backtracking)
-
-#### 💡 Core Idea
-Place 4 non-attacking queens on a $4 \times 4$ chessboard. Conflict condition:
-$$col[i] = col[j] \quad \text{or} \quad |col[i] - col[j]| = |i - j|$$
-
-#### 👣 Step-by-Step Backtracking Tree
-- **Row 1**: Place $Q_1$ at Col 1: `[1, _, _, _]`
-- **Row 2**:
-  - Col 1: Conflict (same column)
-  - Col 2: Conflict (diagonal $|2-1| == |2-1|$)
-  - Col 3: Safe $\implies$ Place $Q_2$ at Col 3: `[1, 3, _, _]`
-- **Row 3**:
-  - Col 1: Conflict with $Q_1$
-  - Col 2: Conflict with $Q_2$ ($|2-3| == |3-2|$)
-  - Col 3: Conflict with $Q_2$
-  - Col 4: Conflict with $Q_2$ ($|4-3| == |3-2|$)
-  - $\implies$ **Dead End! Backtrack to Row 2.**
-- **Row 2**: Try next column $\implies$ Col 4 safe $\implies$ `[1, 4, _, _]`
-  - **Row 3**: Col 2 is safe $\implies$ `[1, 4, 2, _]`
-  - **Row 4**: All columns 1, 2, 3, 4 are attacked $\implies$ **Dead End! Backtrack to Row 1.**
-- **Row 1**: Place $Q_1$ at Col 2: `[2, _, _, _]`
-  - **Row 2**: Col 4 is safe $\implies$ `[2, 4, _, _]`
-  - **Row 3**: Col 1 is safe $\implies$ `[2, 4, 1, _]`
-  - **Row 4**: Col 3 is safe $\implies$ `[2, 4, 1, 3]` $\implies$ **VALID SOLUTION!**
-
-#### ♟️ Solution Board
-```text
-. Q . .  (Row 1: Col 2)
-. . . Q  (Row 2: Col 4)
-Q . . .  (Row 3: Col 1)
-. . Q .  (Row 4: Col 3)
-```
-- **Solution Vector**: $\mathbf{(2, 4, 1, 3)}$ (1-indexed).
-
----
-
-### 27. 0/1 Knapsack using Backtracking
-
-#### 🔢 Example Problem
-$W = 7$, Items: $I_1(w=3, p=12), I_2(w=4, p=16), I_3(w=5, p=15)$.
-Sort by $p/w$: $I_1(4.0), I_2(4.0), I_3(3.0)$.
-
-#### 👣 Backtracking Search with Bounding
-- Root (level 0): $w=0, p=0$.
-  - Branch Left ($+I_1$): $w=3, p=12$.
-    - Branch Left ($+I_2$): $w = 3 + 4 = 7 \le 7$, $p = 12 + 16 = 28$.
-      - Branch Left ($+I_3$): $w = 7 + 5 = 12 > 7 \implies$ **Infeasible! Prune**.
-      - Branch Right ($-I_3$): Leaf reached $\implies$ **Current Best $= 28$**.
-    - Branch Right ($-I_2$): $w=3, p=12$.
-      - Max possible bound with remaining $I_3 = 12 + 15 = 27 < 28 \implies$ **Pruned!**
-  - Branch Right ($-I_1$): $w=0, p=0$.
-    - Max possible bound with $I_2, I_3 = 16 + 15 = 31$.
-    - Explore $+I_2$: $w=4, p=16$. $+I_3$ gives $w=9 > 7$ (Prune). Without $I_3$, $p=16 < 28$.
-- **Optimal Profit**: $\mathbf{28}$ with items $\{I_1, I_2\}$.
-
----
-
-### 28. 0/1 Knapsack using Branch & Bound (LC-BB)
-
-#### 💡 Core Idea
-At each node, compute an **Upper Bound ($UB$)** using Fractional Knapsack on remaining capacity. Maintain a priority queue prioritizing the highest $UB$.
-
-#### 🔢 Example Problem
-Capacity $W = 15$. Items:
-- $I_1: w=2, p=10$ ($p/w = 5$)
-- $I_2: w=4, p=10$ ($p/w = 2.5$)
-- $I_3: w=6, p=12$ ($p/w = 2.0$)
-- $I_4: w=9, p=18$ ($p/w = 2.0$)
-
-#### 👣 Root Bound Calculation
-- Capacity $= 15$.
-- Take $I_1$ (wt 2, p 10), $I_2$ (wt 4, p 10), $I_3$ (wt 6, p 12). Weight used $= 12$, Profit $= 32$.
-- Remaining weight $= 3$. Take fraction of $I_4$: $3/9 \times 18 = 6$.
-- Root **$UB = 32 + 6 = \mathbf{38}$**.
-- As nodes are explored:
-  - Any node whose $UB \le \text{Current Best Profit}$ is **pruned/killed**.
-- **Final Result**: Optimal subset $\{I_1, I_3, I_4\}$ with weight $2 + 6 + 7$? Capacity is 15: $\{I_1, I_2, I_4\} \implies 2+4+9 = 15$, profit $= 10 + 10 + 18 = \mathbf{38}$.
-
----
-
-### 29. Minimax Principle & Alpha-Beta Pruning
-
-#### 🔢 Example Problem
-Game tree of depth 3 with $\alpha = -\infty, \beta = +\infty$.
-
-```text
-              [MAX: A]
-            /          \
-       [MIN: B]       [MIN: C]
-       /      \       /      \
-    [D]       [E]   [F]      [G]
-    / \       / \   / \      / \
-   3   5     6   9 1   2    0   ?
+```mermaid
+flowchart TD
+    subgraph L0 ["Level 0: Distance = 0"]
+        V1((1))
+    end
+    subgraph L1 ["Level 1: Distance = 1"]
+        V2((2))
+        V3((3))
+    end
+    subgraph L2 ["Level 2: Distance = 2"]
+        V4((4))
+        V5((5))
+    end
+    subgraph L3 ["Level 3: Distance = 3"]
+        V6((6))
+    end
+    V1 --- V2
+    V1 --- V3
+    V2 --- V4
+    V2 --- V5
+    V3 --- V5
+    V4 --- V6
+    V5 --- V6
 ```
 
-#### 👣 Step-by-Step Alpha-Beta Trace
-1. **Node D (MIN)**: evaluates $3$ and $5 \implies \min(3, 5) = \mathbf{3}$.
-2. **Node B (MIN)**: updates $\beta = \min(+\infty, 3) = \mathbf{3}$.
-3. **Node E (MIN)**:
-   - First child $= 6$. Since $6 > \beta(3)$, MIN will not choose a value higher than 3.
-   - However, since E is under B, let's look at root A:
-     - After B finishes, $B$ returns $3$.
-     - Root A (MAX) updates $\alpha = \max(-\infty, 3) = \mathbf{3}$.
-4. **Node C (MIN)**:
-   - Node F evaluates $1$ and $2 \implies \min(1, 2) = \mathbf{1}$.
-   - Node C gets value $1 \implies \beta_C = \min(+\infty, 1) = \mathbf{1}$.
-   - Now at Node C: $\alpha = 3$ (from root), $\beta = 1$.
-   - Since **$\alpha \ge \beta$ ($3 \ge 1$)**: **Prune right child G!** (The second child of G is never evaluated).
-- **Optimal Minimax Value at Root**: $\mathbf{3}$.
+#### 5.1.3 Step-by-Step Queue & Distance Updates
 
----
+##### Initialization
+- Visited: $\{1\}$
+- Queue: `[1]`
+- Distance array:
+  $$d[1] = 0, \quad d[2 \dots 6] = \infty$$
 
-### 30. Travelling Salesperson Problem (TSP BB)
+##### Step 1: Dequeue $1$
+- Dequeued vertex: $1$
+- Unvisited neighbors: $2, 3$
+- Updates:
+  - $d[2] = d[1] + 1 = 1$
+  - $d[3] = d[1] + 1 = 1$
+- Enqueue: $2, 3$
+- Queue: `[2, 3]`
+- Visited: $\{1, 2, 3\}$
 
-#### 🔢 Example Problem
-$4 \times 4$ Cost Matrix:
-$$M = \begin{bmatrix} \infty & 10 & 15 & 20 \\ 5 & \infty & 9 & 10 \\ 6 & 13 & \infty & 12 \\ 8 & 8 & 9 & \infty \end{bmatrix}$$
+##### Step 2: Dequeue $2$
+- Dequeued vertex: $2$
+- Unvisited neighbors: $4, 5$
+- Updates:
+  - $d[4] = d[2] + 1 = 2$
+  - $d[5] = d[2] + 1 = 2$
+- Enqueue: $4, 5$
+- Queue: `[3, 4, 5]`
+- Visited: $\{1, 2, 3, 4, 5\}$
 
-#### 👣 Step 1: Initial Cost Matrix Reduction
-- **Row Reductions**:
-  - Row 1: min is $10 \implies$ subtract 10: `[inf, 0, 5, 10]`, $r_1 = 10$
-  - Row 2: min is $5 \implies$ subtract 5: `[0, inf, 4, 5]`, $r_2 = 5$
-  - Row 3: min is $6 \implies$ subtract 6: `[0, 7, inf, 6]`, $r_3 = 6$
-  - Row 4: min is $8 \implies$ subtract 8: `[0, 0, 1, inf]`, $r_4 = 8$
-  - Row reduction sum $= 10 + 5 + 6 + 8 = 29$.
-- **Column Reductions**:
-  - Col 1: has 0 ($c_1 = 0$)
-  - Col 2: has 0 ($c_2 = 0$)
-  - Col 3: min is $1 \implies$ subtract 1 ($c_3 = 1$)
-  - Col 4: min is $5 \implies$ subtract 5 ($c_4 = 5$)
-  - Column reduction sum $= 0 + 0 + 1 + 5 = 6$.
-- **Root Lower Bound**: $\text{Cost} = 29 + 6 = \mathbf{35}$.
+##### Step 3: Dequeue $3$
+- Dequeued vertex: $3$
+- Neighbors: $1$ (already visited), $5$ (already visited)
+- No new vertices enqueued.
+- Queue: `[4, 5]`
 
-#### 👣 Step 2: Branching
-- Branch from city 1 to city $j \in \{2, 3, 4\}$:
-  $$\text{Bound}(child) = \text{Bound}(parent) + \text{ReducedCost}(1, j) + \text{New Reduction}$$
-  The branch minimizing lower bound is selected until tour $1 \to A \to B \to C \to 1$ completes.
+##### Step 4: Dequeue $4$
+- Dequeued vertex: $4$
+- Unvisited neighbors: $6$
+- Updates:
+  - $d[6] = d[4] + 1 = 3$
+- Enqueue: $6$
+- Queue: `[5, 6]`
+- Visited: $\{1, 2, 3, 4, 5, 6\}$
 
----
+##### Step 5: Dequeue $5$
+- Dequeued vertex: $5$
+- Neighbors: $2, 3, 6$ (all visited)
+- Queue: `[6]`
 
-# Unit 7: String Matching & NP-Completeness
+##### Step 6: Dequeue $6$
+- Dequeued vertex: $6$
+- Queue: `[]` (Empty)
+- Traversal complete.
 
----
+#### 5.1.4 Final BFS Traversal Sequence & Tree Edges
+- BFS Node Visitation Order:
+  $$\mathbf{1 \to 2 \to 3 \to 4 \to 5 \to 6}$$
+- BFS Tree Edges:
+  $$(1, 2), \quad (1, 3), \quad (2, 4), \quad (2, 5), \quad (4, 6)$$
+- Time Complexity: $\mathbf{O(V + E)}$
+- Space Complexity: $\mathbf{O(V)}$ (Queue).
 
-### 31. Naive String Matching
+### 5.2 Depth-First Search (DFS) & Edge Classification
 
-#### 🔢 Example Problem
-Text $T = \text{"AABAACAADAABAABA"}$, Pattern $P = \text{"AABA"}$ ($n = 16, m = 4$).
+#### 5.2.1 Graph Structure & Initialization
+- Directed graph with vertices $\{1, 2, 3, 4\}$:
+  - $1 \to 2$
+  - $1 \to 3$
+  - $2 \to 4$
+  - $3 \to 4$
+  - $4 \to 1$
+- Global timer: $\text{time} = 0$
 
-#### 👣 Step-by-Step Shift Trace
+#### 5.2.2 Visual DFS Edge Classification Graph
 
-| Shift $s$ | Substring $T[s \dots s+3]$ | Comparison with `"AABA"` | Result |
-|---|---|---|---|
-| **$s = 0$** | `"AABA"` | Matches completely! | **Match at index 0** |
-| **$s = 1$** | `"ABAA"` | $T[1]='A' == P[0]$, but $T[2]='B' \ne P[1]('A')$ | Mismatch |
-| **$s = 2$** | `"BAAC"` | $T[2]='B' \ne P[0]('A')$ | Mismatch |
-| **$s = 9$** | `"AABA"` | Matches completely! | **Match at index 9** |
-| **$s = 12$**| `"AABA"` | Matches completely! | **Match at index 12**|
+```mermaid
+graph TD
+    N1["Node 1 (disc: 1, fin: 8)"] -->|"Tree Edge"| N2["Node 2 (disc: 2, fin: 5)"]
+    N2 -->|"Tree Edge"| N4["Node 4 (disc: 3, fin: 4)"]
+    N4 -.->|"Back Edge (Cycle to Ancestor 1)"| N1
+    N1 -->|"Tree Edge"| N3["Node 3 (disc: 6, fin: 7)"]
+    N3 -.->|"Cross Edge (to Finished Node 4)"| N4
+```
 
-- **Total Valid Matches**: Shifts $s \in \{0, 9, 12\}$.
-- **Complexity**: Worst case $\mathbf{O((n - m + 1) m)}$.
+#### 5.2.3 Step-by-Step Recursion Stack & Timestamp Trace ($d[u], f[u]$)
+- Step 1: Visit node $1$:
+  - $\text{time} = 1$
+  - Discovery time: $d[1] = 1$
+- Step 2: Traverse tree edge $1 \to 2$, visit node $2$:
+  - $\text{time} = 2$
+  - Discovery time: $d[2] = 2$
+- Step 3: Traverse tree edge $2 \to 4$, visit node $4$:
+  - $\text{time} = 3$
+  - Discovery time: $d[4] = 3$
+- Step 4: Explore edge $4 \to 1$:
+  - Node $1$ is currently in the active recursion stack (GRAY).
+  - This indicates an ancestor relationship.
+  - Classification: **Back Edge (Cycle detected!)**
+- Step 5: Finish node $4$:
+  - $\text{time} = 4$
+  - Finishing time: $f[4] = 4$
+- Step 6: Backtrack to node $2$ and finish:
+  - $\text{time} = 5$
+  - Finishing time: $f[2] = 5$
+- Step 7: Backtrack to node $1$, explore tree edge $1 \to 3$, visit node $3$:
+  - $\text{time} = 6$
+  - Discovery time: $d[3] = 6$
+- Step 8: Explore edge $3 \to 4$:
+  - Node $4$ is already completely processed (BLACK) and is not an ancestor.
+  - Classification: **Cross Edge**
+- Step 9: Finish node $3$:
+  - $\text{time} = 7$
+  - Finishing time: $f[3] = 7$
+- Step 10: Finish node $1$:
+  - $\text{time} = 8$
+  - Finishing time: $f[1] = 8$
 
----
+#### 5.2.4 Edge Classification Summary
+- Tree Edges: $(1 \to 2), (2 \to 4), (1 \to 3)$
+- Back Edge: $(4 \to 1)$
+- Cross Edge: $(3 \to 4)$
+- Time Complexity: $\mathbf{O(V + E)}$
 
-### 32. Rabin-Karp Algorithm (Rolling Hash)
+### 5.3 Topological Sorting
 
-#### 🔢 Example Problem
-Text $T = \text{"31415926535"}$, Pattern $P = \text{"26"}$, Radix $d = 10$, Prime modulus $q = 11$.
+#### 5.3.1 DAG Definition & Visual Graph
+- Directed Acyclic Graph (DAG) with vertices $\{A, B, C, D, E\}$:
 
-#### 👣 Step-by-Step Solution
-1. **Compute Pattern Hash**:
-   $$p = 26 \pmod{11} = \mathbf{4}$$
-2. **Slide Window of length $m = 2$ across Text**:
-   - Window 0 (`"31"`): $31 \pmod{11} = 9 \ne 4$.
-   - Window 1 (`"14"`): $14 \pmod{11} = 3 \ne 4$.
-   - Window 2 (`"41"`): $41 \pmod{11} = 8 \ne 4$.
-   - Window 3 (`"15"`): $15 \pmod{11} = \mathbf{4} == 4 \implies$ **Spurious Hit!** Check string: `"15" != "26"`.
-   - Window 4 (`"59"`): $59 \pmod{11} = \mathbf{4} == 4 \implies$ **Spurious Hit!** `"59" != "26"`.
-   - Window 5 (`"92"`): $92 \pmod{11} = \mathbf{4} == 4 \implies$ **Spurious Hit!** `"92" != "26"`.
-   - Window 6 (`"26"`): $26 \pmod{11} = \mathbf{4} == 4 \implies$ **Valid Hit!** String `"26" == "26"`. **Match at Shift 6!**
+```mermaid
+graph TD
+    A((A)) --> B((B))
+    A((A)) --> C((C))
+    B((B)) --> D((D))
+    C((C)) --> D((D))
+    D((D)) --> E((E))
+```
 
-#### Rolling Hash Update Formula
-$$t_{s+1} = \left( d (t_s - T[s+1] \cdot h) + T[s+m+1] \right) \pmod q$$
-where $h = d^{m-1} \pmod q = 10^{2-1} \pmod{11} = 10$.
-- **Complexity**: Average: $\mathbf{O(n + m)}$, Worst: $\mathbf{O((n - m + 1)m)}$.
+#### 5.3.2 Kahn's Algorithm Trace (In-Degree Elimination)
 
----
+##### Step 1: In-Degree Calculation
+- Node $A$: $\text{in}(A) = 0$
+- Node $B$: $\text{in}(B) = 1$
+- Node $C$: $\text{in}(C) = 1$
+- Node $D$: $\text{in}(D) = 2$
+- Node $E$: $\text{in}(E) = 1$
 
-### 33. String Matching with Finite Automata (FA)
+##### Step 2: Initialize Queue
+- Enqueue nodes with in-degree $0$:
+  $$\text{Queue} = [A]$$
 
-#### 🔢 Example Problem
-Pattern $P = \text{"aba"}$ over alphabet $\Sigma = \{a, b\}$. States: $\{0, 1, 2, 3\}$. Accepting State $= 3$.
+##### Step 3: Dequeue $A$
+- Output: $A$
+- Decrement neighbor in-degrees:
+  - $\text{in}(B) = 1 - 1 = 0 \implies$ Enqueue $B$
+  - $\text{in}(C) = 1 - 1 = 0 \implies$ Enqueue $C$
+- $\text{Queue} = [B, C]$
 
-#### 👣 Transition Function $\delta(q, c)$ Calculation
-$\delta(q, c)$ is the length of the longest prefix of $P$ that is a suffix of $P_q c$:
+##### Step 4: Dequeue $B$
+- Output: $B$
+- Decrement neighbor in-degrees:
+  - $\text{in}(D) = 2 - 1 = 1$
+- $\text{Queue} = [C]$
 
-| State $q$ | Input `a` | Input `b` |
+##### Step 5: Dequeue $C$
+- Output: $C$
+- Decrement neighbor in-degrees:
+  - $\text{in}(D) = 1 - 1 = 0 \implies$ Enqueue $D$
+- $\text{Queue} = [D]$
+
+##### Step 6: Dequeue $D$
+- Output: $D$
+- Decrement neighbor in-degrees:
+  - $\text{in}(E) = 1 - 1 = 0 \implies$ Enqueue $E$
+- $\text{Queue} = [E]$
+
+##### Step 7: Dequeue $E$
+- Output: $E$
+- Decrement neighbors: None
+- $\text{Queue} = []$
+
+#### 5.3.3 Linear Topological Order Flow
+
+```mermaid
+flowchart LR
+    A((A)) --> B((B)) --> C((C)) --> D((D)) --> E((E))
+```
+
+- Topological ordering:
+  $$\mathbf{A \to B \to C \to D \to E}$$
+- Time Complexity: $\mathbf{O(V + E)}$
+
+### 5.4 Strongly Connected Components (Kosaraju's Algorithm)
+
+#### 5.4.1 Directed Graph Input & Component Subgraphs
+
+```mermaid
+graph TD
+    subgraph C1 ["SCC 1: {1, 2, 3}"]
+        N1((1)) --> N2((2))
+        N2((2)) --> N3((3))
+        N3((3)) --> N1((1))
+    end
+    subgraph C2 ["SCC 2: {4, 5}"]
+        N4((4)) --> N5((5))
+        N5((5)) --> N4((4))
+    end
+    N3((3)) -->|"Bridge Edge"| N4((4))
+```
+
+#### 5.4.2 Pass 1: Forward DFS & Finish-Time Stack
+- Run DFS on original graph $G$:
+  - Start at $1 \to 2 \to 3 \to 4 \to 5$
+  - Finish $5 \implies$ Push $5$
+  - Finish $4 \implies$ Push $4$
+  - Finish $3 \implies$ Push $3$
+  - Finish $2 \implies$ Push $2$
+  - Finish $1 \implies$ Push $1$
+- Resulting Stack (top to bottom):
+  $$\text{Stack} = [1, 2, 3, 4, 5]$$
+
+#### 5.4.3 Pass 2: Transpose Graph $G^T$ Construction
+- Reverse the direction of all edges:
+  $$2 \to 1, \quad 3 \to 2, \quad 1 \to 3, \quad 4 \to 3, \quad 5 \to 4, \quad 4 \to 5$$
+
+#### 5.4.4 Pass 3: Reverse DFS & SCC Extraction
+- Pop $1$ from Stack:
+  - DFS on $G^T$ from $1$ visits: $\{1, 3, 2\}$
+  - **Component 1:** $\{1, 2, 3\}$
+- Next unvisited on Stack is $4$:
+  - Pop $4$ from Stack
+  - DFS on $G^T$ from $4$ visits: $\{4, 5\}$
+  - **Component 2:** $\{4, 5\}$
+- Strongly Connected Components:
+  $$\mathbf{\{1, 2, 3\}} \quad \text{and} \quad \mathbf{\{4, 5\}}$$
+- Time Complexity: $\mathbf{O(V + E)}$
+
+### 5.5 Articulation Points & Bridges
+
+#### 5.5.1 Graph Problem Input & Visual Diagram
+- Undirected graph with $5$ vertices:
+
+```mermaid
+graph TD
+    N1((1)) --- N2((2))
+    N2((2)) --- N3((3))
+    N3((3)) --- N1((1))
+    N3((3)) ===|"Bridge: (3, 4)"| N4((4))
+    N4((4)) ===|"Bridge: (4, 5)"| N5((5))
+```
+
+#### 5.5.2 Discovery Times and Low Values ($disc[u], low[u]$)
+- DFS traversal starting at node $1$:
+  - Visit $1$: $disc[1] = 1, low[1] = 1$
+  - Visit $2$: $disc[2] = 2, low[2] = 2$
+  - Visit $3$: $disc[3] = 3, low[3] = 3$
+  - Back edge $(3-1)$: $low[3] = \min(3, disc[1]) = 1$
+  - Propagate back to $2$: $low[2] = \min(2, low[3]) = 1$
+  - Propagate back to $1$: $low[1] = 1$
+  - From $3$, explore tree edge $3-4$:
+    - Visit $4$: $disc[4] = 4, low[4] = 4$
+    - Explore tree edge $4-5$:
+      - Visit $5$: $disc[5] = 5, low[5] = 5$
+
+#### 5.5.3 Cut Vertex Condition Testing
+- Non-root condition: Vertex $u$ is an articulation point if it has a child $v$ such that:
+  $$low[v] \ge disc[u]$$
+- Test Node $3$ with child $4$:
+  $$low[4] = 4, \quad disc[3] = 3$$
+  $$4 \ge 3 \implies \mathbf{\text{Node 3 is an Articulation Point!}}$$
+- Test Node $4$ with child $5$:
+  $$low[5] = 5, \quad disc[4] = 4$$
+  $$5 \ge 4 \implies \mathbf{\text{Node 4 is an Articulation Point!}}$$
+
+#### 5.5.4 Bridge Condition Testing & Output
+- Bridge condition: Edge $(u, v)$ is a bridge if:
+  $$low[v] > disc[u]$$
+- Test edge $(3, 4)$:
+  $$low[4] = 4 > disc[3] = 3 \implies \mathbf{\text{Edge }(3, 4)\text{ is a Bridge!}}$$
+- Test edge $(4, 5)$:
+  $$low[5] = 5 > disc[4] = 4 \implies \mathbf{\text{Edge }(4, 5)\text{ is a Bridge!}}$$
+- Articulation Points: $\{3, 4\}$
+- Bridges: $\{(3, 4), (4, 5)\}$
+- Time Complexity: $\mathbf{O(V + E)}$
+
+:::info[Unit - 6]
+## Backtracking & Branch and Bound
+:::
+
+### 6.1 4-Queens Problem (Backtracking)
+
+#### 6.1.1 Problem Statement & Board Model
+- Place $4$ queens on a $4 \times 4$ chessboard such that no two queens attack each other.
+- Representation: array `col[1..4]` where `col[i]` is the column of the queen in row $i$.
+
+#### 6.1.2 Non-Attacking Constraints
+- Two queens in rows $i$ and $j$ conflict if:
+  - Same column: $col[i] == col[j]$
+  - Same diagonal: $|col[i] - col[j]| == |i - j|$
+
+#### 6.1.3 Visual State-Space Search Tree
+
+```mermaid
+flowchart TD
+    Root["Root (Row 0)"] --> Q1C1["Q1 at Col 1"]
+    Root --> Q1C2["Q1 at Col 2 (Success Path)"]
+    Q1C1 --> Q2C3["Q2 at Col 3"]
+    Q2C3 --> Dead1["Row 3: All attacked (Backtrack!)"]
+    Q1C1 --> Q2C4["Q2 at Col 4"]
+    Q2C4 --> Q3C2["Q3 at Col 2"]
+    Q3C2 --> Dead2["Row 4: All attacked (Backtrack!)"]
+    Q1C2 --> Q2C4_ok["Q2 at Col 4"]
+    Q2C4_ok --> Q3C1_ok["Q3 at Col 1"]
+    Q3C1_ok --> Q4C3_ok["Q4 at Col 3: Solution (2, 4, 1, 3)!"]
+```
+
+#### 6.1.4 Step-by-Step Exploration & Pruning
+
+##### Row 1: Place Queen 1
+- Try Column 1:
+  - $\text{col}[1] = 1$
+  - State: `[1, _, _, _]`
+
+##### Row 2: Place Queen 2
+- Try Column 1: Conflict with $Q_1$ (same column).
+- Try Column 2: Conflict with $Q_1$ ($|2 - 1| == |2 - 1|$ diagonal).
+- Try Column 3: Safe!
+  - $\text{col}[2] = 3$
+  - State: `[1, 3, _, _]`
+
+##### Row 3: Place Queen 3
+- Try Column 1: Conflict with $Q_1$ (same column).
+- Try Column 2: Conflict with $Q_2$ ($|2 - 3| == |3 - 2|$ diagonal).
+- Try Column 3: Conflict with $Q_2$ (same column).
+- Try Column 4: Conflict with $Q_2$ ($|4 - 3| == |3 - 2|$ diagonal).
+- Dead end! No safe column in Row 3.
+- **Action: Backtrack to Row 2.**
+
+##### Row 2 (Re-try):
+- Try Column 4: Safe!
+  - $\text{col}[2] = 4$
+  - State: `[1, 4, _, _]`
+
+##### Row 3:
+- Try Column 1: Conflict with $Q_1$.
+- Try Column 2: Safe!
+  - $\text{col}[3] = 2$
+  - State: `[1, 4, 2, _]`
+
+##### Row 4:
+- Try Column 1: Conflict with $Q_3$ ($|1 - 2| == |4 - 3|$).
+- Try Column 2: Conflict with $Q_3$ (same column).
+- Try Column 3: Conflict with $Q_3$ ($|3 - 2| == |4 - 3|$).
+- Try Column 4: Conflict with $Q_2$ (same column).
+- Dead end!
+- **Action: Backtrack all the way to Row 1.**
+
+##### Row 1 (Re-try): Place Queen 1 at Column 2
+- Try Column 2:
+  - $\text{col}[1] = 2$
+  - State: `[2, _, _, _]`
+
+##### Row 2:
+- Try Column 1: Conflict with $Q_1$ diagonal.
+- Try Column 2: Conflict with $Q_1$ column.
+- Try Column 3: Conflict with $Q_1$ diagonal.
+- Try Column 4: Safe!
+  - $\text{col}[2] = 4$
+  - State: `[2, 4, _, _]`
+
+##### Row 3:
+- Try Column 1: Safe!
+  - $\text{col}[3] = 1$
+  - State: `[2, 4, 1, _]`
+
+##### Row 4:
+- Try Column 1: Conflict with $Q_3$ column.
+- Try Column 2: Conflict with $Q_1$ column.
+- Try Column 3: Safe!
+  - $\text{col}[4] = 3$
+  - State: `[2, 4, 1, 3]`
+
+#### 6.1.5 Final Solution Placement & Vector
+- Solution Vector:
+  $$\mathbf{[2, 4, 1, 3]}$$
+- Visual Chessboard:
+```text
+. Q . .   (Row 1: Queen at Col 2)
+. . . Q   (Row 2: Queen at Col 4)
+Q . . .   (Row 3: Queen at Col 1)
+. . Q .   (Row 4: Queen at Col 3)
+```
+- Time Complexity: $\mathbf{O(N!)}$
+
+### 6.2 0/1 Knapsack using Backtracking
+
+#### 6.2.1 Problem Parameters & Items
+- Capacity: $W = 7$
+- Items sorted by $P_i / W_i$:
+  - $I_1$: $w_1 = 3, p_1 = 12$ (Ratio $= 4.0$)
+  - $I_2$: $w_2 = 4, p_2 = 16$ (Ratio $= 4.0$)
+  - $I_3$: $w_3 = 5, p_3 = 15$ (Ratio $= 3.0$)
+
+#### 6.2.2 State-Space Tree Exploration
+- Root: weight $= 0$, profit $= 0$, best profit $= 0$.
+
+##### Branch Left (Include $I_1$):
+- Weight: $0 + 3 = 3 \le 7$
+- Profit: $0 + 12 = 12$
+  - Branch Left (Include $I_2$):
+    - Weight: $3 + 4 = 7 \le 7$
+    - Profit: $12 + 16 = 28$
+    - Update best profit: $\text{best} = 28$
+      - Branch Left (Include $I_3$):
+        - Weight: $7 + 5 = 12 > 7$ (Over capacity!)
+        - **Prune: Infeasible branch.**
+      - Branch Right (Exclude $I_3$):
+        - Leaf reached with profit $28$.
+  - Branch Right (Exclude $I_2$):
+    - Weight: $3$
+    - Profit: $12$
+    - Maximum possible profit with remaining $I_3$:
+      $$\text{Bound} = 12 + 15 = 27$$
+    - Since $27 < \text{best}(28)$:
+      - **Prune: Promising check fails.**
+
+##### Branch Right (Exclude $I_1$):
+- Weight: $0$
+- Profit: $0$
+- Maximum possible profit with $I_2, I_3$:
+  $$\text{Bound} = 16 + 15 = 31 > 28$$
+  - Branch Left (Include $I_2$):
+    - Weight: $4$, Profit: $16$
+    - Try include $I_3$: Weight $4 + 5 = 9 > 7 \implies$ Infeasible.
+    - Exclude $I_3$: Profit is $16 < 28$.
+  - Branch Right (Exclude $I_2$):
+    - Only $I_3$ left $\implies$ Max profit $15 < 28 \implies$ Prune.
+
+#### 6.2.3 Pruning Checks & Best Profit Updates
+- Optimal solution: $\{I_1, I_2\}$
+- Max profit: $\mathbf{28}$
+- Weight used: $3 + 4 = 7$
+
+### 6.3 0/1 Knapsack using Branch & Bound (LC-BB)
+
+#### 6.3.1 Problem Instance & Relaxation Model
+- Capacity: $W = 15$
+- Sorted items:
+  - $I_1$: $w = 2, p = 10$ ($p/w = 5.0$)
+  - $I_2$: $w = 4, p = 10$ ($p/w = 2.5$)
+  - $I_3$: $w = 6, p = 12$ ($p/w = 2.0$)
+  - $I_4$: $w = 9, p = 18$ ($p/w = 2.0$)
+
+#### 6.3.2 Upper Bound ($UB$) Formula via Fractional Knapsack
+- Upper bound formula at any node:
+  $$UB = \text{Current Profit} + \text{Fractional Knapsack on Remaining Capacity}$$
+
+#### 6.3.3 State-Space Tree Expansion & Priority Queue State
+- Root Node (Node 1):
+  - Current weight: $0$
+  - Current profit: $0$
+  - Take $I_1$ ($w=2, p=10$), $I_2$ ($w=4, p=10$), $I_3$ ($w=6, p=12$)
+  - Total weight: $12$, Total profit: $32$
+  - Remaining capacity: $15 - 12 = 3$
+  - Fractional part of $I_4$:
+    $$\frac{3}{9} \times 18 = 6$$
+  - Upper Bound:
+    $$UB = 32 + 6 = \mathbf{38}$$
+
+#### 6.3.4 Node Pruning & Optimal Leaf Finding
+- Branch Left (Include $I_1$):
+  - Current weight: $2$, Profit: $10$
+  - Upper Bound remains $38$.
+- Branch Right (Exclude $I_1$):
+  - Upper bound drops below $32$.
+- Expanding promising nodes:
+  - Take $\{I_1, I_2, I_4\}$:
+    - Weight: $2 + 4 + 9 = 15 \le 15$
+    - Profit: $10 + 10 + 18 = \mathbf{38}$
+- Any node with $UB \le 38$ is pruned.
+- Final optimal profit: $\mathbf{38}$
+
+### 6.4 Minimax Principle & Alpha-Beta Pruning
+
+#### 6.4.1 Game Tree Layout & Visual Cutoff Diagram
+
+```mermaid
+flowchart TD
+    A["MAX: Node A (Value: 3)"] --> B["MIN: Node B (Value: 3)"]
+    A --> C["MIN: Node C (Value: 1 <= alpha=3, PRUNE!)"]
+    B --> D["MAX: Node D (3)"]
+    B --> E["MAX: Node E (Pruned: 6 > beta)"]
+    D --> D1["Leaf: 3"]
+    D --> D2["Leaf: 5"]
+    E --> E1["Leaf: 6"]
+    E --> E2["Leaf: 9"]
+    C --> F["MAX: Node F (1)"]
+    C -.->|"alpha=3 >= beta=1 Cutoff"| G["MAX: Node G (PRUNED)"]
+    F --> F1["Leaf: 1"]
+    F --> F2["Leaf: 2"]
+    G -.-> G1["Leaf: 0 (Unvisited)"]
+    G -.-> G2["Leaf: 7 (Unvisited)"]
+```
+
+#### 6.4.2 Alpha ($\alpha$) and Beta ($\beta$) Boundary Definitions
+- $\alpha$: Best score that Maximizer can guarantee so far ($-\infty$ initially).
+- $\beta$: Best score that Minimizer can guarantee so far ($+\infty$ initially).
+- Prune condition:
+  $$\alpha \ge \beta$$
+
+#### 6.4.3 Step-by-Step Node Evaluations & Cutoffs
+
+##### Subtree Under $B$
+- Leaf 1 under $D$: value $3$
+- Leaf 2 under $D$: value $5$
+- Node $D$ (MIN) selects: $\min(3, 5) = 3$
+- Node $B$ (MIN) updates beta:
+  $$\beta_B = \min(+\infty, 3) = 3$$
+- Subtree $E$:
+  - Leaf 1 under $E$: value $6$
+  - Since $6 > \beta_B(3)$, MIN at node $B$ will never select a value from $E$.
+- Node $B$ returns value $3$.
+
+##### Root Node $A$
+- Node $A$ (MAX) receives $3$ from child $B$.
+- Update alpha:
+  $$\alpha_A = \max(-\infty, 3) = \mathbf{3}$$
+
+##### Subtree Under $C$
+- Node $C$ inherits $\alpha = 3, \beta = +\infty$.
+- Subtree $F$:
+  - Leaf 1 under $F$: value $1$
+  - Leaf 2 under $F$: value $2$
+  - Node $F$ evaluates to: $\min(1, 2) = 1$
+- Node $C$ (MIN) updates beta:
+  $$\beta_C = \min(+\infty, 1) = \mathbf{1}$$
+- Pruning Check at Node $C$:
+  $$\alpha = 3, \quad \beta = 1$$
+  $$\alpha \ge \beta \quad (3 \ge 1)$$
+- **Condition Met: Cutoff / Prune Subtree $G$ entirely!**
+- Leaves under $G$ ($0$ and $7$) are never evaluated.
+
+#### 6.4.4 Final Root Optimal Decision
+- Optimal minimax value at root: $\mathbf{3}$
+
+### 6.5 Travelling Salesperson Problem (TSP) using Branch & Bound
+
+#### 6.5.1 Cost Matrix Definition
+- Initial $4 \times 4$ cost matrix:
+  $$M = \begin{bmatrix} \infty & 10 & 15 & 20 \\ 5 & \infty & 9 & 10 \\ 6 & 13 & \infty & 12 \\ 8 & 8 & 9 & \infty \end{bmatrix}$$
+
+#### 6.5.2 Visual City Graph
+
+```mermaid
+graph TD
+    C1((City 1)) -->|"10"| C2((City 2))
+    C1((City 1)) -->|"15"| C3((City 3))
+    C1((City 1)) -->|"20"| C4((City 4))
+    C2((City 2)) -->|"5"| C1((City 1))
+    C2((City 2)) -->|"9"| C3((City 3))
+    C2((City 2)) -->|"10"| C4((City 4))
+    C3((City 3)) -->|"6"| C1((City 1))
+    C3((City 3)) -->|"13"| C2((City 2))
+    C3((City 3)) -->|"12"| C4((City 4))
+    C4((City 4)) -->|"8"| C1((City 1))
+    C4((City 4)) -->|"8"| C2((City 2))
+    C4((City 4)) -->|"9"| C3((City 3))
+```
+
+#### 6.5.3 Row Reductions Step-by-Step
+- Row 1: minimum is $10$
+  - Subtract $10$: $[\infty, 0, 5, 10]$
+  - Reduction $r_1 = 10$
+- Row 2: minimum is $5$
+  - Subtract $5$: $[0, \infty, 4, 5]$
+  - Reduction $r_2 = 5$
+- Row 3: minimum is $6$
+  - Subtract $6$: $[0, 7, \infty, 6]$
+  - Reduction $r_3 = 6$
+- Row 4: minimum is $8$
+  - Subtract $8$: $[0, 0, 1, \infty]$
+  - Reduction $r_4 = 8$
+- Sum of row reductions:
+  $$\sum r_i = 10 + 5 + 6 + 8 = 29$$
+
+#### 6.5.4 Column Reductions Step-by-Step
+- Reduced matrix after row reduction:
+  $$\begin{bmatrix} \infty & 0 & 5 & 10 \\ 0 & \infty & 4 & 5 \\ 0 & 7 & \infty & 6 \\ 0 & 0 & 1 & \infty \end{bmatrix}$$
+- Column 1: has $0 \implies c_1 = 0$
+- Column 2: has $0 \implies c_2 = 0$
+- Column 3: minimum is $1$
+  - Subtract $1$: $[4, 3, \infty, 0]^T$
+  - Reduction $c_3 = 1$
+- Column 4: minimum is $5$
+  - Subtract $5$: $[5, 0, 1, \infty]^T$
+  - Reduction $c_4 = 5$
+- Sum of column reductions:
+  $$\sum c_j = 0 + 0 + 1 + 5 = 6$$
+
+#### 6.5.5 Initial Lower Bound Calculation
+- Root Lower Bound:
+  $$\text{Bound}(\text{Root}) = \sum r_i + \sum c_j = 29 + 6 = \mathbf{35}$$
+
+#### 6.5.6 Branching & Child Bound Computations
+- Child bound formula for moving from city $i$ to city $j$:
+  $$\text{Bound}(child) = \text{Bound}(parent) + A[i, j] + r$$
+- Set row $i$ to $\infty$
+- Set column $j$ to $\infty$
+- Set cell $(j, 1)$ to $\infty$
+- The branch with the minimum lower bound is explored until the full tour $1 \to A \to B \to C \to 1$ completes.
+
+#### 6.5.7 Optimal Tour & Minimum Cost
+- Optimal tour cost: $\mathbf{35}$
+
+:::info[Unit - 7]
+## String Matching & NP-Completeness
+:::
+
+### 7.1 Naive String Matching
+
+#### 7.1.1 Problem Strings (Text & Pattern)
+- Text:
+  $$T = \text{"AABAACAADAABAABA"} \quad (n = 16)$$
+- Pattern:
+  $$P = \text{"AABA"} \quad (m = 4)$$
+- Possible shifts: $s = 0$ to $n - m = 16 - 4 = 12$
+
+#### 7.1.2 Shift-by-Shift Character Comparison Trace
+
+##### Shift $s = 0$:
+- Substring $T[0 \dots 3] = \text{"AABA"}$
+- Compare with $P = \text{"AABA"}$
+- All $4$ characters match.
+- **Match found at index $0$!**
+
+##### Shift $s = 1$:
+- Substring $T[1 \dots 4] = \text{"ABAA"}$
+- Compare: $T[1] = 'A' == P[0]$, but $T[2] = 'B' \ne P[1]('A')$.
+- Mismatch after $1$ comparison.
+
+##### Shift $s = 2$:
+- Substring $T[2 \dots 5] = \text{"BAAC"}$
+- Compare: $T[2] = 'B' \ne P[0]('A')$.
+- Immediate mismatch.
+
+##### Shift $s = 9$:
+- Substring $T[9 \dots 12] = \text{"AABA"}$
+- Compare with $P$: All characters match.
+- **Match found at index $9$!**
+
+##### Shift $s = 12$:
+- Substring $T[12 \dots 15] = \text{"AABA"}$
+- Compare with $P$: All characters match.
+- **Match found at index $12$!**
+
+#### 7.1.3 Valid Matches & Worst-Case Analysis
+- Valid match shifts:
+  $$\mathbf{s \in \{0, 9, 12\}}$$
+- Time Complexity:
+  - Best Case: $O(n)$
+  - Worst Case: $\mathbf{O((n - m + 1) m)}$
+
+### 7.2 Rabin-Karp Algorithm (Rolling Hash)
+
+#### 7.2.1 Problem Parameters
+- Text:
+  $$T = \text{"31415926535"}$$
+- Pattern:
+  $$P = \text{"26"}$$
+- Pattern length: $m = 2$
+- Radix / Base: $d = 10$
+- Prime modulus: $q = 11$
+- High-order multiplier:
+  $$h = d^{m-1} \pmod q = 10^{2-1} \pmod{11} = 10$$
+
+#### 7.2.2 Pattern Hash Calculation
+- Direct value: $26$
+- Hash:
+  $$p = 26 \pmod{11} = \mathbf{4}$$
+
+#### 7.2.3 Window-by-Window Rolling Hash Trace
+- Window 0 (`"31"`):
+  $$t_0 = 31 \pmod{11} = 9 \ne 4$$
+- Window 1 (`"14"`):
+  $$t_1 = 14 \pmod{11} = 3 \ne 4$$
+- Window 2 (`"41"`):
+  $$t_2 = 41 \pmod{11} = 8 \ne 4$$
+- Window 3 (`"15"`):
+  $$t_3 = 15 \pmod{11} = 4 == p$$
+  - Hash match! Verify characters:
+  - String `"15"` $\ne$ `"26"`
+  - **Spurious Hit!**
+- Window 4 (`"59"`):
+  $$t_4 = 59 \pmod{11} = 4 == p$$
+  - Hash match! String `"59"` $\ne$ `"26"`
+  - **Spurious Hit!**
+- Window 5 (`"92"`):
+  $$t_5 = 92 \pmod{11} = 4 == p$$
+  - Hash match! String `"92"` $\ne$ `"26"`
+  - **Spurious Hit!**
+- Window 6 (`"26"`):
+  $$t_6 = 26 \pmod{11} = 4 == p$$
+  - Hash match! Verify characters:
+  - String `"26"` $==$ `"26"`
+  - **Valid Match found at Shift $6$!**
+
+#### 7.2.4 Rolling Hash Formula Calculation Step-by-Step
+- Shift formula:
+  $$t_{s+1} = \left( d (t_s - T[s+1] \cdot h) + T[s+m+1] \right) \pmod q$$
+- Example: Transition from Window 0 (`"31"`) to Window 1 (`"14"`):
+  - Outgoing digit: $3$
+  - Incoming digit: $4$
+  - Calculation:
+    $$t_1 = (10(31 - 3 \times 10) + 4) \pmod{11}$$
+    $$t_1 = (10(1) + 4) \pmod{11} = 14 \pmod{11} = 3$$
+- Time Complexity:
+  - Average Case: $\mathbf{O(n + m)}$
+  - Worst Case: $\mathbf{O((n - m + 1)m)}$
+
+### 7.3 String Matching with Finite Automata (FA)
+
+#### 7.3.1 Automaton Model (States & Alphabet)
+- Pattern:
+  $$P = \text{"aba"}$$
+- Alphabet:
+  $$\Sigma = \{a, b\}$$
+- States: $\{0, 1, 2, 3\}$
+- Initial State: $0$
+- Accepting State: $3$
+
+#### 7.3.2 Visual Automaton State Diagram
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> State0
+    State0 --> State1: a
+    State0 --> State0: b
+    State1 --> State1: a
+    State1 --> State2: b
+    State2 --> State3: a (Valid Match)
+    State2 --> State0: b
+    State3 --> State1: a
+    State3 --> State2: b
+```
+
+#### 7.3.3 State Transition Function ($\delta(q, a)$) Computation
+- Definition: $\delta(q, c)$ is the length of the longest prefix of $P$ that is a suffix of $P_q c$.
+- From State $0$ ($\emptyset$):
+  - On $'a'$: Longest prefix of `"aba"` in `"a"` is `"a"` $\implies$ State $1$.
+  - On $'b'$: Longest prefix in `"b"` is $\emptyset \implies$ State $0$.
+- From State $1$ (`"a"`):
+  - On $'a'$: Suffix of `"aa"` is `"a"` $\implies$ State $1$.
+  - On $'b'$: Suffix of `"ab"` is `"ab"` $\implies$ State $2$.
+- From State $2$ (`"ab"`):
+  - On $'a'$: Suffix of `"aba"` is `"aba"` $\implies$ State $3$.
+  - On $'b'$: Suffix of `"abb"` is $\emptyset \implies$ State $0$.
+- From State $3$ (`"aba"`):
+  - On $'a'$: Suffix of `"abaa"` is `"a"` $\implies$ State $1$.
+  - On $'b'$: Suffix of `"abab"` is `"ab"` $\implies$ State $2$.
+
+#### 7.3.4 Complete State Transition Table
+
+| State $q$ | Input `'a'` | Input `'b'` |
 |---|---|---|
-| **0** ($\emptyset$) | 1 (`"a"`) | 0 |
-| **1** (`"a"`) | 1 (`"a"`) | 2 (`"ab"`) |
-| **2** (`"ab"`) | **3** (`"aba"`) | 0 |
-| **3** (`"aba"`) | 1 (`"a"`) | 2 (`"ab"`) |
+| **0** | 1 | 0 |
+| **1** | 1 | 2 |
+| **2** | **3** | 0 |
+| **3** | 1 | 2 |
 
-#### Text Trace: $T = \text{"ababa"}$
-$$q_0 = 0 \xrightarrow{a} 1 \xrightarrow{b} 2 \xrightarrow{a} \mathbf{3\text{ (Match at index 3!)}} \xrightarrow{b} 2 \xrightarrow{a} \mathbf{3\text{ (Match at index 5!)}}$$
-- **Complexity**: Search time is optimal $\mathbf{\Theta(n)}$ (one transition per character).
+#### 7.3.5 Text Processing State Trace
+- Input Text: $T = \text{"ababa"}$
+  - Start at state: $0$
+  - Read $T[1] = 'a' \implies$ State $1$
+  - Read $T[2] = 'b' \implies$ State $2$
+  - Read $T[3] = 'a' \implies$ **State $3$ (Match at index 3!)**
+  - Read $T[4] = 'b' \implies$ State $2$
+  - Read $T[5] = 'a' \implies$ **State $3$ (Match at index 5!)**
+- Matching Time: $\mathbf{\Theta(n)}$
 
----
+### 7.4 Knuth-Morris-Pratt (KMP) Algorithm
 
-### 34. Knuth-Morris-Pratt (KMP) Algorithm
+#### 7.4.1 Pattern Definition & Prefix Function Concept
+- Pattern:
+  $$P = \text{"ababaca"}$$
+- Length: $m = 7$
+- Prefix function $\pi[i]$ represents the length of the longest proper prefix of $P[1 \dots i]$ that is also a suffix of $P[1 \dots i]$.
 
-#### 🔢 Example Problem
-Pattern $P = \text{"ababaca"}$ ($m = 7$). Compute the Prefix Function ($\pi$ / LPS array) and search text.
+#### 7.4.2 Step-by-Step $\pi$ (LPS) Array Calculation
 
-#### 👣 Step-by-Step $\pi$ Table Computation
-$\pi[i]$ is the length of the longest proper prefix of $P[1 \dots i]$ that is also a suffix of $P[1 \dots i]$:
-- $i = 1$: `"a"` $\implies \mathbf{\pi[1] = 0}$.
-- $i = 2$: `"ab"` $\implies$ prefixes: `{a}`, suffixes: `{b}` $\implies \mathbf{\pi[2] = 0}$.
-- $i = 3$: `"aba"` $\implies$ prefix `"a"` matches suffix `"a"` $\implies \mathbf{\pi[3] = 1}$.
-- $i = 4$: `"abab"` $\implies$ prefix `"ab"` matches suffix `"ab"` $\implies \mathbf{\pi[4] = 2}$.
-- $i = 5$: `"ababa"` $\implies$ prefix `"aba"` matches suffix `"aba"` $\implies \mathbf{\pi[5] = 3}$.
-- $i = 6$: `"ababac"` $\implies$ no prefix matches suffix with `'c'` $\implies \mathbf{\pi[6] = 0}$.
-- $i = 7$: `"ababaca"` $\implies$ prefix `"a"` matches suffix `"a"` $\implies \mathbf{\pi[7] = 1}$.
+##### Index $i = 1$: Substring `"a"`
+- No proper prefix exists.
+- $\pi[1] = \mathbf{0}$
 
-#### $\pi$ Table Summary
+##### Index $i = 2$: Substring `"ab"`
+- Proper prefixes: `{"a"}`
+- Proper suffixes: `{"b"}`
+- Match: None
+- $\pi[2] = \mathbf{0}$
+
+##### Index $i = 3$: Substring `"aba"`
+- Proper prefixes: `{"a", "ab"}`
+- Proper suffixes: `{"a", "ba"}`
+- Longest match: `"a"` (length $1$)
+- $\pi[3] = \mathbf{1}$
+
+##### Index $i = 4$: Substring `"abab"`
+- Proper prefixes: `{"a", "ab", "aba"}`
+- Proper suffixes: `{"b", "ab", "bab"}`
+- Longest match: `"ab"` (length $2$)
+- $\pi[4] = \mathbf{2}$
+
+##### Index $i = 5$: Substring `"ababa"`
+- Proper prefixes: `{"a", "ab", "aba", "abab"}`
+- Proper suffixes: `{"a", "ba", "aba", "baba"}`
+- Longest match: `"aba"` (length $3$)
+- $\pi[5] = \mathbf{3}$
+
+##### Index $i = 6$: Substring `"ababac"`
+- New character $'c'$ mismatches with $'b'$.
+- Longest matching proper prefix-suffix: None.
+- $\pi[6] = \mathbf{0}$
+
+##### Index $i = 7$: Substring `"ababaca"`
+- Proper prefixes: `{"a", ...}`
+- Proper suffixes: `{"a", ...}`
+- Longest match: `"a"` (length $1$)
+- $\pi[7] = \mathbf{1}$
+
+#### 7.4.3 Complete $\pi$ Table
 
 | $i$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
 | **$P[i]$** | `a` | `b` | `a` | `b` | `a` | `c` | `a` |
 | **$\pi[i]$** | **0** | **0** | **1** | **2** | **3** | **0** | **1** |
 
-#### Search Trace on $T = \text{"abababaca"}$
-1. At text index 5: matches $P[1 \dots 5]$ (`"ababa"`).
-2. Next char $T[6] = 'b'$, but $P[6] = 'c'$ $\implies$ Mismatch!
-3. Instead of backtracking text pointer, shift using $\pi[5] = 3$:
-   Compare $T[6]('b')$ with $P[3+1] = P[4]('b')$ $\implies$ **Direct match!**
-- **Complexity**: Preprocessing $\mathbf{\Theta(m)}$, Search $\mathbf{\Theta(n)}$, Total $\mathbf{\Theta(n + m)}$.
+#### 7.4.4 Text Search Walkthrough (No Backtracking on Text)
+- Text: $T = \text{"abababaca"}$
+- Indices $1$ to $5$:
+  - $T[1 \dots 5] = \text{"ababa"}$ matches $P[1 \dots 5]$.
+- Index $6$:
+  - $T[6] = 'b'$, but $P[6] = 'c'$ (Mismatch).
+- Shift without text backtracking:
+  - Current matched length: $5$.
+  - Lookup $\pi[5] = 3$.
+  - Resume comparison with $P[3 + 1] = P[4] = 'b'$.
+  - Compare $T[6]('b')$ with $P[4]('b')$ $\implies$ Direct match!
+- Preprocessing Time: $\mathbf{\Theta(m)}$
+- Matching Time: $\mathbf{\Theta(n)}$
+- Total Time: $\mathbf{\Theta(n + m)}$
 
----
+### 7.5 NP-Completeness Foundations & Polynomial-Time Reduction
 
-### 35. NP-Completeness Reduction (3-SAT to Clique)
+#### 7.5.1 Definitions: P, NP, NP-Hard, NP-Complete
+- **Class P**: Problems solvable in polynomial time ($O(n^k)$).
+- **Class NP**: Decision problems whose solutions are verifiable in polynomial time.
+- **NP-Hard**: Problems at least as hard as any problem in NP (not necessarily in NP).
+- **NP-Complete**: Problems that are both in **NP** and **NP-Hard**.
 
-#### 💡 Core Idea
-To prove a problem $B \in \text{NP-Complete}$:
-1. Show $B \in \text{NP}$ (solution verifiable in polynomial time).
-2. Reduce a known NP-Complete problem $A \le_P B$ in polynomial time.
+#### 7.5.2 3-SAT to CLIQUE Reduction Example
+- 3-CNF Boolean formula $\phi$ with $k$ clauses:
+  $$\phi = (x_1 \lor \neg x_2 \lor x_3) \land (\neg x_1 \lor x_2 \lor x_4)$$
+- Number of clauses: $k = 2$
 
-#### 🔢 Example: 3-SAT to CLIQUE Reduction
-Given 3-CNF formula:
-$$\phi = (x_1 \lor \neg x_2 \lor x_3) \land (\neg x_1 \lor x_2 \lor x_4)$$
-Number of clauses $k = 2$.
+#### 7.5.3 Visual Reduction Graph Diagram
 
-#### 👣 Graph Construction
-1. Create a vertex for every literal in every clause:
-   - Clause 1 vertices: $v_{1,1}(x_1), v_{1,2}(\neg x_2), v_{1,3}(x_3)$
-   - Clause 2 vertices: $v_{2,1}(\neg x_1), v_{2,2}(x_2), v_{2,3}(x_4)$
-2. Connect edge $(u, v)$ between two vertices if:
-   - They belong to **different clauses**.
-   - They are **not contradictory** (i.e. not $x_i$ and $\neg x_i$).
-3. **Equivalence**:
-   - $\phi$ is satisfiable $\iff$ Graph $G$ has a **Clique of size $k = 2$**.
-   - Example satisfying assignment: $x_1 = \text{True}, x_2 = \text{True}$.
-   - Vertices $v_{1,1}(x_1)$ and $v_{2,2}(x_2)$ are in different clauses and not contradictory, forming a 2-clique!
+```mermaid
+graph TD
+    subgraph Clause1 ["Clause 1: (x1 v ~x2 v x3)"]
+        V1["v1,1: x1 (Chosen)"]
+        V2["v1,2: ~x2"]
+        V3["v1,3: x3"]
+    end
+    subgraph Clause2 ["Clause 2: (~x1 v x2 v x4)"]
+        U1["v2,1: ~x1"]
+        U2["v2,2: x2 (Chosen)"]
+        U3["v2,3: x4"]
+    end
+    V1 ===|"Edge: Non-contradictory (Forms 2-Clique)"| U2
+    V1 --- U3
+    V2 --- U1
+    V2 --- U3
+    V3 --- U1
+    V3 --- U2
+    V3 --- U3
+```
 
----
+#### 7.5.4 Graph Transformation Step-by-Step
+- Clause 1: create vertices for literals $v_{1,1}(x_1), v_{1,2}(\neg x_2), v_{1,3}(x_3)$.
+- Clause 2: create vertices for literals $v_{2,1}(\neg x_1), v_{2,2}(x_2), v_{2,3}(x_4)$.
+- Edge placement rule:
+  - Connect two vertices if they are in **different clauses** AND are **not complementary** (i.e. not $x_i$ and $\neg x_i$).
 
-## ⚡ Master Exam Complexity Cheat Sheet
+#### 7.5.5 Equivalence Proof Walkthrough
+- If $\phi$ is satisfiable:
+  - Choosing assignment $x_1 = \text{True}, x_2 = \text{True}$:
+  - Literal $x_1$ in Clause 1 is True.
+  - Literal $x_2$ in Clause 2 is True.
+  - They are in different clauses and not contradictory.
+  - An edge exists between them, forming a **Clique of size $k = 2$**.
+- If graph has a $k$-clique:
+  - Exactly one vertex per clause is chosen.
+  - Since no edges exist between contradictory literals, setting all selected literals to True satisfies formula $\phi$.
+- Proves $\text{3-SAT} \le_P \text{CLIQUE}$.
 
-| Unit | Algorithm | Time Complexity (Best / Avg / Worst) | Space Complexity | Paradigm |
-|---|---|---|---|---|
-| **U1** | Karatsuba Multiplication | $\Theta(n^{1.585})$ | $O(n)$ | Divide & Conquer |
-| **U2** | Binary Search | $O(1)$ / $O(\log n)$ / $O(\log n)$ | $O(1)$ | Divide & Conquer |
-| **U2** | Merge Sort | $\Theta(n \log n)$ in all cases | $O(n)$ | Divide & Conquer |
-| **U2** | Quick Sort | $O(n \log n)$ / $O(n \log n)$ / $O(n^2)$ | $O(\log n)$ | Divide & Conquer |
-| **U2** | Strassen Matrix Mult | $\Theta(n^{2.807})$ | $O(n^2)$ | Divide & Conquer |
-| **U3** | Kruskal's MST | $O(E \log E) = O(E \log V)$ | $O(V)$ | Greedy (DSU) |
-| **U3** | Prim's MST | $O(E \log V)$ (Heap) | $O(V)$ | Greedy |
-| **U3** | Dijkstra Shortest Path | $O((V + E) \log V)$ | $O(V)$ | Greedy |
-| **U3** | Fractional Knapsack | $O(n \log n)$ | $O(1)$ | Greedy |
-| **U3** | Huffman Coding | $O(n \log n)$ | $O(n)$ | Greedy (Min-Heap) |
-| **U4** | 0/1 Knapsack (DP) | $\Theta(n W)$ | $O(n W)$ or $O(W)$ | Dynamic Programming |
-| **U4** | Floyd-Warshall | $\Theta(V^3)$ | $\Theta(V^2)$ | Dynamic Programming |
-| **U4** | Matrix Chain Mult | $\Theta(n^3)$ | $\Theta(n^2)$ | Dynamic Programming |
-| **U4** | Longest Common Subseq | $\Theta(m \cdot n)$ | $\Theta(m \cdot n)$ | Dynamic Programming |
-| **U5** | BFS / DFS | $\Theta(V + E)$ | $O(V)$ | Graph Traversal |
-| **U5** | Topological Sort | $\Theta(V + E)$ | $O(V)$ | DAG Traversal |
-| **U5** | Kosaraju SCC | $\Theta(V + E)$ | $O(V)$ | Double DFS |
-| **U6** | 4-Queens Backtracking | $O(N!)$ | $O(N)$ | Backtracking |
-| **U6** | TSP Branch & Bound | $O(2^n \cdot n^2)$ | $O(n)$ | Branch and Bound |
-| **U7** | Rabin-Karp | Avg: $O(n+m)$, Worst: $O(n \cdot m)$ | $O(1)$ | Rolling Hash |
-| **U7** | KMP String Matcher | Pre: $O(m)$, Search: $O(n)$ | $O(m)$ | Finite Automaton / LPS |
+## 8. Master Algorithm Complexity Reference Table
+
+| Unit | Algorithm | Best Case Time | Average Case Time | Worst Case Time | Space Complexity |
+|---|---|---|---|---|---|
+| **U1** | Karatsuba Multiplication | $\Theta(n^{1.585})$ | $\Theta(n^{1.585})$ | $\Theta(n^{1.585})$ | $O(n)$ |
+| **U2** | Binary Search | $O(1)$ | $O(\log n)$ | $O(\log n)$ | $O(1)$ |
+| **U2** | Merge Sort | $\Theta(n \log n)$ | $\Theta(n \log n)$ | $\Theta(n \log n)$ | $O(n)$ |
+| **U2** | Quick Sort | $O(n \log n)$ | $O(n \log n)$ | $O(n^2)$ | $O(\log n)$ |
+| **U2** | Strassen Matrix Mult | $\Theta(n^{2.807})$ | $\Theta(n^{2.807})$ | $\Theta(n^{2.807})$ | $O(n^2)$ |
+| **U2** | Modular Exponentiation | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ |
+| **U3** | Kruskal's MST | $O(E \log E)$ | $O(E \log E)$ | $O(E \log E)$ | $O(V)$ |
+| **U3** | Prim's MST (Min-Heap) | $O(E \log V)$ | $O(E \log V)$ | $O(E \log V)$ | $O(V)$ |
+| **U3** | Dijkstra Shortest Path | $O((V+E)\log V)$ | $O((V+E)\log V)$ | $O((V+E)\log V)$ | $O(V)$ |
+| **U3** | Fractional Knapsack | $O(n \log n)$ | $O(n \log n)$ | $O(n \log n)$ | $O(1)$ |
+| **U3** | Activity Selection | $O(n)$ (sorted) | $O(n \log n)$ | $O(n \log n)$ | $O(1)$ |
+| **U3** | Huffman Coding | $O(n \log n)$ | $O(n \log n)$ | $O(n \log n)$ | $O(n)$ |
+| **U4** | 0/1 Knapsack (DP) | $\Theta(n W)$ | $\Theta(n W)$ | $\Theta(n W)$ | $O(n W)$ |
+| **U4** | Binomial Coefficient DP | $\Theta(n k)$ | $\Theta(n k)$ | $\Theta(n k)$ | $O(k)$ |
+| **U4** | Floyd-Warshall APSP | $\Theta(V^3)$ | $\Theta(V^3)$ | $\Theta(V^3)$ | $\Theta(V^2)$ |
+| **U4** | Matrix Chain Mult (MCM) | $\Theta(n^3)$ | $\Theta(n^3)$ | $\Theta(n^3)$ | $\Theta(n^2)$ |
+| **U4** | Longest Common Subseq | $\Theta(m \cdot n)$ | $\Theta(m \cdot n)$ | $\Theta(m \cdot n)$ | $\Theta(m \cdot n)$ |
+| **U5** | Breadth-First Search | $\Theta(V + E)$ | $\Theta(V + E)$ | $\Theta(V + E)$ | $O(V)$ |
+| **U5** | Depth-First Search | $\Theta(V + E)$ | $\Theta(V + E)$ | $\Theta(V + E)$ | $O(V)$ |
+| **U5** | Topological Sort (Kahn) | $\Theta(V + E)$ | $\Theta(V + E)$ | $\Theta(V + E)$ | $O(V)$ |
+| **U5** | Kosaraju SCC | $\Theta(V + E)$ | $\Theta(V + E)$ | $\Theta(V + E)$ | $O(V)$ |
+| **U5** | Articulation Points | $\Theta(V + E)$ | $\Theta(V + E)$ | $\Theta(V + E)$ | $O(V)$ |
+| **U6** | 4-Queens Backtracking | $O(1)$ | $O(N!)$ | $O(N!)$ | $O(N)$ |
+| **U6** | 0/1 Knapsack Backtracking| $O(n)$ | $O(2^n)$ | $O(2^n)$ | $O(n)$ |
+| **U6** | TSP Branch & Bound | $O(n^2)$ | $O(2^n \cdot n^2)$ | $O(2^n \cdot n^2)$ | $O(n)$ |
+| **U7** | Naive String Matching | $O(n)$ | $O(n)$ | $O((n - m + 1)m)$| $O(1)$ |
+| **U7** | Rabin-Karp Matcher | $O(n + m)$ | $O(n + m)$ | $O((n - m + 1)m)$| $O(1)$ |
+| **U7** | Finite Automaton Matcher| $\Theta(n)$ | $\Theta(n)$ | $\Theta(n)$ | $O(m |\Sigma|)$ |
+| **U7** | KMP String Matcher | $\Theta(n + m)$ | $\Theta(n + m)$ | $\Theta(n + m)$ | $O(m)$ |

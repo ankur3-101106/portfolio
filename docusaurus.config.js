@@ -187,8 +187,8 @@ const config = {
         {
           title: 'Docs',
           items: [
-            { label: 'Introduction', to: '/docs/intro' },
-            { label: 'Notes', to: '/docs/intro' },
+            { label: 'Introduction', to: '/docs/' },
+            { label: 'Notes', to: '/docs/' },
           ],
         },
         {

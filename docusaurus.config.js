@@ -2,13 +2,14 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkPreserveHeadingMath from './src/plugins/remarkPreserveHeadingMath.js';
 
 const SITE_URL = 'https://ankur3-101106.github.io';
 const REPO_URL = 'https://github.com/ankur3-101106/portfolio';
 const PROFILE_URL = 'https://github.com/ankur3-101106';
 
 const mathPlugins = {
-  remarkPlugins: [remarkMath],
+  beforeDefaultRemarkPlugins: [remarkMath, remarkPreserveHeadingMath],
   rehypePlugins: [rehypeKatex],
 };
 

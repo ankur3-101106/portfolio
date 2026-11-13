@@ -24,6 +24,12 @@ export default function MatrixRain() {
       return document.documentElement.dataset.theme || 'dark';
     }
 
+    function fillBackground() {
+      const isLight = getTheme() === 'light';
+      ctx.fillStyle = isLight ? '#ffffff' : '#0a0e17';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
     function resize() {
       canvas.width = canvas.parentElement?.offsetWidth || window.innerWidth;
       canvas.height = canvas.parentElement?.offsetHeight || window.innerHeight;
@@ -31,6 +37,7 @@ export default function MatrixRain() {
       drops = Array.from({ length: columns }, () =>
         Math.random() * -100
       );
+      fillBackground();
     }
 
     function draw() {
@@ -38,7 +45,7 @@ export default function MatrixRain() {
 
       // Trail fade
       if (isLight) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
       } else {
         ctx.fillStyle = 'rgba(10, 14, 23, 0.06)';
       }
@@ -53,9 +60,8 @@ export default function MatrixRain() {
         const isLead = Math.random() > 0.97;
         if (isLead) {
           if (isLight) {
-            ctx.fillStyle = 'rgba(50, 130, 180, 0.35)';
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = 'rgba(50, 130, 180, 0.2)';
+            ctx.fillStyle = 'rgba(14, 116, 144, 0.6)';
+            ctx.shadowBlur = 0;
           } else {
             ctx.fillStyle = 'rgba(0, 255, 180, 0.9)';
             ctx.shadowBlur = 15;
@@ -63,8 +69,8 @@ export default function MatrixRain() {
           }
         } else {
           if (isLight) {
-            const opacity = 0.03 + Math.random() * 0.07;
-            ctx.fillStyle = `rgba(80, 140, 180, ${opacity})`;
+            const opacity = 0.04 + Math.random() * 0.08;
+            ctx.fillStyle = `rgba(14, 116, 144, ${opacity})`;
           } else {
             const opacity = 0.05 + Math.random() * 0.15;
             ctx.fillStyle = `rgba(0, 200, 140, ${opacity})`;
@@ -89,9 +95,9 @@ export default function MatrixRain() {
     draw();
     window.addEventListener('resize', resize);
 
-    // Watch for theme changes to clear canvas on switch
+    // Watch for theme changes to reset background on switch
     const observer = new MutationObserver(() => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fillBackground();
     });
     observer.observe(document.documentElement, {
       attributes: true,

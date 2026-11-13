@@ -100,18 +100,19 @@
 }
 
 /* ── Light Theme Token Overrides ── */
-html[data-theme='light'] :root {
+html[data-theme='light'],
+[data-theme='light'] {
   /* Backgrounds — clean white scale */
   --color-bg-deepest:    #ffffff;
   --color-bg-deep:       #f8f9fb;
   --color-bg-surface:    #f0f2f5;
   --color-bg-elevated:   #e8eaed;
-  --color-bg-glass:      rgba(255, 255, 255, 0.7);
+  --color-bg-glass:      rgba(255, 255, 255, 0.75);
 
-  /* Text — dark grays */
-  --color-text-primary:   #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-muted:     #9ca3af;
+  /* Text — dark grays with high contrast */
+  --color-text-primary:   #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted:     #64748b;
 
   /* Accent — deeper teal for contrast on light */
   --color-accent:         oklch(0.48 0.14 200);
@@ -123,13 +124,13 @@ html[data-theme='light'] :root {
   --color-danger:         oklch(0.55 0.22 25);
   --color-danger-dim:     oklch(0.45 0.18 25);
 
-  /* Borders — light grays */
-  --color-border:         #d1d5db;
-  --color-border-subtle:  #e5e7eb;
+  /* Borders — clean subtle slate */
+  --color-border:         #cbd5e1;
+  --color-border-subtle:  #e2e8f0;
 
   /* Glassmorphism */
   --glass-blur: 20px;
-  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg: rgba(255, 255, 255, 0.75);
   --glass-border: 1px solid rgba(0, 0, 0, 0.08);
 
   /* Glows — softened for light mode */
@@ -153,7 +154,8 @@ html[data-theme='light'] :root {
   min-height: 100vh;
 }
 
-html[data-theme='light'] .home-page-container {
+html[data-theme='light'] .home-page-container,
+[data-theme='light'] .home-page-container {
   color-scheme: light;
 }
 

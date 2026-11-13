@@ -201,3 +201,32 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ── Light Theme Overrides ── */
+html[data-theme='light'] .contact__headline {
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    oklch(0.42 0.16 200)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+html[data-theme='light'] .contact__email-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme='light'] .contact__email-card:hover {
+  box-shadow: 0 10px 30px rgba(14, 116, 144, 0.15);
+}
+
+html[data-theme='light'] .contact__social-link {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+html[data-theme='light'] .contact__social-link:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}

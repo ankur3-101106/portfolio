@@ -19,22 +19,34 @@
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   border-radius: 28px;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.2),
+    0 0 20px rgba(0, 240, 255, 0.08);
+
+  /* Multi-color cyber animated border with frosted glass inner surface */
+  border: 1.5px solid transparent;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.78)),
+    linear-gradient(180deg, #8330e9, #00f0ff, #f500fd, #8330e9);
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  background-size: 100% 100%, 100% 300%;
+  animation: dock-border-flow 8s ease infinite;
 }
 
-/* Light mode overrides for Dock — clean frosted glass without obscuring blue gradient */
+/* Light mode overrides for Dock — soft pastel cyber animated border with clean frosted glass */
 .side-dock--light .side-dock__container,
 html[data-theme='light'] .side-dock__container {
-  background: rgba(255, 255, 255, 0.88);
-  background-image: none;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    inset 0 1px 1px rgba(255, 255, 255, 0.95);
-  animation: none;
+  border: 1.5px solid transparent;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.84)),
+    linear-gradient(180deg, #a855f7, #0284c7, #f43f5e, #a855f7);
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  background-size: 100% 100%, 100% 300%;
+  animation: dock-border-flow 8s ease infinite;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.85);
 }
 
 .side-dock__item {
@@ -44,52 +56,52 @@ html[data-theme='light'] .side-dock__container {
   justify-content: center;
   width: 46px;
   height: 46px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #f1f5f9;
   border-radius: 14px;
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-snappy);
-  background: transparent;
-  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .side-dock--light .side-dock__item,
 html[data-theme='light'] .side-dock__item {
-  color: #334155;
-  background: transparent;
-  border: 1px solid transparent;
+  color: #0f172a; /* Slate-900: sharp contrast against light frosted glass */
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* Hover States */
 .side-dock__item:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(74, 255, 29, 0.4);
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.4);
   transform: scale(1.08) translateX(-2px);
-  box-shadow: 0 4px 15px rgba(74, 255, 29, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.2);
 }
 
 .side-dock--light .side-dock__item:hover,
 html[data-theme='light'] .side-dock__item:hover {
-  color: #0f172a;
-  background: rgba(0, 0, 0, 0.06);
-  border-color: rgba(22, 163, 74, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  color: #0284c7;
+  background: rgba(2, 132, 199, 0.08);
+  border-color: rgba(2, 132, 199, 0.35);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15);
 }
 
-/* Active State */
+/* Active State — Cyan Highlight */
 .side-dock__item--active {
-  color: #4aff1d; /* Vibrant green active icon */
-  background: rgba(74, 255, 29, 0.12);
-  border-color: rgba(74, 255, 29, 0.4);
-  box-shadow: 0 0 15px rgba(74, 255, 29, 0.25);
+  color: #00f0ff; /* Electric cyan highlight */
+  background: rgba(0, 240, 255, 0.16);
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
 }
 
 .side-dock--light .side-dock__item--active,
 html[data-theme='light'] .side-dock__item--active {
-  color: #16a34a;
-  background: rgba(22, 163, 74, 0.14);
-  border-color: rgba(22, 163, 74, 0.4);
-  box-shadow: 0 0 12px rgba(22, 163, 74, 0.2);
+  color: #0284c7; /* Vibrant cyan/sky highlight */
+  background: rgba(2, 132, 199, 0.14);
+  border-color: rgba(2, 132, 199, 0.45);
+  box-shadow: 0 0 14px rgba(2, 132, 199, 0.25);
 }
 
 /* Linux / Ubuntu running application indicator dot */
@@ -107,8 +119,8 @@ html[data-theme='light'] .side-dock__item--active {
 }
 
 .side-dock__indicator--active {
-  background: #4aff1d;
-  box-shadow: 0 0 8px #4aff1d;
+  background: #00f0ff;
+  box-shadow: 0 0 8px #00f0ff;
   height: 10px;
   border-radius: var(--radius-full);
 }
@@ -132,7 +144,7 @@ html[data-theme='light'] .side-dock__item--active {
   top: 50%;
   transform: translateY(-50%) translateX(8px);
   background: rgba(15, 15, 23, 0.95);
-  border: 1.5px solid rgba(74, 255, 29, 0.2);
+  border: 1.5px solid rgba(0, 240, 255, 0.3);
   color: var(--color-text-primary);
   padding: 6px 12px;
   font-family: var(--font-body);
@@ -149,15 +161,15 @@ html[data-theme='light'] .side-dock__item--active {
 .side-dock--light .side-dock__tooltip,
 html[data-theme='light'] .side-dock__tooltip {
   background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(2, 132, 199, 0.3);
   color: #0f172a;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .side-dock--light .side-dock__indicator--active,
 html[data-theme='light'] .side-dock__indicator--active {
-  background: #16a34a;
-  box-shadow: 0 0 6px #16a34a;
+  background: #0284c7;
+  box-shadow: 0 0 8px #0284c7;
 }
 
 .side-dock__item:hover .side-dock__tooltip {
@@ -195,20 +207,31 @@ html[data-theme='light'] .side-dock__indicator--active {
     gap: 6px;
     padding: 6px 10px;
     border-radius: 36px;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1.5px solid transparent;
+    background-image:
+      linear-gradient(rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.82)),
+      linear-gradient(90deg, #8330e9, #00f0ff, #f500fd, #8330e9);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    background-size: 100% 100%, 300% 100%;
+    animation: dock-border-flow-horizontal 8s ease infinite;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45),
-      inset 0 1.5px 2px rgba(255, 255, 255, 0.2);
+      inset 0 1.5px 2px rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(0, 240, 255, 0.08);
   }
 
   .side-dock--light .side-dock__container,
   html[data-theme='light'] .side-dock__container {
-    background: rgba(255, 255, 255, 0.88);
-    background-image: none;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1.5px solid transparent;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+      linear-gradient(90deg, #a855f7, #0284c7, #f43f5e, #a855f7);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    background-size: 100% 100%, 300% 100%;
+    animation: dock-border-flow-horizontal 8s ease infinite;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08),
       inset 0 1.5px 2px rgba(255, 255, 255, 0.85);
-    animation: none;
   }
 
   .side-dock__item {

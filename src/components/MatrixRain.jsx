@@ -45,7 +45,7 @@ export default function MatrixRain() {
 
       // Trail fade
       if (isLight) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.10)';
       } else {
         ctx.fillStyle = 'rgba(10, 14, 23, 0.06)';
       }
@@ -60,7 +60,7 @@ export default function MatrixRain() {
         const isLead = Math.random() > 0.97;
         if (isLead) {
           if (isLight) {
-            ctx.fillStyle = 'rgba(14, 116, 144, 0.6)';
+            ctx.fillStyle = 'rgba(15, 118, 110, 0.95)';
             ctx.shadowBlur = 0;
           } else {
             ctx.fillStyle = 'rgba(0, 255, 180, 0.9)';
@@ -69,8 +69,8 @@ export default function MatrixRain() {
           }
         } else {
           if (isLight) {
-            const opacity = 0.04 + Math.random() * 0.08;
-            ctx.fillStyle = `rgba(14, 116, 144, ${opacity})`;
+            const opacity = 0.25 + Math.random() * 0.45;
+            ctx.fillStyle = `rgba(15, 118, 110, ${opacity})`;
           } else {
             const opacity = 0.05 + Math.random() * 0.15;
             ctx.fillStyle = `rgba(0, 200, 140, ${opacity})`;
@@ -78,7 +78,9 @@ export default function MatrixRain() {
           ctx.shadowBlur = 0;
         }
 
-        ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
+        ctx.font = isLight
+          ? `600 ${fontSize}px "JetBrains Mono", monospace`
+          : `${fontSize}px "JetBrains Mono", monospace`;
         ctx.fillText(char, x, y);
         ctx.shadowBlur = 0;
 

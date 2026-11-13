@@ -19,28 +19,22 @@
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   border-radius: 28px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.2),
-    0 0 20px rgba(203, 166, 247, 0.06);
-
-  /* Liquid transparent water glass styling matching the navbar */
-  border: 1.5px solid transparent;
-  background-image:
-    linear-gradient(transparent, transparent),
-    linear-gradient(180deg, #8330e9, #000000, #f500fd, #2c69cc);
-  background-clip: padding-box, border-box;
-  background-origin: padding-box, border-box;
-  background-size: 100% 100%, 100% 300%;
-  animation: dock-border-flow 8s ease infinite;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.1);
 }
 
-/* Light mode overrides for Dock */
-.side-dock--light .side-dock__container {
-  background-image:
-    linear-gradient(transparent, transparent),
-    linear-gradient(180deg, rgba(203, 166, 247, 0.8), rgba(38, 74, 132, 0.8), rgba(245, 194, 231, 0.8), rgba(203, 166, 247, 0.8));
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.85);
+/* Light mode overrides for Dock — clean frosted glass without obscuring blue gradient */
+.side-dock--light .side-dock__container,
+html[data-theme='light'] .side-dock__container {
+  background: rgba(255, 255, 255, 0.88);
+  background-image: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  animation: none;
 }
 
 .side-dock__item {
@@ -50,20 +44,19 @@
   justify-content: center;
   width: 46px;
   height: 46px;
-  color: #4aff1d;
-  /* Rich blue base color for high contrast against dark bg */
+  color: rgba(255, 255, 255, 0.7);
   border-radius: 14px;
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-snappy);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: transparent;
+  border: 1px solid transparent;
 }
 
-.side-dock--light .side-dock__item {
-  color: #1e3a8a;
-  /* Deep blue base color for high contrast against light bg */
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+.side-dock--light .side-dock__item,
+html[data-theme='light'] .side-dock__item {
+  color: #334155;
+  background: transparent;
+  border: 1px solid transparent;
 }
 
 /* Hover States */
@@ -75,11 +68,12 @@
   box-shadow: 0 4px 15px rgba(74, 255, 29, 0.2);
 }
 
-.side-dock--light .side-dock__item:hover {
-  color: #000000;
+.side-dock--light .side-dock__item:hover,
+html[data-theme='light'] .side-dock__item:hover {
+  color: #0f172a;
   background: rgba(0, 0, 0, 0.06);
-  border-color: rgba(22, 163, 74, 0.4);
-  box-shadow: 0 4px 15px rgba(22, 163, 74, 0.15);
+  border-color: rgba(22, 163, 74, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
 /* Active State */
@@ -90,10 +84,12 @@
   box-shadow: 0 0 15px rgba(74, 255, 29, 0.25);
 }
 
-.side-dock--light .side-dock__item--active {
+.side-dock--light .side-dock__item--active,
+html[data-theme='light'] .side-dock__item--active {
   color: #16a34a;
-  background: rgba(22, 163, 74, 0.12);
+  background: rgba(22, 163, 74, 0.14);
   border-color: rgba(22, 163, 74, 0.4);
+  box-shadow: 0 0 12px rgba(22, 163, 74, 0.2);
 }
 
 /* Linux / Ubuntu running application indicator dot */
@@ -150,10 +146,18 @@
   transition: all var(--duration-fast) var(--ease-snappy);
 }
 
-.side-dock--light .side-dock__tooltip {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(137, 180, 250, 0.3);
-  color: oklch(0.12 0.01 260);
+.side-dock--light .side-dock__tooltip,
+html[data-theme='light'] .side-dock__tooltip {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.side-dock--light .side-dock__indicator--active,
+html[data-theme='light'] .side-dock__indicator--active {
+  background: #16a34a;
+  box-shadow: 0 0 6px #16a34a;
 }
 
 .side-dock__item:hover .side-dock__tooltip {
@@ -191,22 +195,20 @@
     gap: 6px;
     padding: 6px 10px;
     border-radius: 36px;
-    background-image:
-      linear-gradient(transparent, transparent),
-      linear-gradient(90deg, #8330e9, #000000, #f500fd, #2c69cc);
-    background-size: 100% 100%, 300% 100%;
-    animation: dock-border-flow-horizontal 8s ease infinite;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45),
-      inset 0 1.5px 2px rgba(255, 255, 255, 0.2),
-      0 0 20px rgba(203, 166, 247, 0.08);
+      inset 0 1.5px 2px rgba(255, 255, 255, 0.2);
   }
 
-  .side-dock--light .side-dock__container {
-    background-image:
-      linear-gradient(transparent, transparent),
-      linear-gradient(90deg, rgba(203, 166, 247, 0.8), rgba(38, 74, 132, 0.8), rgba(245, 194, 231, 0.8), rgba(203, 166, 247, 0.8));
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1),
+  .side-dock--light .side-dock__container,
+  html[data-theme='light'] .side-dock__container {
+    background: rgba(255, 255, 255, 0.88);
+    background-image: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08),
       inset 0 1.5px 2px rgba(255, 255, 255, 0.85);
+    animation: none;
   }
 
   .side-dock__item {

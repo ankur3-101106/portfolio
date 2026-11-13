@@ -285,6 +285,7 @@
   font-size: 0.85rem;
   line-height: 1.6;
   color: #cdd6f4;
+  cursor: text;
 }
 
 .arch-term__body::-webkit-scrollbar {
@@ -394,7 +395,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 12px 0 6px 0;
+  margin: 8px 0 2px 0;
 }
 
 .arch-term__cmd-line {
@@ -409,8 +410,9 @@
 
 /* Outputs & Results */
 .arch-term__output {
-  margin-left: 20px;
-  margin-bottom: 12px;
+  margin-left: 0;
+  margin-bottom: 6px;
+  line-height: 1.45;
 }
 
 .arch-term__out-result {
@@ -432,59 +434,107 @@
   font-weight: bold;
 }
 
-.arch-term__line {
-  margin: 4px 0 4px 20px;
+/* Terminal Output Lines */
+.arch-term pre {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font: inherit !important;
 }
 
-.arch-term__line pre {
+.arch-term__line {
   margin: 0;
-  font-family: inherit;
-  font-size: inherit;
+  padding: 1px 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.45;
   white-space: pre-wrap;
   word-break: break-word;
   color: #cdd6f4;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
+.arch-term__line--command,
 .arch-term__line--command pre {
   color: #f5c2e7;
 }
 
+.arch-term__line--system,
 .arch-term__line--system pre {
   color: #b4befe;
   font-style: italic;
 }
 
+.arch-term__line--header,
+.arch-term__line--header pre {
+  color: #cba6f7;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.arch-term__line--info,
 .arch-term__line--info pre {
   color: #89b4fa;
 }
 
+.arch-term__line--diminfo,
+.arch-term__line--diminfo pre {
+  color: #a6adc8;
+}
+
+.arch-term__line--success,
 .arch-term__line--success pre {
   color: #a6e3a1;
 }
 
+.arch-term__line--error,
 .arch-term__line--error pre {
   color: #f38ba8;
 }
 
-/* Interactive form row */
-.arch-term__input-row {
+.arch-term__line--warn,
+.arch-term__line--warn pre {
+  color: #fab387;
+  font-weight: bold;
+}
+
+/* Interactive input line (inline inside terminal body) */
+.arch-term__input-line {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: #11111b;
+  margin: 8px 0 6px 0;
+  width: 100%;
 }
 
 .arch-term__input {
   flex: 1;
+  min-width: 60px;
   background: transparent;
   border: none;
   outline: none;
   color: #cdd6f4;
   font-family: var(--font-mono);
   font-size: 0.85rem;
+  line-height: 1.6;
   caret-color: #f5c2e7;
+  padding: 0;
+  margin: 0;
+}
+
+.arch-term__input::placeholder {
+  color: #585b70;
+  font-style: italic;
+  font-size: 0.8rem;
 }
 
 .arch-term__cursor-idle {
@@ -511,6 +561,7 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   height: 20px;
+  flex-shrink: 0;
 }
 
 .starship__seg {
@@ -567,6 +618,29 @@
   color: #a6e3a1;
   font-weight: bold;
   margin-left: 6px;
+}
+
+/* Starship Responsive */
+@media (max-width: 640px) {
+  .starship__seg--user,
+  .starship__arrow--user {
+    display: none;
+  }
+
+  .starship__seg--dir {
+    border-radius: 4px 0 0 4px;
+  }
+}
+
+@media (max-width: 440px) {
+  .starship__seg--dir,
+  .starship__arrow--dir {
+    display: none;
+  }
+
+  .starship__seg--git {
+    border-radius: 4px 0 0 4px;
+  }
 }
 
 /* Orbit Rings */
@@ -685,7 +759,7 @@
 
   .arch-term {
     max-width: 100%;
-    height: 480px;
+    height: 520px;
   }
 
   .hero__orbits {
@@ -706,11 +780,34 @@
   }
 
   .arch-term {
-    height: 400px;
+    height: 480px;
   }
 
   .arch-term__body {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
+    padding: 12px;
+  }
+
+  .arch-term__neofetch {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .arch-term__neofetch-logo {
+    font-size: 0.52rem;
+    line-height: 1.15;
+  }
+
+  .arch-term__neofetch-info {
+    font-size: 0.72rem;
+  }
+
+  .arch-term__input-line {
+    margin: 8px 0 12px 0;
+  }
+
+  .arch-term__input {
+    font-size: 0.75rem;
   }
 }
 

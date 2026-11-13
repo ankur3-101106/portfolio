@@ -62,15 +62,15 @@ const NEOFETCH_INFO = [
   { label: 'Shell', value: 'bash 2.11' },
 ];
 
-const HELP_TEXT = `Available commands:
-  help           — Show this help menu
-  about          — Who I am
-  neofetch       — Show system info
-  projects       — List projects
-  certifications — View certifications
-  contact        — Social links & email
-  connect        — Send me a message (emailjs)
-  clear          — Clear terminal`;
+const HELP_TEXT = `COMMANDS:
+  about           Display author bio and security focus
+  projects        List featured repositories & tools
+  certifications  Show certifications & badges (alias: certs)
+  contact         Show email and social profile links
+  connect         Interactive message wizard (EmailJS)
+  neofetch        Display system information and specs
+  help            Show this command manual
+  clear           Clear the terminal screen`;
 
 export default function Hero() {
   const sectionRef = useRef(null);
@@ -82,6 +82,7 @@ export default function Hero() {
   const [animStep, setAnimStep] = useState(0);
   const [showNeofetch, setShowNeofetch] = useState(false);
   const [startTyping, setStartTyping] = useState(false);
+  const [isCleared, setIsCleared] = useState(false);
 
   /* ── Interactive terminal state ── */
   const [interactiveReady, setInteractiveReady] = useState(false);
@@ -147,7 +148,7 @@ export default function Hero() {
     if (terminalBodyRef.current) {
       terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
     }
-  }, [cmdLines, animStep]);
+  }, [cmdLines, animStep, interactiveReady]);
 
   // ── Anime.js animations ──
   useEffect(() => {
@@ -221,13 +222,13 @@ export default function Hero() {
         },
       });
 
-      // Terminal entry animation (hence and forth motion bound to scroll)
+      // Terminal entry animation (once into view)
       gsap.fromTo(terminalRef.current,
         {
           opacity: 0,
-          y: 120,
-          scale: 0.9,
-          rotationX: 10,
+          y: 60,
+          scale: 0.96,
+          rotationX: 8,
           transformOrigin: "center top",
         },
         {
@@ -235,16 +236,24 @@ export default function Hero() {
           y: 0,
           scale: 1,
           rotationX: 0,
-          ease: 'power1.out',
+          duration: 1,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: terminalRef.current,
-            start: "top bottom-=80px",
-            end: "top 30%",
-            scrub: 1,
+            start: "top 85%",
+            once: true,
             onEnter: () => setStartTyping(true),
           }
         }
       );
+
+      // Trigger typing if terminal is already visible on load
+      if (typeof window !== 'undefined' && terminalRef.current) {
+        const rect = terminalRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.9) {
+          setStartTyping(true);
+        }
+      }
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -365,9 +374,11 @@ export default function Hero() {
         break;
 
       case 'about':
-        pushLine("  Hi, I'm Ankur — penetration tester & network security enthusiast.", 'info');
-        pushLine('  Daily Arch Linux user │ CTF Player │ Hands-on Learner', 'info');
-        pushLine('  Type \"projects\" to see my work or \"certs\" to see certifications.', 'system');
+        pushLine('ABOUT:', 'header');
+        pushLine('  Ankur Macwan — Cybersecurity Student & Linux Enthusiast', 'info');
+        pushLine('  Daily Arch Linux user · CTF Player · Hands-on Learner', 'diminfo');
+        pushLine('  Focus: Offensive Security, Network Security, Automation', 'diminfo');
+        pushLine('  Type "projects" to view repositories or "certs" for credentials.', 'system');
         break;
 
       case 'neofetch':
@@ -376,32 +387,35 @@ export default function Hero() {
         break;
 
       case 'projects':
-        pushLine('  ┌─── Projects ──────────────────────────────────────┐', 'info');
-        pushLine('  │  🐧  Linux Hardening Toolkit                     │', 'info');
-        pushLine('  │      Automated system hardening (Bash + Python)   │', 'diminfo');
-        pushLine('  │  🔍  Network Security Analyzer                   │', 'info');
-        pushLine('  │      Real-time traffic analysis & anomaly detect  │', 'diminfo');
-        pushLine('  └──────────────────────────────────────────────────┘', 'info');
+        pushLine('PROJECTS:', 'header');
+        pushLine('  * linux-hardening-toolkit', 'info');
+        pushLine('    Automated security baseline auditing & hardening (Bash · Python)', 'diminfo');
+        pushLine('    Status: Active · Targets: Arch / Debian / RHEL', 'system');
+        pushLine('  * network-security-analyzer', 'info');
+        pushLine('    Real-time packet inspection, anomaly detection & pcap parsing', 'diminfo');
+        pushLine('    Status: Active · Stack: Python · Scapy · Wireshark', 'system');
         break;
 
       case 'certifications':
       case 'certs':
-        pushLine('  ┌─── Certifications ───────────────────────────────┐', 'info');
-        pushLine('  │  🌐  CCST Networking — Cisco                     │', 'info');
-        pushLine('  │  🐧  Linux Hardening — Self-Study                │', 'info');
-        pushLine('  │  🔐  Web Application Security — Lab-Based        │', 'info');
-        pushLine('  │  🛡️  CEH / eJPT — Target Certification           │', 'info');
-        pushLine('  └──────────────────────────────────────────────────┘', 'info');
+        pushLine('CERTIFICATIONS:', 'header');
+        pushLine('  [COMPLETED]   CCST Networking — Cisco', 'success');
+        pushLine('                Foundational networking, routing, switching & IP protocols', 'diminfo');
+        pushLine('  [COMPLETED]   Linux Hardening & Administration — Self-Study', 'success');
+        pushLine('                Kernel parameters, PAM, systemd, SSH baseline hardening', 'diminfo');
+        pushLine('  [COMPLETED]   Web Application Security — Lab-Based', 'success');
+        pushLine('                OWASP Top 10, SQLi, XSS, CSRF, privilege escalation', 'diminfo');
+        pushLine('  [IN PROGRESS] CEH / eJPT — Target Offensive Security Credentials', 'info');
+        pushLine('                Reconnaissance, network scanning, vulnerability exploitation', 'diminfo');
         break;
 
       case 'contact':
-        pushLine('  ┌─── Contact ──────────────────────────────────────┐', 'info');
-        pushLine('  │  📧  ankurdcs101106@gmail.com                    │', 'info');
-        pushLine('  │  🐙  github.com/ankur3-101106                    │', 'info');
-        pushLine('  │  🔗  linkedin.com/in/ankur101106                 │', 'info');
-        pushLine('  │  🦊  gitlab.com/ankur3-101106                    │', 'info');
-        pushLine('  └──────────────────────────────────────────────────┘', 'info');
-        pushLine('  Type \"connect\" to send me a message directly.', 'system');
+        pushLine('CONTACT & PROFILES:', 'header');
+        pushLine('  email     ankurdcs101106@gmail.com', 'info');
+        pushLine('  github    https://github.com/ankur3-101106', 'info');
+        pushLine('  linkedin  https://linkedin.com/in/ankur101106', 'info');
+        pushLine('  gitlab    https://gitlab.com/ankur3-101106', 'info');
+        pushLine('  Type "connect" to send me a message directly.', 'system');
         break;
 
       case 'connect':
@@ -412,8 +426,9 @@ export default function Hero() {
         break;
 
       case 'clear':
+        setIsCleared(true);
         setCmdLines([
-          { type: 'system', text: '  Terminal cleared. Type \"help\" for commands.' },
+          { type: 'system', text: '  Terminal cleared. Type "help" for commands.' },
         ]);
         break;
 
@@ -447,6 +462,13 @@ export default function Hero() {
       }
     }
   }
+
+  const handleTerminalClick = () => {
+    // Focus terminal input when clicking anywhere in terminal, unless selecting text
+    if (typeof window !== 'undefined' && !window.getSelection()?.toString() && inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
 
   return (
     <section id="hero" ref={sectionRef} className="hero section section--full">
@@ -517,6 +539,7 @@ export default function Hero() {
           <div
             ref={terminalRef}
             className="arch-term"
+            onClick={handleTerminalClick}
           >
             {/* ── Terminal Chrome Header ── */}
             <div className="arch-term__header">
@@ -543,7 +566,7 @@ export default function Hero() {
             <div className="arch-term__body" ref={terminalBodyRef}>
 
               {/* ── Neofetch ── */}
-              {showNeofetch && (
+              {!isCleared && showNeofetch && (
                 <div className="arch-term__neofetch">
                   <div className="arch-term__neofetch-logo" aria-hidden="true">
                     {ARCH_LOGO.map((line, i) => (
@@ -584,7 +607,7 @@ export default function Hero() {
               {/* ── Initial animated lines with Starship prompt + output ── */}
 
               {/* Command 1: whoami (step 1 = typing, step 2+ = output) */}
-              {animStep >= 1 && (
+              {!isCleared && animStep >= 1 && (
                 <>
                   <div className="arch-term__cmd-block">
                     <StarshipPrompt />
@@ -605,7 +628,7 @@ export default function Hero() {
               )}
 
               {/* Command 2: cat /etc/profile | head -3 (step 3 = typing, step 4+ = output) */}
-              {animStep >= 3 && (
+              {!isCleared && animStep >= 3 && (
                 <>
                   <div className="arch-term__cmd-block">
                     <StarshipPrompt />
@@ -630,7 +653,7 @@ export default function Hero() {
               )}
 
               {/* Command 3: nmap -sV portfolio.ankur.dev (step 5 = typing, step 6+ = output) */}
-              {animStep >= 5 && (
+              {!isCleared && animStep >= 5 && (
                 <>
                   <div className="arch-term__cmd-block">
                     <StarshipPrompt />
@@ -708,37 +731,37 @@ export default function Hero() {
                 }
                 return (
                   <div key={`cmd-${i}`} className={`arch-term__line arch-term__line--${line.type}`}>
-                    <pre>{line.text}</pre>
+                    {line.text || '\u00A0'}
                   </div>
                 );
               })}
 
-              {/* ── Blinking cursor (only before interactive mode) ── */}
-              {!interactiveReady && showNeofetch && (
+              {/* ── Blinking cursor (only at idle pause before command 1 begins) ── */}
+              {!interactiveReady && showNeofetch && animStep === 0 && !isCleared && (
                 <div className="arch-term__cursor-idle">
                   <StarshipPrompt />
                   <span className="arch-term__blink">▋</span>
                 </div>
               )}
-            </div>
 
-            {/* ── Interactive input row (Starship prompt) ── */}
-            {interactiveReady && (
-              <form onSubmit={handleSubmit} className="arch-term__input-row">
-                <StarshipPrompt compact />
-                <input
-                  ref={inputRef}
-                  value={cmdInput}
-                  onChange={(e) => setCmdInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="arch-term__input"
-                  spellCheck="false"
-                  autoComplete="off"
-                  placeholder="type a command..."
-                  aria-label="Terminal command input"
-                />
-              </form>
-            )}
+              {/* ── Interactive input line (rendered inline directly after commands) ── */}
+              {interactiveReady && (
+                <form onSubmit={handleSubmit} className="arch-term__input-line">
+                  <StarshipPrompt />
+                  <input
+                    ref={inputRef}
+                    value={cmdInput}
+                    onChange={(e) => setCmdInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="arch-term__input"
+                    spellCheck="false"
+                    autoComplete="off"
+                    placeholder="type a command..."
+                    aria-label="Terminal command input"
+                  />
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -797,5 +820,10 @@ function TypewriterText({ text, speed = 50, onComplete }) {
     return () => clearInterval(timer);
   }, [text, speed]);
 
-  return <span className="arch-term__typed-cmd">{displayed}</span>;
+  return (
+    <span className="arch-term__typed-cmd">
+      {displayed}
+      {displayed.length < text.length && <span className="arch-term__blink">▋</span>}
+    </span>
+  );
 }

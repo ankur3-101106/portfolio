@@ -223,7 +223,7 @@ In a public cloud, physical servers, hypervisors, and core fiber networks are sh
 ## 5. Core VPC Components
 
 ```mermaid
-flowchart TD
+flowchart LR
     VPC["Amazon VPC"]
     Subnet["Subnets (Public & Private)"]
     RT["Route Tables"]
@@ -358,7 +358,7 @@ flowchart TD
 | **Default Configuration** | Default SG: Denies all inbound, allows all outbound. Custom SG: Denies all inbound, allows all outbound. | Default NACL: Allows all inbound and outbound. Custom NACL: Denies all inbound and outbound until configured. |
 
 ### 8.2 The Ephemeral Port Problem in NACLs
-Because NACLs are completely stateless, when a client connects to a web server on port `80`, the web server sends response packets back to the client's temporary source port (called an **ephemeral port**). 
+Because NACLs are completely stateless, when a client connects to a web server on port `80`, the web server sends response packets back to the client's temporary source port (called an **ephemeral port**).
 - In Linux clients, ephemeral ports typically range from `32768 – 60999`.
 - Windows and modern NAT gateways use `1024 – 65535`.
 - **NACL Rule Requirement:** To allow web servers in a subnet protected by a custom NACL to return data to users, an outbound NACL rule permitting TCP traffic on ports `1024 – 65535` is mandatory.
